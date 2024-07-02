@@ -9,3 +9,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+use App\Http\Controllers\TemplateController;
+
+Route::get('/admin',[TemplateController::class,'index']);
