@@ -246,3 +246,32 @@
   gtag('js', new Date());
   gtag('config', 'UA-56159088-1');
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Function to load pages dynamically
+        function loadPage(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    // Assuming you have a div with id `main-content` where you want to load the content
+                    $('#main-content').html(data);
+                },
+                error: function(xhr) {
+                    console.log("An error occurred while loading the page: ", xhr);
+                }
+            });
+        }
+
+        // Event listener for sidebar links
+        $('.nav-link').on('click', function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            var url = $(this).data('url'); // Get the URL from the data attribute
+            if (url) {
+                loadPage(url); // Load the page
+            }
+        });
+    });
+</script>
+
