@@ -9,7 +9,7 @@
             <p>{{ $message }}</p>
         </div>
     @endif
-    <a href="{{ route('suppliers.create') }}" class="btn btn-primary mb-3">Create New Supplier</a>
+    <a href="{{ route('createsupplier') }}" class="btn btn-primary mb-3">Create New Supplier</a>
     <table class="table table-bordered">
         <tr>
             <th>Name</th>
@@ -28,14 +28,14 @@
             <td>{{ $supplier->supplier_code }}</td>
             <td>
                 <!-- Show Button -->
-                <a href="{{ route('suppliers.show', $supplier->id) }}" class="btn btn-secondary">Show</a>
+                <a href="{{ route('showsupplier', $supplier->id) }}" class="btn btn-secondary">Show</a>
 
                 <!-- Edit Button -->
-                <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ route('editsupplier', $supplier->id) }}" class="btn btn-primary">Edit</a>
 
                 <!-- Delete Button -->
                 <button class="btn btn-danger" onclick="confirmDelete({{ $supplier->id }})">Delete</button>
-                <form id="delete-form-{{ $supplier->id }}" action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" style="display:none;">
+                <form id="delete-form-{{ $supplier->id }}" action="{{ route('deletesupplier', $supplier->id) }}" method="POST" style="display:none;">
                     @csrf
                     @method('DELETE')
                 </form>

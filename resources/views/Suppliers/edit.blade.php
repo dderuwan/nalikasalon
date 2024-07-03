@@ -4,10 +4,10 @@
 <main role="main" class="main-content">
     <div class="container">
         <h2>Edit Supplier</h2>
-        <form action="{{ route('suppliers.update', $supplier->id) }}" method="POST">
+        <form action="{{ route('updatesupplier') }}" method="POST">
             @csrf
             @method('PUT')
-
+            <input type="hidden" value="{{ $supplier->id}}" name="id">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $supplier->name) }}" required>

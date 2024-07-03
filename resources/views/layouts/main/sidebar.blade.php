@@ -16,19 +16,20 @@
         </a>
       </div>
       <ul class="navbar-nav flex-fill w-100 mb-2">
-        <li class="nav-item dropdown">
-          <a href="/" data-toggle="collapse" aria-expanded="false" class=" nav-link">
+        <li class="nav-item ">
+          <a href="{{route('/')}}" class=" nav-link">
             <i class="fe fe-home fe-16"></i>
             <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item dropdown">
-          <a href="/suppliers" class="nav-link" onclick="loadPage('{{ route('suppliers.index') }}')">
+        <li class="nav-item ">
+          <a href="{{route('allsupplier')}}" class="nav-link" >
             <i class="fe fe-user fe-16"></i>
             <span class="ml-3 item-text">Suppliers</span><span class="sr-only">(current)</span>
           </a>
+
         </li>
-        
+
       </ul>
     </nav>
   </aside>

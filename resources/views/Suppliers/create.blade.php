@@ -5,7 +5,7 @@
 <div class="container">
     <h2>Create Supplier</h2>
     <div class="card-body">
-        <form action="{{ route('suppliers.store') }}" method="POST">
+        <form action="{{ route('insertsupplier') }}" method="POST">
             @csrf
             <div class="form-row">
                 <div class="form-group col-md-6">

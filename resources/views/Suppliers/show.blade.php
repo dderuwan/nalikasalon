@@ -5,9 +5,9 @@
     <div class="container">
         <h2>Supplier Details</h2>
         <div class="mb-3">
-            <a href="{{ route('suppliers.index') }}" class="btn btn-secondary">Back to List</a>
-            <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-primary">Edit</a>
-            <form action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" style="display:inline;">
+            <a href="{{ route('allsupplier') }}" class="btn btn-secondary">Back to List</a>
+            <a href="{{ route('editsupplier',$supplier->id) }}" class="btn btn-primary">Edit</a>
+            <form action="{{ route('deletesupplier', $supplier->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('Are you sure you want to delete this supplier?')" class="btn btn-danger">Delete</button>
