@@ -27,7 +27,12 @@
             <i class="fe fe-user fe-16"></i>
             <span class="ml-3 item-text">Suppliers</span><span class="sr-only">(current)</span>
           </a>
-
+        </li>
+        <li class="nav-item ">
+          <a href="{{route('allitems')}}" class="nav-link" >
+          <i class="fe fe-trash fe-16"></i></i>
+            <span class="ml-3 item-text">Items</span><span class="sr-only">(current)</span>
+          </a>
         </li>
 
       </ul>

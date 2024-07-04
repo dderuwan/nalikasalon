@@ -21,3 +21,11 @@ Auth::routes();
  Route::put('/updatesupplier', [App\Http\Controllers\SupplierController::class,'update'])->name('updatesupplier');
  Route::delete('/deletesupplier/{id}',[App\Http\Controllers\SupplierController::class,'destroy'])->name('deletesupplier');
 
+ // Item module routes
+ Route::get('/allitems', [App\Http\Controllers\ItemController::class, 'index'])->name('allitems');
+ Route::get('/createitem', [App\Http\Controllers\ItemController::class, 'create'])->name('createitem');
+ Route::post('/insertitem', [App\Http\Controllers\ItemController::class, 'store'])->name('insertitem');
+ Route::get('/edititem/{id}', [App\Http\Controllers\ItemController::class, 'edit'])->name('edititem');
+ Route::get('/showitem/{id}', [App\Http\Controllers\ItemController::class, 'show'])->name('showitem');
+ Route::put('/updateitem/{id}', [App\Http\Controllers\ItemController::class, 'update'])->name('updateitem');
+ Route::delete('/deleteitem/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('deleteitem');
