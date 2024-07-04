@@ -16,25 +16,26 @@
         </a>
       </div>
       <ul class="navbar-nav flex-fill w-100 mb-2">
-        <li class="nav-item ">
-          <a href="{{route('/')}}" class=" nav-link">
+        <li class="nav-item active sidebar_li">
             <i class="fe fe-home fe-16"></i>
+          <a href="{{route('/')}}" class="sidebar_text" >
             <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item ">
-          <a href="{{route('allsupplier')}}" class="nav-link" >
-            <i class="fe fe-user fe-16"></i>
+        <li class="nav-item sidebar_li">
+        <i class="fe fe-user fe-16"></i>
+          <a href="{{route('allsupplier')}}" class="sidebar_text" >
             <span class="ml-3 item-text">Suppliers</span><span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item ">
-          <a href="{{route('allitems')}}" class="nav-link" >
-          <i class="fe fe-trash fe-16"></i></i>
+        <li class="nav-item sidebar_li">
+            <i class="fe fe-trash fe-16"></i></i>
+          <a href="{{route('allitems')}}" class="sidebar_text"  >
             <span class="ml-3 item-text">Items</span><span class="sr-only">(current)</span>
           </a>
         </li>
 
       </ul>
+
     </nav>
   </aside>

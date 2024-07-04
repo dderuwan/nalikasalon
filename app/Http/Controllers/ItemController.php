@@ -14,19 +14,15 @@ class ItemController extends Controller
     // Display a listing of the items
     public function index()
     {
-        try {
             $items = Item::all();
             return view('items.index', compact('items'));
-        } catch (Exception $e) {
-            return back()->withError($e->getMessage())->withInput();
-        }
     }
 
     // Show the form for creating a new item
     public function create()
     {
         try {
-            $suppliers = Supplier::all(); 
+            $suppliers = Supplier::all();
             return view('items.create', compact('suppliers'));
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
