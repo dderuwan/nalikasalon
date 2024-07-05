@@ -29,17 +29,33 @@
           </a>
         </li>
         <li class="nav-item sidebar_li">
-            <i class="fe fe-trash fe-16"></i></i>
+            <i class="fe fe-box fe-16"></i></i>
           <a href="{{route('allitems')}}" class="sidebar_text"  >
             <span class="ml-3 item-text">Items</span><span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item sidebar_li">
-            <i class="fe fe-trash fe-16"></i></i>
-          <a href="{{route('allitems')}}" class="sidebar_text"  >
+            <i class="fe fe-box fe-16"></i>
+          <a href="{{route('masterstock')}}" class="sidebar_text"  >
             <span class="ml-3 item-text">Master Stock</span><span class="sr-only">(current)</span>
           </a>
         </li>
+
+        <li class="nav-item sidebar_li">
+            <i class="fe fe-users fe-16"></i>
+          <a href="{{route('allcustomer')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">Customers</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
+
+        <li class="nav-item sidebar_li">
+            <i class="fe fe-file-text fe-16"></i>
+          <a href="{{route('masterstock')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
+
+
 
       </ul>
 

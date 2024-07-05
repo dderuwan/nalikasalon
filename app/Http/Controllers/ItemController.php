@@ -18,6 +18,12 @@ class ItemController extends Controller
             return view('items.index', compact('items'));
     }
 
+    public function showMasterStock()
+    {
+        $items = Item::all();
+        return view('items.master', compact('items'));
+    }
+
 
     // Show the form for creating a new item
     public function create()
