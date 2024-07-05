@@ -34,6 +34,12 @@
             <span class="ml-3 item-text">Items</span><span class="sr-only">(current)</span>
           </a>
         </li>
+        <li class="nav-item sidebar_li">
+            <i class="fe fe-trash fe-16"></i></i>
+          <a href="{{route('allitems')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">Master Stock</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
 
       </ul>
 

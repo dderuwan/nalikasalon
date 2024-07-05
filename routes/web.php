@@ -29,3 +29,7 @@ Auth::routes();
  Route::get('/showitem/{id}', [App\Http\Controllers\ItemController::class, 'show'])->name('showitem');
  Route::put('/updateitem/{id}', [App\Http\Controllers\ItemController::class, 'update'])->name('updateitem');
  Route::delete('/deleteitem/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('deleteitem');
+
+ // Master stock route
+Route::get('/masterstock', [App\Http\Controllers\MasterStockController::class, 'index'])->name('masterstock.index');
+

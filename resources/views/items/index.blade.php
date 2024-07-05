@@ -10,7 +10,7 @@
         </div>
     @endif
     <a href="{{ route('createitem') }}" class="btn btn-primary mb-3">Add Item</a>
-    <table class="table table-bordered mt-3" id="items-table">
+    <table class="table table-bordered " id="items-table">
         <thead>
             <tr>
                 <th>Image</th>
@@ -57,26 +57,9 @@
 
 <style>
     
-    #items-table {
-        border: 1px solid #878a8f; /* Table border */
-        width: 100%;
-        margin-bottom: 1rem;
+    #items-table th{
+        color:#001a4e;
     }
-
-    #items-table th
-     {
-        font-weight:bold;
-        color:white;
-        font-size:20px;
-    }
-
-    #items-table-img img{
-        height:60px;
-        width:60px;
-
-    }
-
-    
 
     
 </style> 

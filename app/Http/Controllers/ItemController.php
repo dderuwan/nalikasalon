@@ -18,6 +18,7 @@ class ItemController extends Controller
             return view('items.index', compact('items'));
     }
 
+
     // Show the form for creating a new item
     public function create()
     {
@@ -38,6 +39,7 @@ class ItemController extends Controller
                 'items.*.item_name' => 'required',
                 'items.*.item_description' => 'required',
                 'items.*.pack_size' => 'required',
+                'items.*.item_quentity' => 'required',
                 'items.*.unit_price' => 'required|numeric',
                 'items.*.image' => 'nullable|image',
             ]);
@@ -48,6 +50,7 @@ class ItemController extends Controller
                 $item->item_name = $itemData['item_name'];
                 $item->item_description = $itemData['item_description'];
                 $item->pack_size = $itemData['pack_size'];
+                $item->item_quentity = $itemData['item_quentity'];
                 $item->unit_price = $itemData['unit_price'];
                 $item->supplier_code = $request->supplier_code;
 
@@ -108,6 +111,7 @@ class ItemController extends Controller
                 'item_name' => 'required',
                 'item_description' => 'required',
                 'pack_size' => 'required',
+                'item_quentity' => 'required',
                 'unit_price' => 'required|numeric',
                 'supplier_code' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -118,6 +122,7 @@ class ItemController extends Controller
             $item->item_name = $request->item_name;
             $item->item_description = $request->item_description;
             $item->pack_size = $request->pack_size;
+            $item->item_quentity = $request->item_quentity;
             $item->unit_price = $request->unit_price;
             $item->supplier_code = $request->supplier_code;
 

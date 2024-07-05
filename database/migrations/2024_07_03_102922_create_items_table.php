@@ -17,13 +17,14 @@ return new class extends Migration
             $table->string('item_name');
             $table->text('item_description');
             $table->string('pack_size');
+            $table->int('item_quentity');
             $table->decimal('unit_price', 10, 2);
             $table->string('supplier_code');
             $table->string('image')->nullable();
             $table->timestamps();
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      */
