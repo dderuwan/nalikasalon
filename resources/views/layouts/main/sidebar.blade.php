@@ -49,9 +49,9 @@
         </li>
 
         <li class="nav-item sidebar_li">
-            <i class="fe fe-file-text fe-16"></i>
-          <a href="{{route('masterstock')}}" class="sidebar_text"  >
-            <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
+            <i class="fe fe-shopping-cart fe-16"></i>
+          <a href="{{route('allorderrequests')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">Purchase Managment</span><span class="sr-only">(current)</span>
           </a>
         </li>
 

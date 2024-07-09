@@ -36,7 +36,6 @@ class ItemController extends Controller
         }
     }
 
-    // Store a newly created item in storage
     public function store(Request $request)
     {
         try {
@@ -44,9 +43,7 @@ class ItemController extends Controller
                 'supplier_code' => 'required',
                 'items.*.item_name' => 'required',
                 'items.*.item_description' => 'required',
-                'items.*.pack_size' => 'required',
-                'items.*.item_quentity' => 'required',
-                'items.*.unit_price' => 'required|numeric',
+                'items.*.unit_price' => 'nullable|numeric',
                 'items.*.image' => 'nullable|image',
             ]);
 
@@ -55,14 +52,12 @@ class ItemController extends Controller
                 $item->item_code = $this->generateItemCode();
                 $item->item_name = $itemData['item_name'];
                 $item->item_description = $itemData['item_description'];
-                $item->pack_size = $itemData['pack_size'];
-                $item->item_quentity = $itemData['item_quentity'];
                 $item->unit_price = $itemData['unit_price'];
                 $item->supplier_code = $request->supplier_code;
 
                 if (isset($itemData['image'])) {
                     $file = $itemData['image'];
-                    $filename = time() . '.' . $file->getClientOriginalExtension();
+                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('images/items'), $filename);
                     $item->image = $filename;
                 }
@@ -75,6 +70,7 @@ class ItemController extends Controller
             return back()->withError($e->getMessage())->withInput();
         }
     }
+
 
     private function generateItemCode()
     {
@@ -116,9 +112,7 @@ class ItemController extends Controller
                 'item_code' => 'required|unique:items,item_code,'.$id,
                 'item_name' => 'required',
                 'item_description' => 'required',
-                'pack_size' => 'required',
-                'item_quentity' => 'required',
-                'unit_price' => 'required|numeric',
+                'unit_price' => 'nullable|numeric',
                 'supplier_code' => 'required',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
@@ -127,8 +121,6 @@ class ItemController extends Controller
             $item->item_code = $request->item_code;
             $item->item_name = $request->item_name;
             $item->item_description = $request->item_description;
-            $item->pack_size = $request->pack_size;
-            $item->item_quentity = $request->item_quentity;
             $item->unit_price = $request->unit_price;
             $item->supplier_code = $request->supplier_code;
 

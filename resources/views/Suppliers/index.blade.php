@@ -9,7 +9,7 @@
             <p>{{ $message }}</p>
         </div>
     @endif
-    <a href="{{ route('createcustomer') }}" class="btn btn-primary mb-3">Create New Supplier</a>
+    <a href="{{ route('createsupplier') }}" class="btn btn-primary mb-3">Create New Supplier</a>
     <table class="table table-bordered">
         <tr>
             <th>Name</th>

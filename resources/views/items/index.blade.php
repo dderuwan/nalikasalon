@@ -17,7 +17,7 @@
                 <th>Image</th>
                 <th>Item Code</th>
                 <th>Item Name</th>
-                <th>Pack Size</th>
+                <th>Description</th>
                 <th>Item Quentity</th>
                 <th>Unit Price</th>
                 <th>Supplier Code</th>
@@ -36,7 +36,7 @@
                 </td>
                 <td>{{ $item->item_code }}</td>
                 <td>{{ $item->item_name }}</td>
-                <td>{{ $item->pack_size }}</td>
+                <td>{{ $item->item_description }}</td>
                 <td>{{ $item->item_quentity }}</td>
                 <td>{{ $item->unit_price }}</td>
                 <td>{{ $item->supplier_code }}</td>

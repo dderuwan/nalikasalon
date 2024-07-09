@@ -27,10 +27,6 @@
                 <td>{{ $item->item_description }}</td>
             </tr>
             <tr>
-                <th>Pack Size</th>
-                <td>{{ $item->pack_size }}</td>
-            </tr>
-            <tr>
                 <th>Unit Price</th>
                 <td>{{ $item->unit_price }}</td>
             </tr>

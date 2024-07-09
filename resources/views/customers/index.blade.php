@@ -10,7 +10,7 @@
         </div>
     @endif
 
-    <a href="{{ route('createcustomer') }}" class="btn btn-primary mb-3">Create New Supplier</a>
+    <a href="{{ route('createcustomer') }}" class="btn btn-primary mb-3">Add New Customer</a>
     <table class="table table-bordered">
         <tr>
             <th>Customer Code</th>

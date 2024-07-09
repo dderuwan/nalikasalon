@@ -5,12 +5,12 @@
     <div class="container">
         <h2>Supplier Details</h2>
         <div class="mb-3">
-            <a href="{{ route('allcustomer') }}" class="btn btn-secondary">Back to List</a>
-            <a href="{{ route('editcustomer',$customer->id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ route('allcustomer') }}" class="btn btn-secondary"><i class="fe fe-arrow-left fe-16"></i></a>
+            <a href="{{ route('editcustomer',$customer->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>
             <form action="{{ route('deletecustomer', $customer->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
-                <button type="submit" onclick="return confirm('Are you sure you want to delete this customer?')" class="btn btn-danger">Delete</button>
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this customer?')" class="btn btn-danger"><i class="fe fe-trash fe-16"></i></button>
             </form>
         </div>
         <table class="table table-bordered">

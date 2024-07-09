@@ -16,13 +16,11 @@
                 </select>
             </div>
             <table class="table table-bordered" id="items-table">
-                <thead >
-                    <tr >
+                <thead>
+                    <tr>
                         <th>Item Name *</th>
                         <th>Description</th>
-                        <th>Pack Size *</th>
-                        <th>Item Quentity</th>
-                        <th>Individual Item Cost *</th>
+                        <th>Selling Price</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>
@@ -30,11 +28,9 @@
                 <tbody>
                     <tr>
                         <td><input type="text" name="items[0][item_name]" class="form-control" required></td>
-                        <td><input type="text" name="items[0][item_description]" class="form-control" id="items-table-description"></td>
-                        <td><input type="text" name="items[0][pack_size]" class="form-control" required></td>
-                        <td><input type="text" name="items[0][item_quentity]" class="form-control" required></td>
+                        <td><input type="text" name="items[0][item_description]" class="form-control" required></td>
                         <td><input type="text" name="items[0][unit_price]" class="form-control" required></td>
-                        <td><input type="file" name="items[0][image]" class="form-control"  id="items-table-image"></td>
+                        <td><input type="file" name="items[0][image]" class="form-control"></td>
                         <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>
                     </tr>
                 </tbody>
@@ -44,8 +40,6 @@
         </form>
     </div>
 </main>
-
-
 
 <script>
     let rowIndex = 1;
@@ -57,8 +51,6 @@
             <tr>
                 <td><input type="text" name="items[${rowIndex}][item_name]" class="form-control" required></td>
                 <td><input type="text" name="items[${rowIndex}][item_description]" class="form-control" required></td>
-                <td><input type="text" name="items[${rowIndex}][pack_size]" class="form-control" required></td>
-                <td><input type="text" name="items[${rowIndex}][item_quentity]" class="form-control" required></td>
                 <td><input type="text" name="items[${rowIndex}][unit_price]" class="form-control" required></td>
                 <td><input type="file" name="items[${rowIndex}][image]" class="form-control"></td>
                 <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>

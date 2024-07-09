@@ -25,16 +25,6 @@
             </div>
 
             <div class="form-group">
-                <label for="pack_size">Pack Size</label>
-                <input type="text" name="pack_size" id="pack_size" class="form-control" value="{{ old('pack_size', $item->pack_size) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="item_quentity">Item Quentity</label>
-                <input type="text" name="item_quentity" id="item_quentity" class="form-control" value="{{ old('item_quentity', $item->item_quentity) }}" required>
-            </div>
-
-            <div class="form-group">
                 <label for="unit_price">Unit Price</label>
                 <input type="text" name="unit_price" id="unit_price" class="form-control" value="{{ old('unit_price', $item->unit_price) }}" required>
             </div>
