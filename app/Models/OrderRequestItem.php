@@ -9,7 +9,7 @@ class OrderRequestItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_request_id', 'item_code', 'instock', 'quantity', 'status'];
+    protected $fillable = ['order_request_id', 'item_code', 'instock', 'quantity', ];
 
     public function orderRequest()
     {

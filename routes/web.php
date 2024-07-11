@@ -58,3 +58,17 @@ Route::delete('/deleteorderrequests/{id}', [App\Http\Controllers\RequestOrderCon
 // API Routes for fetching items and stock
 Route::get('/api/get-items/{supplierCode}', [App\Http\Controllers\RequestOrderContraller::class, 'getItemsBySupplier']);
 Route::get('/api/get-item-stock/{itemCode}', [App\Http\Controllers\RequestOrderContraller::class, 'getItemStock']);
+
+
+// OrderRequest module
+Route::get('/allgins', [App\Http\Controllers\GinController::class, 'index'])->name('allgins');
+Route::get('/creategin', [App\Http\Controllers\GinController::class, 'create'])->name('creategin');
+Route::post('/insertgin', [App\Http\Controllers\GinController::class, 'store'])->name('insertgin');
+Route::get('/showogins/{id}', [App\Http\Controllers\GinController::class, 'show'])->name('showogins');
+Route::get('/editgins/{id}/edit', [App\Http\Controllers\GinController::class, 'edit'])->name('editgins');
+Route::put('/updategins/{id}', [App\Http\Controllers\GinController::class, 'update'])->name('updategins');
+Route::delete('/deletegins/{id}', [App\Http\Controllers\GinController::class, 'destroy'])->name('deletegins');
+
+// routes/web.php
+Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'getOrderItems']);
+
