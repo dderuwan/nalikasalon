@@ -11,25 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('order_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('item_code')->unique();
-            $table->string('item_name');
-            $table->text('item_description');
-            $table->string('pack_size');
-            $table->int('item_quentity');
-            $table->decimal('unit_price', 10, 2);
+            $table->string('order_request_code')->unique();
             $table->string('supplier_code');
-            $table->string('image')->nullable();
+            $table->date('date');
             $table->timestamps();
         });
     }
- 
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('order_requests');
     }
 };

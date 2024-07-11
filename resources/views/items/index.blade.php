@@ -1,4 +1,5 @@
 @extends('layouts.main.master')
+@section('title', 'Items')
 
 @section('content')
 <main role="main" class="main-content">
@@ -10,13 +11,14 @@
         </div>
     @endif
     <a href="{{ route('createitem') }}" class="btn btn-primary mb-3">Add Item</a>
-    <table class="table table-bordered mt-3" id="items-table">
+    <table class="table table-bordered " id="items-table">
         <thead>
             <tr>
                 <th>Image</th>
                 <th>Item Code</th>
                 <th>Item Name</th>
-                <th>Pack Size</th>
+                <th>Description</th>
+                <th>Item Quentity</th>
                 <th>Unit Price</th>
                 <th>Supplier Code</th>
                 <th>Actions</th>
@@ -27,14 +29,15 @@
             <tr>
                 <td id="items-table-img">
                 @if($item->image)
-                        <img src="{{ asset('images/items/' . $item->image) }}" alt="{{ $item->item_name }}" style="max-width: 100px;">
+                        <img src="{{ asset('images/items/' . $item->image) }}" alt="{{ $item->item_name }}" style="width: 50px; height: 50px;">
                     @else
                         No image
                     @endif
                 </td>
                 <td>{{ $item->item_code }}</td>
                 <td>{{ $item->item_name }}</td>
-                <td>{{ $item->pack_size }}</td>
+                <td>{{ $item->item_description }}</td>
+                <td>{{ $item->item_quentity }}</td>
                 <td>{{ $item->unit_price }}</td>
                 <td>{{ $item->supplier_code }}</td>
                 <td>
@@ -57,26 +60,9 @@
 
 <style>
     
-    #items-table {
-        border: 1px solid #878a8f; /* Table border */
-        width: 100%;
-        margin-bottom: 1rem;
+    #items-table th{
+        color:#001a4e;
     }
-
-    #items-table th
-     {
-        font-weight:bold;
-        color:white;
-        font-size:20px;
-    }
-
-    #items-table-img img{
-        height:60px;
-        width:60px;
-
-    }
-
-    
 
     
 </style> 
@@ -100,4 +86,27 @@
         })
     }
 </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('success'))
+                showToast('success', '{{ session('success') }}');
+            @endif
+
+            @if (session('error'))
+                showToast('error', '{{ session('error') }}');
+            @endif
+
+            @if (session('warning'))
+                showToast('warning', '{{ session('warning') }}');
+            @endif
+
+            @if (session('info'))
+                showToast('info', '{{ session('info') }}');
+            @endif
+
+            @if (session('question'))
+                showToast('question', '{{ session('question') }}');
+            @endif
+        });
+    </script>
 @endsection
