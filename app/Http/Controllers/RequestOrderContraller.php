@@ -45,7 +45,7 @@ class RequestOrderContraller extends Controller
             'supplier_code' => $request->supplier_code,
             'date' => Carbon::today(),
         ]);
-
+        
         foreach ($request->items as $item) {
             OrderRequestItem::create([
                 'order_request_id' => $orderRequest->id,
