@@ -52,14 +52,17 @@ class SupplierController extends Controller
             $supplier->account_details = $validatedData['account_details'];
             $supplier->supplier_code = 'SUP' . strtoupper(uniqid()); // Generate supplier code
             $supplier->save();
-            // toastr()->success('Data has been saved successfully!');
+            
+            notify()->success('Supplier Registerd successfully. ⚡️', 'Success');
             return redirect()->route('allsupplier')->with('success', 'Supplier Registerd successfully.');
 
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->success('Supplier not found. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Supplier not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to update supplier.');
+            
+            notify()->success('Failed to update supplier. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Failed to update supplier.']);
         }
     }
@@ -75,10 +78,12 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($id);
             return view('suppliers.show', compact('supplier'));
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->success('Supplier not found. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Supplier not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+            
+            notify()->success('Failed to retrieve supplier details. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Failed to retrieve supplier details.']);
         }
     }
@@ -93,10 +98,12 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($id);
             return view('suppliers.edit', compact('supplier'));
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->success('Supplier not found. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Supplier not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+            
+            notify()->success('Failed to retrieve supplier for editing. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Failed to retrieve supplier for editing.']);
         }
     }
@@ -118,13 +125,15 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($request->id);
             $supplier->update($validatedData);
 
-            // toastr()->success('Supplier updated successfully.');
+            notify()->success('Supplier updated successfully. ⚡️', 'Success');
             return redirect()->route('allsupplier')->with('success', 'Supplier updated successfully.');
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->success('Supplier not found. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Supplier not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+            
+            notify()->success('Failed to update supplier. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Failed to update supplier.']);
         }
     }
@@ -139,13 +148,15 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($id);
             $supplier->delete();
 
-            // toastr()->success('Supplier deleted successfully.');
+            notify()->success('Supplier deleted successfully. ⚡️', 'Success');
             return redirect()->route('allsupplier')->with('success', 'Supplier deleted successfully.');
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->success('Supplier not found. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Supplier not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve delete supplier.');
+            
+            notify()->success('Failed to delete supplier. ⚡️', 'Fail');
             return redirect()->route('allsupplier')->withErrors(['error' => 'Failed to delete supplier.']);
         }
     }

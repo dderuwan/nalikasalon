@@ -28,13 +28,13 @@
             <td>{{ $supplier->supplier_code }}</td>
             <td>
                 <!-- Show Button -->
-                <a href="{{ route('showsupplier', $supplier->id) }}" class="btn btn-secondary">Show</a>
+                <a href="{{ route('showsupplier', $supplier->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
 
                 <!-- Edit Button -->
                 <a href="{{ route('editsupplier', $supplier->id) }}" class="btn btn-primary">Edit</a>
 
                 <!-- Delete Button -->
-                <button class="btn btn-danger" onclick="confirmDelete({{ $supplier->id }})">Delete</button>
+                <button class="btn btn-danger" onclick="confirmDelete({{ $supplier->id }})"><i class="fe fe-trash fe-16"></i></button>
                 <form id="delete-form-{{ $supplier->id }}" action="{{ route('deletesupplier', $supplier->id) }}" method="POST" style="display:none;">
                     @csrf
                     @method('DELETE')

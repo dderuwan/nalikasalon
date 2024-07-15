@@ -71,6 +71,13 @@
             </li>
           </ul>
 
+          <li class="nav-item sidebar_li">
+            <i class="fe fe-users fe-16"></i>
+            <a href="{{route('pospage')}}" class="sidebar_text"  >
+              <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
+            </a>
+          </li>
+
 
 
       </ul>

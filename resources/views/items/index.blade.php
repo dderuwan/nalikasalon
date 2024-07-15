@@ -28,7 +28,7 @@
             @foreach($items as $item)
             <tr>
                 <td id="items-table-img">
-                @if($item->image)
+                    @if($item->image)
                         <img src="{{ asset('images/items/' . $item->image) }}" alt="{{ $item->item_name }}" style="width: 50px; height: 50px;">
                     @else
                         No image

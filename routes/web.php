@@ -43,7 +43,7 @@ Auth::routes();
 
  //Customer
 
-Route::get('/homepage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pos.homepage');
+Route::get('/pospage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pospage');
 
 
 // OrderRequest module
@@ -60,7 +60,7 @@ Route::get('/api/get-items/{supplierCode}', [App\Http\Controllers\RequestOrderCo
 Route::get('/api/get-item-stock/{itemCode}', [App\Http\Controllers\RequestOrderContraller::class, 'getItemStock']);
 
 
-// OrderRequest module
+// GIN
 Route::get('/allgins', [App\Http\Controllers\GinController::class, 'index'])->name('allgins');
 Route::get('/creategin', [App\Http\Controllers\GinController::class, 'create'])->name('creategin');
 Route::post('/insertgin', [App\Http\Controllers\GinController::class, 'store'])->name('insertgin');

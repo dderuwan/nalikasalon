@@ -53,6 +53,7 @@ class ItemController extends Controller
                 $item->item_name = $itemData['item_name'];
                 $item->item_description = $itemData['item_description'];
                 $item->unit_price = $itemData['unit_price'];
+                $item->item_quentity = 0;
                 $item->supplier_code = $request->supplier_code;
 
                 if (isset($itemData['image'])) {
@@ -64,7 +65,7 @@ class ItemController extends Controller
 
                 $item->save();
             }
-
+            notify()->success('Items Created successfully. ⚡️', 'Success');
             return redirect()->route('allitems')->with('success', 'Items created successfully.');
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
@@ -131,7 +132,7 @@ class ItemController extends Controller
             }
 
             $item->save();
-
+            notify()->success('Item Updated successfully. ⚡️', 'Success');
             return redirect()->route('allitems')->with('success', 'Item updated successfully.');
         } catch (ModelNotFoundException $e) {
             return back()->withError('Item not found')->withInput();
@@ -146,7 +147,7 @@ class ItemController extends Controller
         try {
             $item = Item::findOrFail($id);
             $item->delete();
-
+            notify()->success('Item deleted successfully. ⚡️', 'Success');
             return redirect()->route('allitems')->with('success', 'Item deleted successfully.');
         } catch (ModelNotFoundException $e) {
             return back()->withError('Item not found')->withInput();

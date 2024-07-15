@@ -55,6 +55,7 @@ class RequestOrderContraller extends Controller
             ]);
         }
 
+        notify()->success('Order Request created successfully. ⚡️', 'Success');
         return redirect()->route('allorderrequests')->with('success', 'Order Request created successfully.');
     }
 
@@ -80,6 +81,7 @@ class RequestOrderContraller extends Controller
         $orderRequest = OrderRequest::findOrFail($id);
         $orderRequest->delete();
 
+        notify()->success('Order Request deleted successfully. ⚡️', 'Success');
         return redirect()->route('allorderrequests')->with('success', 'Order Request deleted successfully.');
     }
 

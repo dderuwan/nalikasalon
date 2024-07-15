@@ -30,7 +30,7 @@
     @include('layouts.main.script')
     {{-- Yield for additional scripts --}}
     @yield('scripts')
-
+    <x-notify::notify />
 
 
   </body>

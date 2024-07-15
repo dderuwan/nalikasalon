@@ -1,0 +1,123 @@
+/* Main card */
+.custom-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Card body */
+.custom-card-body {
+    padding: 15px;
+}
+
+/* Navigation tabs */
+.custom-navs {
+    list-style: none;
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px 0 20px 0;
+    border-bottom: 1px solid #ddd;
+    text-decoration: none;
+}
+
+.custom-nav-item {
+    margin-right: 10px;
+}
+
+.custom-nav-link {
+    text-decoration: none;
+    padding: 10px 15px;
+    color: #007bff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.custom-nav-link.active,
+.custom-nav-link:hover {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Tab content */
+.custom-tab-content {
+    display: flex;
+}
+
+.custom-tab-pane {
+    display: none;
+    width: 100%;
+}
+
+.custom-tab-pane.active {
+    display: block;
+}
+
+/* Left and right side columns */
+.left-side, .right-side {
+    padding: 10px;
+    height: 450px;
+}
+
+.left-side {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.scrollable-content {
+    height: 100%;
+    overflow-y: auto;
+    padding-left: 10px;
+    overflow-x: hidden;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 8px; 
+    height: 50px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 4px; 
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
+}
+.right-side {
+    flex: 1;
+}
+
+/* Card item */
+.col-item {
+    flex: 0 0 24%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+}
+
+.custom-card-img-top {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.custom-card-title {
+    font-size: 14px;
+    margin: 0;
+}
+
+.table{
+    text-align: center;
+}
+
+.quantity-value{
+    
+    padding: 0 10px 0 10px;
+}
+
+
