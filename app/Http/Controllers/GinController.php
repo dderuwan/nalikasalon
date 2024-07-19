@@ -133,8 +133,8 @@ class GinController extends Controller
         $gin = Gin::findOrFail($id);
         $gin->delete();
 
-        notify()->success('Order Request deleted successfully. ⚡️', 'Success');
-        return redirect()->route('allgins')->with('success', 'Order Request deleted successfully.');
+        notify()->success('Requested Order deleted successfully. ⚡️', 'Success');
+        return redirect()->route('allgins')->with('success', 'Requested Order deleted successfully.');
     }
 
 

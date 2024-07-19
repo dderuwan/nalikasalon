@@ -41,12 +41,24 @@
           </a>
         </li>
 
-        <li class="nav-item sidebar_li">
-            <i class="fe fe-users fe-16"></i>
-          <a href="{{route('allcustomer')}}" class="sidebar_text"  >
-            <span class="ml-3 item-text">Customers</span><span class="sr-only">(current)</span>
-          </a>
-        </li>
+       
+
+        <ul class="navbar-nav flex-fill w-100 mb-2">
+            <li class="nav-item dropdown">
+              <a href="#customer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <i class="fe fe-users fe-16"></i>
+                <span class="ml-3 item-text">Customers</span><span class="sr-only">(current)</span>
+              </a>
+              <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="customer">
+                <li class="nav-item mb-2">
+                <a href="{{route('allcustomer')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Customer List</span><span class="sr-only ">(current)</span>
+                </a>
+                </li>
+                
+              </ul>
+            </li>
+        </ul>
 
         <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item dropdown">
@@ -56,13 +68,13 @@
               </a>
               <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="dashboard">
                 <li class="nav-item mb-2">
-                <a href="{{route('allorderrequests')}}" class="sidebar_text"  >
+                <a href="{{route('allorderrequests')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Request Order</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
 
                 <li class="nav-item active">
-                <a href="{{route('allgins')}}" class="sidebar_text"  >
+                <a href="{{route('allgins')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">GIN</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
@@ -71,14 +83,22 @@
             </li>
           </ul>
 
-          <li class="nav-item sidebar_li">
-            <i class="fe fe-users fe-16"></i>
-            <a href="{{route('pospage')}}" class="sidebar_text"  >
-              <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
-            </a>
-          </li>
-
-
+          <ul class="navbar-nav flex-fill w-100 mb-2">
+            <li class="nav-item dropdown">
+              <a href="#invoice" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <i class="fe fe-users fe-16"></i>
+                <span class="ml-3 item-text">Invoices</span><span class="sr-only">(current)</span>
+              </a>
+              <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="invoice">
+                <li class="nav-item mb-2">
+                <a href="{{route('pospage')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
+                </a>
+                </li>
+                
+              </ul>
+            </li>
+          </ul>
 
       </ul>
 
