@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CompanySettingController;
+use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
 //     return view('dashboard.index');
@@ -71,4 +73,19 @@ Route::delete('/deletegins/{id}', [App\Http\Controllers\GinController::class, 'd
 
 // routes/web.php
 Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'getOrderItems']);
+
+
+//Settings module
+Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');
+Route::post('company-settings', [CompanySettingController::class, 'store'])->name('company.store');
+
+//users
+Route::resource('users', UserController::class);
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::post('/users/add-user', [UserController::class, 'store'])->name('user.store');
+Route::post('/users/user-list', [UserController::class, 'show'])->name('user.show');
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::get('/editUser/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/updateUser/{id}', [UserController::class, 'update'])->name('updateUser');
+
 
