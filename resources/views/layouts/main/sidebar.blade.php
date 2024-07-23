@@ -83,9 +83,24 @@
                             <span class="ml-3 item-text">Add User</span><span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item active mb-2">
                         <a href="{{ route('user.show') }}" class="sidebar_text">
                             <span class="ml-3 item-text">User List</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active mb-2">
+                        <a href="{{route('add_roles')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active mb-2">
+                        <a href="{{route('role_list')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active mb-2">
+                        <a href="{{route('assign_user_role')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>
                         </a>
                     </li>
                 </ul>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 // Route::get('/', function () {
 //     return view('dashboard.index');
@@ -88,4 +89,9 @@ Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.de
 Route::get('/editUser/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/updateUser/{id}', [UserController::class, 'update'])->name('updateUser');
 
+//roles
+Route::view('/add_role', 'setting.roles.add_roles')->name('add_roles');
+Route::view('/role_list', 'setting.roles.role_list')->name('role_list');
+Route::view('/role_edit', 'setting.roles.role_edit')->name('role_edit');
+Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
 
