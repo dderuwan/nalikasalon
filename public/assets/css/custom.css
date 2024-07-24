@@ -7,3 +7,16 @@
 }
 
 
+
+#filter-section{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    gap: 20px;
+}
+
+#fil{
+    display: flex;
+    flex-direction: row;
+}
+

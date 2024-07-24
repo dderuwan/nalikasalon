@@ -13,8 +13,20 @@
 <script src="{{asset('assets/js/datamaps-zoomto.js')}}"></script>
 <script src="{{asset('assets/js/datamaps.custom.js')}}"></script>
 <script src="{{asset('assets/js/Chart.min.js')}}"></script>
-<script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets/js/dataTables.bootstrap4.min.js')}}"></script>
+<!--<script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-2.1.0/af-2.7.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/cr-2.0.3/date-1.5.2/kt-2.12.1/sc-2.4.3/datatables.min.js"></script> -->
+
+<!-- J quary Data table codes -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+
 <script>
   /* defind global options */
   Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
@@ -32,6 +44,9 @@
 <script src="{{asset('js/dropzone.min.js')}}"></script>
 <script src="{{asset('js/uppy.min.js')}}"></script>
 <script src="{{asset('js/quill.min.js')}}"></script>
+
+
+
 <script>
   $('.select2').select2(
   {
@@ -281,8 +296,8 @@
   $('#dataTable-1').DataTable({
     autoWidth: true,
     "lengthMenu": [
-      [6, 32, 64, -1],
-      [6, 32, 64, "All"]
+      [7, 32, 64, -1],
+      [7, 32, 64, "All"]
     ]
   });
 </script>

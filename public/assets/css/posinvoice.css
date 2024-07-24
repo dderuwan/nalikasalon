@@ -215,7 +215,8 @@
 /* Calculator */
 
 .modal-content{
-    width: 235px;
+    width: 350px;
+    margin-left: 10%;
 }
 
 .modal-header{
@@ -225,8 +226,9 @@
 #calculator {
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 300px;
     gap: 10px;
+    padding-left: 13px;
 }
 
 #calculator .btn-group{

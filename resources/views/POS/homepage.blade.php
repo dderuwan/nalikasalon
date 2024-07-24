@@ -170,10 +170,12 @@
                                         </div>
                                         <div class="button-group">
                                             <button class="btn btn-secondary" id="calculator-btn">
-                                                <i class="fe fe-home fe-16"></i>
+                                            <i class="fa fa-calculator"></i>
                                             </button>
+
                                             <button class="btn btn-danger ml-2" id="cancel-btn">Cancel</button>
                                             <button type="submit" class="btn btn-primary float-center">Save</button>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -196,9 +198,10 @@
                                     <p class="card-text"></p>
                                     <div class="row my-4">
                                         <!-- Small table -->
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" >
                                             <div class="card shadow">
-                                                <div class="card-body">
+                                                <div class="card-body" style="height: 550px;">
+                                                    <div class="scrollable-content">
                                                     <table class="table datatables" id="dataTable-1">
                                                         <thead>
                                                             <tr>
@@ -232,6 +235,7 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -241,64 +245,64 @@
                         </div>
                     </div>
                 </div>
-                <!-- All Orders Section -->
+                <!-- Today Orders Section -->
                 <div class="custom-tab-pane" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <h2>Today's Orders</h2>
-                    </div>
-                </div>
-                <p class="card-text"></p>
-                <div class="row my-4">
-                    <div class="col-md-12">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <table class="table datatables" id="dataTable-1">
-                                    <thead>
-                                        <tr>
-                                            <th style="color: black;">Order Code</th>
-                                            <th style="color: black;">Date</th>
-                                            <th style="color: black;">Customer Code</th>
-                                            <th style="color: black;">Total Cost</th>
-                                            <th style="color: black;" width="200px">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($orders as $order)
-                                            @if ($order->date == $today)
-                                                <tr>
-                                                    <td>{{ $order->order_code }}</td>
-                                                    <td>{{ $order->date }}</td>
-                                                    <td>{{ $order->customer_code }}</td>
-                                                    <td>{{ $order->total_cost_payment }}</td>
-                                                    <td>
-                                                        <!-- Show Button -->
-                                                        <a href="{{ route('showopos', $order->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h2>Today's Orders</h2>
+                                    </div>
+                                </div>
+                                <p class="card-text"></p>
+                                <div class="row my-4">
+                                    <div class="col-md-12">
+                                        <div class="card shadow">
+                                            <div class="card-body">
+                                                <table class="table datatables" id="dataTable-1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="color: black;">Order Code</th>
+                                                            <th style="color: black;">Date</th>
+                                                            <th style="color: black;">Customer Code</th>
+                                                            <th style="color: black;">Total Cost</th>
+                                                            <th style="color: black;" width="200px">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($orders as $order)
+                                                            @if ($order->date == $today)
+                                                                <tr>
+                                                                    <td>{{ $order->order_code }}</td>
+                                                                    <td>{{ $order->date }}</td>
+                                                                    <td>{{ $order->customer_code }}</td>
+                                                                    <td>{{ $order->total_cost_payment }}</td>
+                                                                    <td>
+                                                                        <!-- Show Button -->
+                                                                        <a href="{{ route('showopos', $order->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
 
-                                                        <!-- Delete Button -->
-                                                        <button class="btn btn-danger" onclick="confirmDelete({{ $order->id }})"><i class="fe fe-trash fe-16"></i></button>
-                                                        <form id="delete-form-{{ $order->id }}" action="{{ route('deletepos', $order->id) }}" method="POST" style="display:none;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                                                        <!-- Delete Button -->
+                                                                        <button class="btn btn-danger" onclick="confirmDelete({{ $order->id }})"><i class="fe fe-trash fe-16"></i></button>
+                                                                        <form id="delete-form-{{ $order->id }}" action="{{ route('deletepos', $order->id) }}" method="POST" style="display:none;">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                        </form>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-      
+                    
             </div>   
 
             <!-- Add New Customer Modal -->
@@ -595,5 +599,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 </script>
+
 
 @endsection
