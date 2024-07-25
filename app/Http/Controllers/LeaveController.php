@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WeeklyHoliday;
 use App\Models\Holiday;
+use App\Models\Employee;
 use App\Models\Leave_type;
+use App\Models\Leave_Apply;
 
 class LeaveController extends Controller
 {
@@ -165,6 +167,133 @@ class LeaveController extends Controller
 
         return redirect()->route('add_leave_type')->with('success', 'leave type updated successfully');
     }
+
+
+
+    //leave application
+    public function createLeaveApp()
+    {
+        $employees = Employee::all();
+        $leaveTypes = Leave_type::all();
+        return view('humanResources.leave.apply_leave', compact('employees', 'leaveTypes'));
+    }
+
+
+    public function storeleavApp(Request $request)
+    {
+        $request->validate([
+            'employee_id' => 'required',
+            'leave_type_id' => 'required',          
+            'apply_strt_date' => 'required|date',
+            'apply_end_date' => 'required|date|after_or_equal:apply_strt_date',
+            'apply_day' => 'required|integer',
+            'apply_hard_copy' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png',
+            'leave_aprv_strt_date' => 'nullable|date',
+            'leave_aprv_end_date' => 'nullable|date|after_or_equal:leave_aprv_strt_date',
+            'num_aprv_day' => 'nullable|integer',
+            'approved_by' => 'nullable|string|max:255',
+            'reason' => 'nullable|string|max:255',
+        ]);
+    
+        $data = $request->only([
+            'employee_id',
+            'leave_type_id',
+            'apply_strt_date',
+            'apply_end_date',
+            'apply_day',
+            'leave_aprv_strt_date',
+            'leave_aprv_end_date',
+            'num_aprv_day',
+            'approved_by',
+            'reason'
+        ]);
+    
+        if ($request->hasFile('apply_hard_copy')) {
+            $file = $request->file('apply_hard_copy');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads', $fileName, 'public');
+            $data['apply_hard_copy'] = '/storage/' . $filePath;
+        }
+    
+        $data['apply_date'] = $request->input('date', now()->toDateString());
+    
+        Leave_Apply::create($data);
+    
+        return redirect()->route('leave_application')->with('success', 'Leave applied successfully');
+    
+    }
+
+
+    public function showLeaveApp()
+    {
+        $leave_applications = Leave_Apply::with('employee', 'leaveType')->get();
+        $employees = Employee::all();
+        $leaveTypes = Leave_type::all();
+        return view('humanResources.leave.leave_application', compact('employees', 'leaveTypes', 'leave_applications'));
+    }
+
+    public function manageLeaveApp()
+    {
+        $leave_applications = Leave_Apply::with('employee', 'leaveType')->get();
+        $employees = Employee::all();
+        $leaveTypes = Leave_type::all();
+        return view('humanResources.leave.manage_leave_application', compact('employees', 'leaveTypes', 'leave_applications'));
+    }
+
+    public function destroyLeaveapp($id)
+    {
+        $leave_applications = Leave_Apply::find($id);
+        if ($leave_applications) {
+            $leave_applications->delete();
+            return redirect()->route('manage_leave_application')->with('success', 'Deleted successfully');
+        } else {
+            return redirect()->route('manage_leave_application')->with('error', 'not found.');
+        }
+    }
+    
+
+   public function editLeaveApp($id)
+{
+    $leave_applications = Leave_Apply::findOrFail($id);
+    $employees = Employee::all();
+    $leaveTypes = Leave_Type::all();
+
+    return view('humanResources.leave.leave_app_update', compact('leave_applications', 'employees', 'leaveTypes'));
+}
+
+public function updateLeaveApp(Request $request, $id)
+{
+    $request->validate([
+        'employee_id' => 'required|exists:employee,id',
+        'leave_type_id' => 'required|exists:leave_type,id',
+        'apply_strt_date' => 'required|date',
+        'apply_end_date' => 'required|date',
+        'apply_hard_copy' => 'nullable|file|mimes:jpeg,png,pdf,doc,docx|max:2048',
+        'leave_aprv_strt_date' => 'nullable|date',
+        'leave_aprv_end_date' => 'nullable|date',
+        'approved_by' => 'nullable|string|max:255',
+        'reason' => 'nullable|string|max:255',
+    ]);
+
+    $leave_applications = Leave_Apply::findOrFail($id);
+    $leave_applications->employee_id = $request->input('employee_id');
+    $leave_applications->leave_type_id = $request->input('leave_type_id');
+    $leave_applications->apply_strt_date = $request->input('apply_strt_date');
+    $leave_applications->apply_end_date = $request->input('apply_end_date');
+    $leave_applications->leave_aprv_strt_date = $request->input('leave_aprv_strt_date');
+    $leave_applications->leave_aprv_end_date = $request->input('leave_aprv_end_date');
+    $leave_applications->approved_by = $request->input('approved_by');
+    $leave_applications->reason = $request->input('reason');
+
+    if ($request->hasFile('apply_hard_copy')) {
+        $path = $request->file('apply_hard_copy')->store('leave_applications', 'public');
+        $leave_applications->apply_hard_copy = $path;
+    }
+
+    $leave_applications->save();
+
+    return redirect()->route('manage_leave_application')->with('success', 'Leave application updated successfully');
+}
 }
 
 
