@@ -1,6 +1,7 @@
-  <aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
+
+<aside class="sidebar-left border-right bg-white shadow" id="leftSidebar" data-simplebar>
     <a href="#" class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle">
-      <i class="fe fe-x"><span class="sr-only"></span></i>
+        <i class="fe fe-x"><span class="sr-only"></span></i>
     </a>
     <nav class="vertnav navbar navbar-light">
       <!-- nav bar -->
@@ -52,12 +53,12 @@
                   <span class="ml-3 item-text">Customer List</span><span class="sr-only ">(current)</span>
                 </a>
                 </li>
-                
+
               </ul>
             </li>
-        
 
-        
+
+
             <li class="nav-item dropdown">
               <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -75,12 +76,12 @@
                   <span class="ml-3 item-text">GIN</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
-                
+
               </ul>
             </li>
-          
 
-          
+
+
             <li class="nav-item dropdown">
               <a href="#invoice" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                 <i class="fa-solid fa-scale-balanced"></i>
@@ -92,12 +93,12 @@
                   <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
-                
+
               </ul>
             </li>
-          
 
-          
+
+
             <li class="nav-item dropdown">
               <a href="#reports" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                 <i class="fa-solid fa-book-open"></i>
@@ -109,27 +110,27 @@
                 <a href="{{route('customerreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Customer Report</span><span class="sr-only">(current)</span>
                 </a>
-                
+
                 </li>
 
                 <li class="nav-item mb-2">
-                
+
                 <a href="{{route('supplierreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Supplier Report</span><span class="sr-only">(current)</span>
                 </a>
-                
+
                 </li>
 
                 <li class="nav-item mb-2">
-                
+
                 <a href="{{route('productreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Products Report</span><span class="sr-only">(current)</span>
                 </a>
-                
+
                 </li>
 
                 <li class="nav-item mb-2">
-                
+
                 <a href="{{route('purchaseorderreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Purchase Order Report</span><span class="sr-only">(current)</span>
                 </a>
@@ -137,7 +138,7 @@
                 </li>
 
                 <li class="nav-item mb-2">
-                
+
                 <a href="{{route('ginreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">GIN Report</span><span class="sr-only">(current)</span>
                 </a>
@@ -145,20 +146,58 @@
                 </li>
 
                 <li class="nav-item mb-2">
-                
+
                 <a href="{{route('orderreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Sales Report</span><span class="sr-only">(current)</span>
                 </a>
 
                 </li>
 
-                
-                
+
+
               </ul>
             </li>
-          
+        <li class="nav-item dropdown">
+            <a href="#setting" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <i class="fe fe-settings fe-16 mb-2"></i>
+                <span class="ml-3 item-text">Settings</span><span class="sr-only">(current)</span>
+            </a>
+            <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="setting">
+                <li class="nav-item mb-2">
+                    <a href="{{ route('company.index') }}" class="sidebar_text">
+                        <span class="ml-3 item-text">Manage Company</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item active mb-2">
+                    <a href="{{ route('user.index') }}" class="sidebar_text">
+                        <span class="ml-3 item-text">Add User</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item active mb-2">
+                    <a href="{{ route('user.show') }}" class="sidebar_text">
+                        <span class="ml-3 item-text">User List</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item active mb-2">
+                    <a href="{{route('add_roles')}}" class="sidebar_text">
+                        <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item active mb-2">
+                    <a href="{{route('role_list')}}" class="sidebar_text">
+                        <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item active mb-2">
+                    <a href="{{route('assign_user_role')}}" class="sidebar_text">
+                        <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
       </ul>
 
+
     </nav>
-  </aside>
+</aside>
