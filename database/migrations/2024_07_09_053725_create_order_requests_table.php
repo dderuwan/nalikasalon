@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('order_request_code')->unique();
             $table->string('supplier_code');
             $table->date('date');
+            $table->string('status');
             $table->timestamps();
         });
     }

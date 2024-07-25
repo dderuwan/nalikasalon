@@ -7,6 +7,7 @@ use App\Models\Gin;
 use App\Models\GinItems;
 use App\Models\OrderRequest;
 use App\Models\Supplier;
+use App\Models\Item;
 use App\Models\OrderRequestItem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon; 
@@ -26,9 +27,14 @@ class GinController extends Controller
 
     public function create()
     {
-        $orderRequests = OrderRequest::with('items')->get();
+        // Fetch order requests with status 'Processing' and include their items
+        $orderRequests = OrderRequest::with('items')
+                                    ->where('status', 'Processing')
+                                    ->get();
+
         return view('gin.create', compact('orderRequests'));
     }
+
 
     public function store(Request $request)
     {
@@ -73,6 +79,13 @@ class GinController extends Controller
                     'total_cost' => $item['total_cost'],
                     'payment' => $item['payment']
                 ]);
+
+                // Update the item quantity in the items table
+                $itemRecord = Item::where('item_code', $item['item_code'])->first();
+                if ($itemRecord) {
+                    $itemRecord->item_quentity += $item['in_quantity'];
+                    $itemRecord->save();
+                }
             }
 
             $orderRequest = OrderRequest::where('order_request_code', $validatedData['order_request_code'])->first();
@@ -80,7 +93,8 @@ class GinController extends Controller
                 $orderRequest->update(['status' => 'complete']);
             }
         });
-    
+
+        notify()->success('Goods In Note created successfully. ⚡️', 'Success');
         return redirect()->route('allgins')->with('success', 'Goods In Note created successfully.');
     }
     
@@ -119,7 +133,8 @@ class GinController extends Controller
         $gin = Gin::findOrFail($id);
         $gin->delete();
 
-        return redirect()->route('allgins')->with('success', 'Order Request deleted successfully.');
+        notify()->success('Requested Order deleted successfully. ⚡️', 'Success');
+        return redirect()->route('allgins')->with('success', 'Requested Order deleted successfully.');
     }
 
 

@@ -40,14 +40,17 @@ class CustomerController extends Controller
             $customer->date_of_birth = $validatedData['date_of_birth'];
             $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
             $customer->save();
-            // toastr()->success('Data has been saved successfully!');
+            
+            notify()->success('Customer Registerd successfully. ⚡️', 'Success');
             return redirect()->route('allcustomer')->with('success', 'Customer Registerd successfully.');
 
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+
+            notify()->success('Customer not Found. ⚡️', 'Fail');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Customer not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to update supplier.');
+            
+            notify()->success('Failed to update Customer. ⚡️', 'Fail');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Failed to update Customer.']);
         }
     }
@@ -58,10 +61,13 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($id);
             return view('customers.edit', compact('customer'));
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+
+            notify()->error('Supplier not found.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Supplier not found.']);
+
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+
+            notify()->error('Failed to retrieve supplier for editing.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Failed to retrieve supplier for editing.']);
         }
     }
@@ -72,10 +78,12 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($id);
             return view('customers.show', compact('customer'));
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+            
+            notify()->error('customer not found.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'customer not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+            
+            notify()->error('Failed to retrieve customer details.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Failed to retrieve customer details.']);
         }
     }
@@ -95,13 +103,15 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($request->id);
             $customer->update($validatedData);
 
-            // toastr()->success('Supplier updated successfully.');
+            notify()->success('Customer Updated successfully. ⚡️', 'Success');
             return redirect()->route('allcustomer')->with('success', 'customer updated successfully.');
         } catch (ModelNotFoundException $e) {
-            // toastr()->error('Supplier not found.');
+
+            notify()->error('customer not found.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'customer not found.']);
         } catch (Exception $e) {
-            // toastr()->error('Failed to retrieve supplier details.');
+
+            notify()->error('Failed to update customer.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Failed to update customer.']);
         }
     }
@@ -112,10 +122,15 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($id);
             $customer->delete();
 
+            notify()->success('Customer Deleted successfully. ⚡️', 'Success');
             return redirect()->route('allcustomer')->with('success', 'customer deleted successfully.');
         } catch (ModelNotFoundException $e) {
+
+            notify()->error('customer not found.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'customer not found.']);
         } catch (Exception $e) {
+
+            notify()->error('Failed to delete customer.', 'Error');
             return redirect()->route('allcustomer')->withErrors(['error' => 'Failed to delete customer.']);
         }
     }

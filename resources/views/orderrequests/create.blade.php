@@ -114,9 +114,11 @@
             fetch(`/api/get-item-stock/${itemCode}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     row.querySelector('input[name^="items"][name$="[instock]"]').value = data.instock;
-                });
+            });
         }
     });
 </script>
+
 @endsection

@@ -41,10 +41,12 @@ Auth::routes();
  Route::delete('/deletecustomer/{id}', [App\Http\Controllers\CustomerController::class, 'destroy'])->name('deletecustomer');
 
 
- //Customer
-
-Route::get('/homepage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pos.homepage');
-
+ //POS
+Route::get('/pospage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pospage');
+Route::post('/POS.store', [App\Http\Controllers\POSController::class, 'store'])->name('POS.store');
+Route::post('/POS.customerstore', [App\Http\Controllers\POSController::class, 'customerstore'])->name('POS.customerstore');
+Route::get('/showpos/{id}', [App\Http\Controllers\POSController::class, 'show'])->name('showopos');
+Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'destroy'])->name('deletepos');
 
 // OrderRequest module
 Route::get('/allorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'index'])->name('allorderrequests');
@@ -60,7 +62,7 @@ Route::get('/api/get-items/{supplierCode}', [App\Http\Controllers\RequestOrderCo
 Route::get('/api/get-item-stock/{itemCode}', [App\Http\Controllers\RequestOrderContraller::class, 'getItemStock']);
 
 
-// OrderRequest module
+// GIN
 Route::get('/allgins', [App\Http\Controllers\GinController::class, 'index'])->name('allgins');
 Route::get('/creategin', [App\Http\Controllers\GinController::class, 'create'])->name('creategin');
 Route::post('/insertgin', [App\Http\Controllers\GinController::class, 'store'])->name('insertgin');
@@ -72,3 +74,20 @@ Route::delete('/deletegins/{id}', [App\Http\Controllers\GinController::class, 'd
 // routes/web.php
 Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'getOrderItems']);
 
+
+
+//reports
+Route::get('/orderreport', [App\Http\Controllers\ReportController::class, 'orderreport'])->name('orderreport');
+Route::get('/productreport', [App\Http\Controllers\ReportController::class, 'productreport'])->name('productreport');
+Route::get('/customerreport', [App\Http\Controllers\ReportController::class, 'customerreport'])->name('customerreport');
+Route::get('/supplierreport', [App\Http\Controllers\ReportController::class, 'supplierreport'])->name('supplierreport');
+Route::get('/ginreport', [App\Http\Controllers\ReportController::class, 'ginreport'])->name('ginreport');
+Route::get('/ginshow/{id}', [App\Http\Controllers\ReportController::class, 'ginshow'])->name('ginshow');
+Route::get('/purchaseorderreport', [App\Http\Controllers\ReportController::class, 'purchaseorderreport'])->name('purchaseorderreport');
+Route::get('/purchaseordershow/{id}', [App\Http\Controllers\ReportController::class, 'purchaseordershow'])->name('purchaseordershow');
+Route::get('orderreport/print/{id}', [App\Http\Controllers\ReportController::class, 'printOrderReport'])->name('orderreport.print');
+Route::delete('/deleteorderreport/{id}', [App\Http\Controllers\ReportController::class, 'destroy'])->name('orderreport.destroy');
+Route::delete('/customerdestroy/{id}', [App\Http\Controllers\ReportController::class, 'customerdestroy'])->name('customerdestroy');
+Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\ReportController::class,'supplierdestroy'])->name('supplierdestroy');
+Route::delete('/gindestroy/{id}', [App\Http\Controllers\ReportController::class, 'gindestroy'])->name('gindestroy');
+Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
