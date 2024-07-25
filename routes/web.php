@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\AttendanceController;
 
 // Route::get('/', function () {
 //     return view('dashboard.index');
@@ -77,6 +80,7 @@ Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'ge
 
 
 //Settings module
+//company details
 Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');
 Route::post('company-settings', [CompanySettingController::class, 'store'])->name('company.store');
 
@@ -95,3 +99,45 @@ Route::view('/role_list', 'setting.roles.role_list')->name('role_list');
 Route::view('/role_edit', 'setting.roles.role_edit')->name('role_edit');
 Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
 
+
+//HRmodule
+//attendance
+Route::resource('attendance', AttendanceController::class);
+Route::get('/attendance-list', [AttendanceController::class, 'show'])->name('show.employees');
+Route::get('/hrm/attendance_list', [AttendanceController::class, 'show'])->name('attendance_list');
+Route::get('/hrm/manage_attendance_list', [AttendanceController::class, 'manageAttendance'])->name('manage_attendance_list');
+Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.check-in');
+Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.check-out');
+Route::get('/attendance/{id}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
+Route::post('/attendance/{id}/update', [AttendanceController::class, 'update'])->name('attendance.update');
+Route::view('/hrm/update_attendance', 'humanResources.attendance.update_attendance')->name('update_attendance');
+Route::get('/hrm/attendance_reports', [AttendanceController::class, 'attendanceReport'])->name('attendance_reports');
+
+//Leave
+Route::resource('leave', LeaveController::class);
+Route::post('/leave/update', [LeaveController::class, 'update'])->name('leave.update');
+Route::get('/hrm/weekly_holidays', [LeaveController::class, 'show'])->name('weekly_holiday');
+Route::get('/hrm/holiday', [LeaveController::class, 'showHolidays'])->name('holiday');
+Route::get('/hrm/manage_holiday', [LeaveController::class, 'manageHolidays'])->name('manage_holiday');
+Route::post('/holiday/store', [LeaveController::class, 'storeHolidays'])->name('holiday.store');
+Route::delete('/holiday/{holiday}', [LeaveController::class, 'destroy'])->name('holiday.destroy');
+Route::view('/hrm/weekly_holidays_update', 'humanResources.leave.weekly_holiday_update')->name('weekly_holiday_update');
+Route::get('/holiday/{id}/edit', [LeaveController::class, 'edit'])->name('holiday.edit');
+Route::post('/holiday/{id}/update', [LeaveController::class, 'updateHoliday'])->name('update_holiday');
+Route::get('/hrm/add_leave_type', [LeaveController::class, 'showLeavetypes'])->name('add_leave_type');
+Route::post('/hrm/add_leave_type/store', [LeaveController::class, 'storeLeavetypes'])->name('Leave_type.store');
+Route::delete('/hrm/add_leave_type/{leave_type}', [LeaveController::class, 'destroyLeave_type'])->name('leave_type.destroy');
+Route::post('/hrm/add_leave_type/{id}/update', [LeaveController::class, 'updateLeavetype'])->name('update_leave_type');
+Route::get('/hrm/add_leave_type/{id}/edit', [LeaveController::class, 'editLeavetype'])->name('leave_type.edit');
+
+Route::view('/hrm/leave_application', 'humanResources.leave.leave_application')->name('leave_application');
+
+
+
+//employee module
+Route::get('/employee', [App\Http\Controllers\EmployeeController::class, 'index'])->name('employee');
+Route::get('/createemployee', [App\Http\Controllers\EmployeeController::class, 'create'])->name('createemployee');
+Route::get('/editemployee/{id}', [App\Http\Controllers\EmployeeController::class, 'edit'])->name('editemployee');
+Route::post('/updateemployee',[App\Http\Controllers\EmployeeController::class, 'update'])->name('updateemployee');
+Route::post('/storeemployee', [App\Http\Controllers\EmployeeController::class, 'store'])->name('storeemployee');
+Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('deleteemployee');
