@@ -6,18 +6,18 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="row mb-2">
-                <div class="col-md-6" >
-                     <h2>Services</h2>
+                <div class="col-md-6">
+                    <h2>Packages</h2>
                 </div>
                 <div class="col-md-6">
-                    @if ($message = Session::get('succes'))
+                    @if ($message = Session::get('success'))
                     <div class='alert alert-success'>
                         <p>{{ $message }}</p>
                     </div>
                     @endif
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ route('addservice') }}" class="btn btn-primary mb-3">Add Service</a>
+                    <a href="{{ route('addpackages') }}" class="btn btn-primary mb-3">Add Package</a>
                 </div>
             </div>
             <p class="card-text"></p>
@@ -30,35 +30,29 @@
                                 <thead>
                                     <tr>
                                         <th style="color: black;">Id</th>
-                                        <th style="color: black;">Image</th>
                                         <th style="color: black;">Service Code</th>
-                                        <th style="color: black;">Service Name</th>
+                                        <th style="color: black;">Package Name</th>
                                         <th style="color: black;">Description</th>
+                                        <th style="color: black;">Price</th>
                                         <th style="color: black;" width="200px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($services as $service)
+                                    @foreach ($packages as $service)
                                     <tr>
                                         <td>{{ $service->id }}</td>
-                                        <td style="text-align:center; vertical-align:middle;">
-                                            @if($service->image)
-                                                <img src="{{ asset('images/services/' . $service->image) }}" alt="{{ $service->service_name }}" style="height: 50px; display: block; margin: 0 auto;" class="img-fluid">
-                                            @endif
-                                        </td>
-                                        <td>{{ $service->service_code }}</td>
-                                        <td>{{ $service->service_name }}</td>
-                                        <td>{{ $service->description }}</td>
+                                        <td>{{ $service->services_id }}</td>
+                                        <td>{{ $service->package_name }}</td>
+                                        <td>{!! $service->description !!}</td>
+                                        <td>{{ $service->price }}</td>
                                         <td>
-                                            <!-- Show Button -->
-                                            <a href="{{ route('showservices', $service->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
 
                                             <!-- Edit Button -->
-                                            <a href="{{ route('editservices', $service->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>
+                                            <a href="{{ route('editpackage', $service->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>
 
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger" onclick="confirmDelete({{ $service->id }})"><i class="fe fe-trash fe-16"></i></button>
-                                            <form id="delete-form-{{ $service->id }}" action="{{ route('deleteservices', $service->id) }}" method="POST" style="display:none;">
+                                            <form id="delete-form-{{ $service->id }}" action="{{ route('deletepackages', $service->id) }}" method="POST" style="display:none;">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
@@ -94,6 +88,33 @@
                 document.getElementById('delete-form-' + orderRequestId).submit();
             }
         })
+    }
+</script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var editor = document.getElementById('editor');
+    if (editor)
+    {
+        var toolbarOptions = [
+            [{ 'font': [] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['clean']
+        ];
+        var quill = new Quill(editor, {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow'
+        });
     }
 </script>
 @endsection

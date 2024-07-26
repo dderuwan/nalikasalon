@@ -157,47 +157,87 @@
 
               </ul>
             </li>
-        <li class="nav-item dropdown">
-            <a href="#setting" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fe fe-settings fe-16 mb-2"></i>
-                <span class="ml-3 item-text">Settings</span><span class="sr-only">(current)</span>
-            </a>
-            <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="setting">
+
+            <li class="nav-item dropdown">
+              <a href="#services" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span class="ml-3 item-text">Services</span><span class="sr-only">(current)</span>
+              </a>
+              <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="services">
                 <li class="nav-item mb-2">
-                    <a href="{{ route('company.index') }}" class="sidebar_text">
-                        <span class="ml-3 item-text">Manage Company</span><span class="sr-only">(current)</span>
-                    </a>
+                <a href="{{route('services')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Services List</span><span class="sr-only">(current)</span>
+                </a>
                 </li>
-                <li class="nav-item active mb-2">
-                    <a href="{{ route('user.index') }}" class="sidebar_text">
-                        <span class="ml-3 item-text">Add User</span><span class="sr-only">(current)</span>
-                    </a>
+
+                <li class="nav-item mb-2">
+                <a href="{{route('addservice')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Add Services</span><span class="sr-only">(current)</span>
+                </a>
                 </li>
-                <li class="nav-item active mb-2">
-                    <a href="{{ route('user.show') }}" class="sidebar_text">
-                        <span class="ml-3 item-text">User List</span><span class="sr-only">(current)</span>
-                    </a>
+
+                <li class="nav-item mb-2">
+                <a href="{{route('packages')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Packages List</span><span class="sr-only">(current)</span>
+                </a>
                 </li>
-                <li class="nav-item active mb-2">
-                    <a href="{{route('add_roles')}}" class="sidebar_text">
-                        <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
-                    </a>
+
+                <li class="nav-item mb-2">
+                <a href="{{route('addpackages')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Add Packages</span><span class="sr-only">(current)</span>
+                </a>
                 </li>
-                <li class="nav-item active mb-2">
-                    <a href="{{route('role_list')}}" class="sidebar_text">
-                        <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item active mb-2">
-                    <a href="{{route('assign_user_role')}}" class="sidebar_text">
-                        <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+
+              </ul>
+            </li>
+
+
+
+              <li class="nav-item dropdown">
+                  <a href="#setting" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                      <i class="fe fe-settings fe-16 mb-2"></i>
+                      <span class="ml-3 item-text">Settings</span><span class="sr-only">(current)</span>
+                  </a>
+                  <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="setting">
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('company.index') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Manage Company</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{ route('user.index') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Add User</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{ route('user.show') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">User List</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{route('add_roles')}}" class="sidebar_text">
+                              <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{route('role_list')}}" class="sidebar_text">
+                              <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{route('assign_user_role')}}" class="sidebar_text">
+                              <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
 
 
             
+
+
+
+                  
           
 
       </ul>

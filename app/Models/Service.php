@@ -11,8 +11,14 @@ class Service extends Model
     protected $table = "services";
     protected $fillable = [
         'service_code',
-        'service_namee',
+        'service_name',
         'description',
-        'image',
+        'image',  
     ];
+
+    // Define the relationship with the Package model
+    public function packages()
+    {
+        return $this->hasMany(Package::class, 'services_id', 'service_code');
+    }
 }

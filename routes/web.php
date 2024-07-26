@@ -97,7 +97,22 @@ Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportControll
 
 
 //services
-//Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
+Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
+Route::get('/addservice', [App\Http\Controllers\ServiceController::class, 'create'])->name('addservice');
+Route::post('/services/store', [App\Http\Controllers\ServiceController::class, 'store'])->name('storeservices');
+Route::get('/showservices/{id}', [App\Http\Controllers\ServiceController::class, 'show'])->name('showservices');
+Route::delete('/deleteservices/{id}', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('deleteservices');
+Route::get('/services/{id}', [App\Http\Controllers\ServiceController::class, 'edit'])->name('editservices');
+Route::put('/services/{id}', [App\Http\Controllers\ServiceController::class, 'update'])->name('updateservices');
+
+//packages
+Route::get('/packages', [App\Http\Controllers\PackageController::class, 'index'])->name('packages');
+Route::get('/addpackages', [App\Http\Controllers\PackageController::class, 'create'])->name('addpackages');
+Route::post('/packages/store', [App\Http\Controllers\PackageController::class, 'store'])->name('storepackages');
+Route::delete('/packages/{id}', [App\Http\Controllers\PackageController::class, 'destroy'])->name('deletepackages');
+Route::get('/packages/{id}/edit', [App\Http\Controllers\PackageController::class, 'edit'])->name('editpackage');
+Route::put('/packages/{id}', [App\Http\Controllers\PackageController::class, 'update'])->name('updatepackage');
+
 
 //Settings module
 Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');

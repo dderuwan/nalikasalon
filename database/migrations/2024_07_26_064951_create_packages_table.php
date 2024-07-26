@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pos_items', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('services_id')->constrained('services')->onDelete('cascade');
-            $table->string('item_code');
-            $table->string('item_name');
-            $table->integer('quantity');
-            $table->decimal('total_cost', 15, 2);
+            $table->string('services_id');
+            $table->string('package_name');
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pos_items');
+        Schema::dropIfExists('packages');
     }
 };
