@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CompanySettingController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 // Route::get('/', function () {
 //     return view('dashboard.index');
@@ -51,7 +54,7 @@ Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'de
 // OrderRequest module
 Route::get('/allorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'index'])->name('allorderrequests');
 Route::get('/createorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'create'])->name('orderrequests.create');
-Route::post('/insertorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'store'])->name('orderrequests.store'); 
+Route::post('/insertorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'store'])->name('orderrequests.store');
 Route::get('/showorderrequests/{id}', [App\Http\Controllers\RequestOrderContraller::class, 'show'])->name('orderrequests.show');
 Route::get('/editorderrequests/{id}/edit', [App\Http\Controllers\RequestOrderContraller::class, 'edit'])->name('orderrequests.edit');
 Route::put('/updateorderrequests/{id}', [App\Http\Controllers\RequestOrderContraller::class, 'update'])->name('orderrequests.update');
@@ -95,3 +98,24 @@ Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportControll
 
 //services
 //Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
+
+//Settings module
+Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');
+Route::post('company-settings', [CompanySettingController::class, 'store'])->name('company.store');
+
+//users
+Route::resource('users', UserController::class);
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::post('/users/add-user', [UserController::class, 'store'])->name('user.store');
+Route::post('/users/user-list', [UserController::class, 'show'])->name('user.show');
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::get('/editUser/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/updateUser/{id}', [UserController::class, 'update'])->name('updateUser');
+
+//roles
+Route::view('/add_role', 'setting.roles.add_roles')->name('add_roles');
+Route::view('/role_list', 'setting.roles.role_list')->name('role_list');
+Route::view('/role_edit', 'setting.roles.role_edit')->name('role_edit');
+Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
+
+
