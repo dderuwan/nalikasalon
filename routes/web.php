@@ -91,3 +91,7 @@ Route::delete('/customerdestroy/{id}', [App\Http\Controllers\ReportController::c
 Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\ReportController::class,'supplierdestroy'])->name('supplierdestroy');
 Route::delete('/gindestroy/{id}', [App\Http\Controllers\ReportController::class, 'gindestroy'])->name('gindestroy');
 Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
+
+
+//services
+//Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
