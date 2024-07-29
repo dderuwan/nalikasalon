@@ -16,7 +16,7 @@
         <table class="table table-bordered">
             <tr>
                 <th>Customer Code</th>
-                <td>{{ $customer->supplier_code }}</td>
+                <td>{{ $customer->customer_code }}</td>
             </tr>
             <tr>
                 <th>Name</th>
