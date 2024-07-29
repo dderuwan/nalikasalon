@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('leave_type', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('contact_number_1');
-            $table->string('contact_number_2')->nullable();
-            $table->string('address');
-            $table->date('date_of_birth');
-            $table->string('customer_code')->unique();
+            $table->string('leave_type');
+            $table->integer('leave_days');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('leave_type');
     }
 };
