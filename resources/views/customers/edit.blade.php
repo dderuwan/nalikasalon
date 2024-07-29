@@ -9,8 +9,8 @@
             @method('PUT')
             <input type="hidden" value="{{ $customer->id}}" name="id">
             <div class="form-group">
-                <label for="supplier_code">Customer code</label>
-                <input type="text" name="supplier_code" id="supplier_code" class="form-control" value="{{ old('supplier_code', $customer->supplier_code) }}" readonly>
+                <label for="customer_code">Customer code</label>
+                <input type="text" name="customer_code" id="customer_code" class="form-control" value="{{ old('customer_code', $customer->customer_code) }}" readonly>
             </div>
             
             <div class="form-group">

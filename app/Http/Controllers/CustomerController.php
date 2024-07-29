@@ -38,7 +38,7 @@ class CustomerController extends Controller
             $customer->contact_number_2 = $validatedData['contact_number_2'];
             $customer->address = $validatedData['address'];
             $customer->date_of_birth = $validatedData['date_of_birth'];
-            $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
+            $customer->customer_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
             $customer->save();
             // toastr()->success('Data has been saved successfully!');
             return redirect()->route('allcustomer')->with('success', 'Customer Registerd successfully.');

@@ -55,6 +55,13 @@
                 </a>
             </li>
 
+            <li class="nav-item sidebar_li">
+                <i class="fe fe fe-calendar fe-16"></i>
+                <a href="{{route('appointment')}}" class="sidebar_text">
+                    <span class="ml-3 item-text">Appointments</span><span class="sr-only">(current)</span>
+                </a>
+            </li>
+
             <li class="nav-item dropdown">
                 <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-shopping-cart fe-16 mb-2"></i>

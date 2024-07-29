@@ -16,6 +16,6 @@ class Customer extends Model
         'contact_number_2',
         'address',
         'date_of_birth',
-        'supplier_code'
+        'customer_code'
     ];
 }

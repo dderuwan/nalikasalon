@@ -23,7 +23,7 @@
         </tr>
         @foreach ($customers as $customer)
         <tr>
-            <td>{{ $customer->supplier_code }}</td>
+            <td>{{ $customer->customer_code }}</td>
             <td>{{ $customer->name }}</td>
             <td>{{ $customer->contact_number_1 }}</td>
             <td>{{ $customer->contact_number_2 }}</td>
@@ -53,7 +53,7 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmDelete(supplier_code) {
+    function confirmDelete(customer_code) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -64,7 +64,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('delete-form-' + supplier_code).submit();
+                document.getElementById('delete-form-' + customer_code).submit();
             }
         })
     }

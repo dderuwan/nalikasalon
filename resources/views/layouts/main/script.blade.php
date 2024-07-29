@@ -3,8 +3,10 @@
 <script src="{{asset('assets/js/moment.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/js/simplebar.min.js')}}"></script>
-<script src='{{asset('assets/js/daterangepicker.js')}}'></script>
-<script src='{{asset('assets/js/jquery.stickOnScroll.js')}}'></script>
+<script src="{{asset('assets/js/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/fullcalendar.js')}}"></script>
+<script src="{{asset('assets/js/fullcalendar.custom.js')}}"></script>
+<script src="{{asset('assets/js/jquery.stickOnScroll.js')}}"></script>
 <script src="{{asset('assets/js/tinycolor-min.js')}}"></script>
 <script src="{{asset('assets/js/config.js')}}"></script>
 <script src="{{asset('assets/js/d3.min.js')}}"></script>
