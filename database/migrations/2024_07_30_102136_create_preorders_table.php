@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('preorders', function (Blueprint $table) {
             $table->id();
             $table->string('Auto_serial_number')->unique();
             $table->string('booking_reference_number')->unique();
@@ -29,8 +29,8 @@ return new class extends Migration
             $table->string('appointment_time');
             $table->string('main_job_holder');
             $table->string('Assistant_1')->nullable();
-            $table->string('Assistant_1')->nullable();
-            $table->string('Assistant_1')->nullable();
+            $table->string('Assistant_2')->nullable();
+            $table->string('Assistant_3')->nullable();
             $table->text('note')->nullable();
             $table->string('payment_type');
             $table->decimal('Advanced_price',10,2);
@@ -44,6 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appointments');
+        Schema::dropIfExists('preorders');
     }
 };

@@ -21,6 +21,7 @@
   </head>
   <body class="vertical  light  ">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
     <div class="wrapper">
     {{-- navbar --}}
       @include('layouts.main.header')
