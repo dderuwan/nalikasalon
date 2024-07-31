@@ -21,8 +21,7 @@ class Employee extends Model
         'Email' ,
         'address' ,
         'city' ,
-        'zipecode' ,
+        'zipecode',
         'status'
-
     ];
 }

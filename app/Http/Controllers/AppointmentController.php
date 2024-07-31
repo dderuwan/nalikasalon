@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 
+
 class AppointmentController extends Controller
 {
     public function showCustomers()
@@ -25,11 +26,7 @@ class AppointmentController extends Controller
     {
         $appointments = Preorder::all(); 
         return view('appointment.index', compact('appointments'));
-    
     }
-
-
-    
 
     public function getCustomerDetails($customer_code)
     {
@@ -87,6 +84,7 @@ class AppointmentController extends Controller
             'payment_type' => $request->payment_method,
             'Advanced_price' => $request->advanced_payment,
             'Total_price' => $request->total_price,
+            'status'=>'pending',
         ]);
 
         notify()->success('Order created successfully. ⚡️', 'Success');
@@ -118,9 +116,10 @@ class AppointmentController extends Controller
         return view('appointment.print', compact('preorder'));
     }
 
-
-
-
-
+    public function getPreorders()
+    {
+        $preorders = Preorder::all(['appointment_date as start', 'customer_name as title']);
+        return response()->json($preorders);
+    }
     
 }

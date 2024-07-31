@@ -197,5 +197,6 @@ Route::get('/Appointments/New-appointment/customers/{customer_code}', [Appointme
 Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
 Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
 Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
+Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
 
 
