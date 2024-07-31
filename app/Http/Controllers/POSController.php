@@ -111,7 +111,7 @@ class POSController extends Controller
                     'quantity' => $item['quantity'],
                     'total_cost' => $item['total'],
                 ]);
-                dd($orderItem);
+
                 // Decrease item quantity in Item table
                 $itemModel = Item::where('item_code', $item['item_code'])->first();
                 if ($itemModel) {
