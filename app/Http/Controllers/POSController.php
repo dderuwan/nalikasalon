@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator; 
-use Illuminate\Support\Carbon; 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 use PDF;
 
 
@@ -33,7 +33,7 @@ class POSController extends Controller
 
     public function customerstore(Request $request)
     {
-        
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'contact_number_1' => 'required|string|max:20',
@@ -41,7 +41,7 @@ class POSController extends Controller
             'address' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
         ]);
-        
+
         try {
             $customer = new Customer();
             $customer->name = $validatedData['name'];
@@ -51,7 +51,7 @@ class POSController extends Controller
             $customer->date_of_birth = $validatedData['date_of_birth'];
             $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
             $customer->save();
-            
+
             notify()->success('Customer Registerd successfully. ⚡️', 'Success');
             return redirect()->route('pospage')->with('success', 'Customer Registerd successfully.');
 
@@ -60,7 +60,7 @@ class POSController extends Controller
             notify()->success('Customer not Found. ⚡️', 'Fail');
             return redirect()->route('pospage')->withErrors(['error' => 'Customer not found.']);
         } catch (Exception $e) {
-            
+
             notify()->success('Failed to update Customer. ⚡️', 'Fail');
             return redirect()->route('pospage')->withErrors(['error' => 'Failed to update Customer.']);
         }
@@ -68,6 +68,7 @@ class POSController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'customer_code' => 'required',
             'items' => 'required|array',
@@ -82,13 +83,13 @@ class POSController extends Controller
             'change' => 'required|numeric',
             'grand_total' => 'required|numeric',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
+
         DB::beginTransaction();
-    
+
         try {
             $pos = Order::create([
                 'order_code' => $this->generateOrderCode(),
@@ -101,7 +102,7 @@ class POSController extends Controller
                 'change' => $request->change,
                 'payment_type' => $request->payment_type,
             ]);
-    
+
             foreach ($request->items as $item) {
                 $orderItem = OrderItems::create([
                     'pos_id' => $pos->id,
@@ -110,7 +111,7 @@ class POSController extends Controller
                     'quantity' => $item['quantity'],
                     'total_cost' => $item['total'],
                 ]);
-    
+                dd($orderItem);
                 // Decrease item quantity in Item table
                 $itemModel = Item::where('item_code', $item['item_code'])->first();
                 if ($itemModel) {
@@ -124,11 +125,11 @@ class POSController extends Controller
                     throw new Exception("Item not found: " . $item['item_code']);
                 }
             }
-    
+
             DB::commit();
-    
+
             $this->generateAndDownloadBill($pos->id);
-    
+
             notify()->success('Order created successfully. ⚡️', 'Success');
             return redirect()->route('pospage')->with('success', 'Order created successfully.');
         } catch (Exception $e) {
@@ -137,7 +138,7 @@ class POSController extends Controller
             return redirect()->route('pospage')->withErrors(['error' => 'Failed to create order.']);
         }
     }
-    
+
 
     protected function generateAndDownloadBill($orderId)
     {
@@ -175,5 +176,5 @@ class POSController extends Controller
         return redirect()->route('pospage')->with('success', 'Requested Order deleted successfully.');
     }
 
-    
+
 }

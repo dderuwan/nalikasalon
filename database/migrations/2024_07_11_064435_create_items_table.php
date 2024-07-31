@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('item_name');
             $table->text('item_description');
             $table->string('pack_size')->nullable();
-            $table->string('item_quantity')->nullable();
+            $table->string('item_quentity')->nullable();
             $table->decimal('unit_price', 10, 2);
             $table->string('supplier_code');
             $table->string('image')->nullable();

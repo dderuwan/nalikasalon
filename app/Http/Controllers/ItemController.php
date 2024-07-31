@@ -38,6 +38,7 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
+       
         try {
             $request->validate([
                 'supplier_code' => 'required',
