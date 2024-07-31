@@ -7,16 +7,18 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttendanceController;
 
-// Route::get('/', function () {
-//     return view('dashboard.index');
-// });
+//Route::get('/', function () {
+//    return view('dashboard.index');
+//});
 
 Auth::routes();
 
- Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
+ Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
 
 // supplier module
 
@@ -175,3 +177,9 @@ Route::view('/Appointments', 'appointment.index')->name('appointment');
 Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
 Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
 Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
+
+
+//revenue
+Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
+Route::get('/api/monthly-revenue', [RevenueController::class, 'getMonthlyRevenue']);
+Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
