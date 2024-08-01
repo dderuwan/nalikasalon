@@ -121,5 +121,40 @@ class AppointmentController extends Controller
         $preorders = Preorder::all(['appointment_date as start', 'customer_name as title']);
         return response()->json($preorders);
     }
+
+    public function customerstore(Request $request)
+    {
+        
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_number_1' => 'required|string|max:20',
+            'contact_number_2' => 'nullable|string|max:20',
+            'address' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+        ]);
+        
+        try {
+            $customer = new Customer();
+            $customer->name = $validatedData['name'];
+            $customer->contact_number_1 = $validatedData['contact_number_1'];
+            $customer->contact_number_2 = $validatedData['contact_number_2'];
+            $customer->address = $validatedData['address'];
+            $customer->date_of_birth = $validatedData['date_of_birth'];
+            $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
+            $customer->save();
+            
+            notify()->success('Customer Registerd successfully. ⚡️', 'Success');
+            return redirect()->route('new_appointment')->with('success', 'Customer Registerd successfully.');
+
+        } catch (ModelNotFoundException $e) {
+
+            notify()->success('Customer not Found. ⚡️', 'Fail');
+            return redirect()->route('new_appointment')->withErrors(['error' => 'Customer not found.']);
+        } catch (Exception $e) {
+            
+            notify()->success('Failed to update Customer. ⚡️', 'Fail');
+            return redirect()->route('new_appointment')->withErrors(['error' => 'Failed to update Customer.']);
+        }
+    }
     
 }

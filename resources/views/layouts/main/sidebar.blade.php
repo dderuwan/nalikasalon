@@ -237,6 +237,12 @@
                         </li>
                     </ul>
                     </li>
+
+                    <li class="nav-item sidebar_li">
+                        <a href="{{route('employee')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Employee</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -262,12 +268,7 @@
 
 
 
-            <li class="nav-item sidebar_li">
-                <i class="fe fe-user fe-16"></i>
-                <a href="{{route('employee')}}" class="sidebar_text">
-                    <span class="ml-3 item-text">Employee</span><span class="sr-only">(current)</span>
-                </a>
-            </li>
+            
             
 
             <li class="nav-item dropdown">

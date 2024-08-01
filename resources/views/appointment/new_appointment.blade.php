@@ -311,6 +311,58 @@
         </div>
       </div>
     </div>
+
+    <!-- Add New Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                        
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                            
+                                    <form action="{{ route('POS.customerstore') }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="name">Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="contact_number_1">Contact Number 1 : </label>
+                                                    <input type="text" class="form-control" id="contact_number_1" name="contact_number_1"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="contact_number_2">Contact Number 2 : </label>
+                                                    <input type="text" class="form-control" id="contact_number_2" name="contact_number_2" >
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="address">Address</label>
+                                                    <input type="text" class="form-control" id="address" name="address"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="date_of_birth">Date of Birth</label>
+                                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"  required>
+                                                </div>
+
+
+                                                <div class="text-center">
+                                                <button type="submit" class="btn btn-primary float-center">Submit</button>
+                                                </div>
+
+                                            </form>
+                                            
+                                </div>
+                                       
+                        </div>
+                </div>
+                            
+            </div>
   </div>
 </main>
 
@@ -472,6 +524,13 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<script>
+    // Show modal to add customer
+    $('#add-customer-btn').on('click', function() {
+        new bootstrap.Modal(document.getElementById('addCustomerModal')).show();
+    });
 </script>
 
 

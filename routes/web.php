@@ -189,14 +189,11 @@ Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::
 
 //appointment module
 Route::get('/appointments', [AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
-
-
-
 Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
 Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
 Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
 Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
 Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
-
+Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
 
