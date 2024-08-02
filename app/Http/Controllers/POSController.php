@@ -132,6 +132,7 @@ class POSController extends Controller
 
             notify()->success('Order created successfully. ⚡️', 'Success');
             return redirect()->route('pospage')->with('success', 'Order created successfully.');
+            
         } catch (Exception $e) {
             DB::rollback();
             Log::error('Failed to create order: ' . $e->getMessage());

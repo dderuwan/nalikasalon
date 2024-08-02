@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 
+
 class AppointmentController extends Controller
 {
     public function showCustomers()
@@ -25,11 +26,7 @@ class AppointmentController extends Controller
     {
         $appointments = Preorder::all(); 
         return view('appointment.index', compact('appointments'));
-    
     }
-
-
-    
 
     public function getCustomerDetails($customer_code)
     {
@@ -87,6 +84,7 @@ class AppointmentController extends Controller
             'payment_type' => $request->payment_method,
             'Advanced_price' => $request->advanced_payment,
             'Total_price' => $request->total_price,
+            'status'=>'pending',
         ]);
 
         notify()->success('Order created successfully. ⚡️', 'Success');
@@ -118,9 +116,45 @@ class AppointmentController extends Controller
         return view('appointment.print', compact('preorder'));
     }
 
+    public function getPreorders()
+    {
+        $preorders = Preorder::all(['appointment_date as start', 'customer_name as title']);
+        return response()->json($preorders);
+    }
 
+    public function customerstore(Request $request)
+    {
+        
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_number_1' => 'required|string|max:20',
+            'contact_number_2' => 'nullable|string|max:20',
+            'address' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+        ]);
+        
+        try {
+            $customer = new Customer();
+            $customer->name = $validatedData['name'];
+            $customer->contact_number_1 = $validatedData['contact_number_1'];
+            $customer->contact_number_2 = $validatedData['contact_number_2'];
+            $customer->address = $validatedData['address'];
+            $customer->date_of_birth = $validatedData['date_of_birth'];
+            $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
+            $customer->save();
+            
+            notify()->success('Customer Registerd successfully. ⚡️', 'Success');
+            return redirect()->route('new_appointment')->with('success', 'Customer Registerd successfully.');
 
+        } catch (ModelNotFoundException $e) {
 
-
+            notify()->success('Customer not Found. ⚡️', 'Fail');
+            return redirect()->route('new_appointment')->withErrors(['error' => 'Customer not found.']);
+        } catch (Exception $e) {
+            
+            notify()->success('Failed to update Customer. ⚡️', 'Fail');
+            return redirect()->route('new_appointment')->withErrors(['error' => 'Failed to update Customer.']);
+        }
+    }
     
 }

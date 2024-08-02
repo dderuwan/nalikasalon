@@ -38,6 +38,7 @@ class Preorder extends Model
         'payment_type',
         'Advanced_price',
         'Total_price',
+        'status',
     ];
 
     // Define the attributes that should be cast to a specific type
