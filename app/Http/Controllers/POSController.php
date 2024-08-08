@@ -68,6 +68,8 @@ class POSController extends Controller
 
     public function store(Request $request)
     {
+
+
         $validator = Validator::make($request->all(),[
             'customer_code' => 'required',
             'items' => 'required|array',
@@ -110,6 +112,7 @@ class POSController extends Controller
                     'quantity' => $item['quantity'],
                     'total_cost' => $item['total'],
                 ]);
+
 
                 // Decrease item quantity in Item table
                 $itemModel = Item::where('item_code', $item['item_code'])->first();
