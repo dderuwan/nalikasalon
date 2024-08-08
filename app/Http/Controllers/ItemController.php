@@ -38,7 +38,8 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-       
+
+
         try {
             $request->validate([
                 'supplier_code' => 'required',
@@ -47,14 +48,14 @@ class ItemController extends Controller
                 'items.*.unit_price' => 'nullable|numeric',
                 'items.*.image' => 'nullable|image',
             ]);
-
+            //dd($request);
             foreach ($request->items as $itemData) {
                 $item = new Item();
                 $item->item_code = $this->generateItemCode();
                 $item->item_name = $itemData['item_name'];
                 $item->item_description = $itemData['item_description'];
                 $item->unit_price = $itemData['unit_price'];
-                $item->item_quentity = 0;
+                $item->item_quantity = 0;
                 $item->supplier_code = $request->supplier_code;
 
                 if (isset($itemData['image'])) {

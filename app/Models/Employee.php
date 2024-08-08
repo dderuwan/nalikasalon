@@ -21,8 +21,23 @@ class Employee extends Model
         'Email' ,
         'address' ,
         'city' ,
-        'zipecode' ,
+        'zipecode',
         'status'
-
     ];
+
+    public function appointments()
+    {
+        return $this->hasMany(Preorder::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'employee_roles');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+   
 }
