@@ -24,4 +24,20 @@ class Employee extends Model
         'zipecode',
         'status'
     ];
+
+    public function appointments()
+    {
+        return $this->hasMany(Preorder::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'employee_roles');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+   
 }

@@ -134,10 +134,18 @@ Route::get('/editUser/{id}', [UserController::class, 'edit'])->name('user.edit')
 Route::put('/updateUser/{id}', [UserController::class, 'update'])->name('updateUser');
 
 //roles
-Route::view('/add_role', 'setting.roles.add_roles')->name('add_roles');
-Route::view('/role_list', 'setting.roles.role_list')->name('role_list');
-Route::view('/role_edit', 'setting.roles.role_edit')->name('role_edit');
+Route::get('/addRole', [RoleController::class, 'addRole'])->name('addRole');
+Route::post('/storeRole', [RoleController::class, 'storeRole'])->name('storeRole');
+Route::get('/showRole', [RoleController::class, 'showRole'])->name('showRole');
+Route::get('/editRole/{id}', [RoleController::class, 'editRole'])->name('editRole');
+Route::put('/updateRole/{id}', [RoleController::class, 'updateRole'])->name('updateRole');
+Route::delete('/deleteRole/{id}', [RoleController::class, 'deleteRole'])->name('deleteRole');
 Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
+Route::get('/addPermission', [RoleController::class, 'addPermission'])->name('addPermission');
+Route::post('/storePermission', [RoleController::class, 'storePermission'])->name('storePermission');
+Route::get('/showPermission', [RoleController::class, 'showPermission'])->name('showPermission');
+Route::delete('/permissions/{id}', [RoleController::class, 'deletePermission'])->name('deletePermission');
+Route::post('/assignRole', [RoleController::class, 'assignRole'])->name('assignRole');
 
 //HRmodule
 //attendance
@@ -196,4 +204,10 @@ Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackag
 Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
 Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
+// web.php or api.php (depending on your routes file)
+Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);
+Route::get('/get-available-main-dressers', [AppointmentController::class, 'getAvailableMainDressers']);
+Route::get('/get-available-assistants', [AppointmentController::class, 'getAvailableAssistants']);
+
+
 

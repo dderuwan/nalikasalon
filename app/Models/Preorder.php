@@ -49,4 +49,19 @@ class Preorder extends Model
         'Advanced_price' => 'decimal:2',
         'Total_price' => 'decimal:2',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
 }
