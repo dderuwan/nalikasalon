@@ -7,17 +7,20 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttendanceController;
 
 
-// Route::get('/', function () {
-//     return view('dashboard.index');
-// });
+
+//Route::get('/', function () {
+//    return view('dashboard.index');
+//});
 
 Auth::routes();
 
- Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
+ Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
 
 // supplier module
 
@@ -197,3 +200,9 @@ Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class
 Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
 Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
 
+
+
+//revenue
+Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
+Route::get('/api/monthly-revenue', [RevenueController::class, 'getMonthlyRevenue']);
+Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
