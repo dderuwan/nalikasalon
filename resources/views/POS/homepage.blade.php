@@ -31,7 +31,7 @@
                                 <div class="scrollable-content">
                                     <div class="row" id="item-container">
                                         @foreach ($items as $item)
-                                            @if ($item->item_quentity > 1)
+                                            @if ($item->item_quantity > 1)
                                                 <div class="col-item" data-item='@json($item)' data-item-name="{{ $item->item_name }}">
                                                     <div class="custom-card">
                                                         <img src="{{ asset('images/items/' . $item->image) }}" class="custom-card-img-top" alt="{{ $item->item_name }}">
@@ -447,9 +447,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const quantityInput = existingRow.querySelector('.quantity-input');
                 const totalCostCell = existingRow.querySelector('.total-cost');
                 quantityInput.value = parseInt(quantityInput.value) + 1;
-                if (parseInt(quantityInput.value) > itemData.item_quentity) {
-                    notifyExceedQuantity(itemData.item_quentity);
-                    quantityInput.value = itemData.item_quentity;
+                if (parseInt(quantityInput.value) > itemData.item_quantity) {
+                    notifyExceedQuantity(itemData.item_quantity);
+                    quantityInput.value = itemData.item_quantity;
                 }
                 updateTotalCost(quantityInput, totalCostCell, itemData.unit_price);
             } else {
@@ -472,9 +472,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 quantityElement.addEventListener('input', function() {
                     let quantity = parseInt(quantityElement.textContent);
-                    if (quantity > itemData.item_quentity) {
-                        notifyExceedQuantity(itemData.item_quentity);
-                        quantity = itemData.item_quentity;
+                    if (quantity > itemData.item_quantity) {
+                        notifyExceedQuantity(itemData.item_quantity);
+                        quantity = itemData.item_quantity;
                         quantityElement.textContent = quantity;
                     }
                     updateTotalCost(quantity, totalCostCell, itemData.unit_price);

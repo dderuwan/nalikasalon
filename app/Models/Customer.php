@@ -18,4 +18,9 @@ class Customer extends Model
         'date_of_birth',
         'customer_code'
     ];
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

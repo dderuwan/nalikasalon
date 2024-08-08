@@ -16,11 +16,17 @@ class Package extends Model
         'package_name',
         'description',
         'price',
+        'duration',
     ];
 
     // Define the inverse relationship with the Service model
     public function service()
     {
         return $this->belongsTo(Service::class, 'services_id', 'service_code');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Preorder::class);
     }
 }
