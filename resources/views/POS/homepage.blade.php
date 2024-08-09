@@ -32,7 +32,7 @@
                                     <div class="row" id="item-container">
                                         @foreach ($items as $item)
                                             @if ($item->item_quantity > 1)
-                                                <div class="col-item" data-item='@json($item)' data-item-name="{{ $item->item_name }}">
+                                                <div class="col-item" data-item='@json($item)' data-item-name="{{ $item->item_name}}">
                                                     <div class="custom-card">
                                                         <img src="{{ asset('images/items/' . $item->image) }}" class="custom-card-img-top" alt="{{ $item->item_name }}">
                                                         <div class="custom-card-body-item">
@@ -52,20 +52,26 @@
                                     <div class="custom-card-body-right">
                                         <!-- Custom Section for Customer Search and Add -->
                                         <div class="customer-section mb-3">
-                                            <div class="input-group-yt">
-                                                <select name="contact_number_1" class="form-control" id="supplier_code" required>
-                                                    <option value="">Select Customer</option>
-                                                    @foreach($customers->unique('supplier_code') as $customer)
-                                                    <option value="{{ $customer->contact_number_1 }}" data-name="{{ $customer->name }}" data-code="{{ $customer->supplier_code }}">{{ $customer->contact_number_1 }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <button class="btn btn-outline-secondary" type="button" id="add-customer-btn">
-                                                    <i class="fe fe-10 fe-plus"></i>
-                                                </button>
-                                            </div>
-                                            <div id="customer-name-display" class="mb-3 mt-3 ml-2" style="font-weight: bold;"></div>
-                                            <input type="hidden" name="customer_code" id="customer_code">
-                                        </div>
+    <div class="input-group-yt">
+        <select name="customer_contact_number" class="form-control" id="user_id" required>
+            <option value="">Select Customer</option>
+            @foreach($customers->unique('id') as $customer)
+                <option value="{{ $customer->contact_number_1 }}" data-name="{{ $customer->name }}" data-code="{{ $customer->id }}">
+                    {{ $customer->contact_number_1 }}
+                </option>
+            @endforeach
+        </select>
+        <button class="btn btn-outline-secondary" type="button" id="add-customer-btn">
+            <i class="fe fe-10 fe-plus"></i>
+        </button>
+    </div>
+    <div id="customer-name-display" class="mb-3 mt-3 ml-2" style="font-weight: bold;"></div>
+    <input type="hidden" name="customer_code" id="customer_code">
+</div>
+
+
+
+
 
                                         <!-- Customer Table -->
                                         <div class="tablecontnt">
@@ -170,12 +176,10 @@
                                         </div>
                                         <div class="button-group">
                                             <button class="btn btn-secondary" id="calculator-btn">
-                                            <i class="fa fa-calculator"></i>
+                                                <i class="fa fa-calculator"></i>
                                             </button>
-
                                             <button class="btn btn-danger ml-2" id="cancel-btn">Cancel</button>
                                             <button type="submit" class="btn btn-primary float-center">Save</button>
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -198,10 +202,9 @@
                                     <p class="card-text"></p>
                                     <div class="row my-4">
                                         <!-- Small table -->
-                                        <div class="col-md-12" >
+                                        <div class="col-md-12">
                                             <div class="card shadow">
-                                                <div class="card-body" style="height: 550px;">
-                                                    <div class="scrollable-content">
+                                                <div class="card-body">
                                                     <table class="table datatables" id="dataTable-1">
                                                         <thead>
                                                             <tr>
@@ -235,7 +238,6 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -245,7 +247,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Today Orders Section -->
+                <!-- All Orders Section -->
                 <div class="custom-tab-pane" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -324,24 +326,16 @@
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label for="contact_number_1">Contact Number 1 : </label>
+                                                    <label for="contact_number_1">Contact Number : </label>
                                                     <input type="text" class="form-control" id="contact_number_1" name="contact_number_1"  required>
                                                 </div>
 
-                                                <div class="mb-3">
-                                                    <label for="contact_number_2">Contact Number 2 : </label>
-                                                    <input type="text" class="form-control" id="contact_number_2" name="contact_number_2" >
-                                                </div>
                                                 
                                                 <div class="mb-3">
                                                     <label for="address">Address</label>
                                                     <input type="text" class="form-control" id="address" name="address"  required>
                                                 </div>
 
-                                                <div class="mb-3">
-                                                    <label for="date_of_birth">Date of Birth</label>
-                                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"  required>
-                                                </div>
 
 
                                                 <div class="text-center">
@@ -358,6 +352,7 @@
             </div>
         </div>
     </div>
+
 </main>
 @endsection
 
@@ -447,9 +442,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const quantityInput = existingRow.querySelector('.quantity-input');
                 const totalCostCell = existingRow.querySelector('.total-cost');
                 quantityInput.value = parseInt(quantityInput.value) + 1;
-                if (parseInt(quantityInput.value) > itemData.item_quantity) {
-                    notifyExceedQuantity(itemData.item_quantity);
-                    quantityInput.value = itemData.item_quantity;
+                if (parseInt(quantityInput.value) > itemData.item_quentity) {
+                    notifyExceedQuantity(itemData.item_quentity);
+                    quantityInput.value = itemData.item_quentity;
                 }
                 updateTotalCost(quantityInput, totalCostCell, itemData.unit_price);
             } else {
@@ -472,9 +467,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 quantityElement.addEventListener('input', function() {
                     let quantity = parseInt(quantityElement.textContent);
-                    if (quantity > itemData.item_quantity) {
-                        notifyExceedQuantity(itemData.item_quantity);
-                        quantity = itemData.item_quantity;
+                    if (quantity > itemData.quentity) {
+                        notifyExceedQuantity(itemData.quentity);
+                        quantity = itemData.quentity;
                         quantityElement.textContent = quantity;
                     }
                     updateTotalCost(quantity, totalCostCell, itemData.unit_price);
@@ -553,26 +548,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <script>
         $(document).ready(function() {
-            // Initialize Select2 on the select element
-            $('#supplier_code').select2({
-                placeholder: 'Select or type customer contact number',
-                allowClear: true
-            });
+    $('#user_id').select2({
+        placeholder: 'Select or type customer contact number',
+        allowClear: true
+    });
 
-            // Update customer name and code display when selection changes
-            $('#supplier_code').on('change', function() {
-                var selectedOption = $(this).find('option:selected');
-                var customerName = selectedOption.data('name');
-                var customerCode = selectedOption.data('code'); // Get the customer code
-                if (customerName && customerCode) {
-                    $('#customer-name-display').text('Customer Name: ' + customerName + ' | Customer Code: ' + customerCode);
-                    $('#customer_code').val(customerCode); // Set the customer code to the hidden input
-                } else {
-                    $('#customer-name-display').text('');
-                    $('#customer_code').val(''); // Clear the hidden input if no selection
-                }
-            });
-        });
+    // Update customer name and code display when selection changes
+    $('#user_id').on('change', function() {
+        var selectedOption = $(this).find('option:selected');
+        var customerName = selectedOption.data('name');
+        var customerCode = selectedOption.data('code'); // Get the customer ID
+        if (customerName && customerCode) {
+            $('#customer-name-display').text('Customer Name: ' + customerName + ' | Customer Code: ' + customerCode);
+            $('#customer_code').val(customerCode); // Set the customer ID to the hidden input
+        } else {
+            $('#customer-name-display').text('');
+            $('#customer_code').val(''); // Clear the hidden input if no selection
+        }
+    });
+});
 
         document.getElementById('cancel-btn').addEventListener('click', function() {
             // Redirect to the same page
@@ -598,7 +592,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
     }
+
+    
 </script>
 
 
 @endsection
+
+

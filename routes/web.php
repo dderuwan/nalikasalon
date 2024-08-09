@@ -53,11 +53,13 @@ Auth::routes();
 
 
  //POS
-Route::get('/pospage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pospage');
-Route::post('/POS.store', [App\Http\Controllers\POSController::class, 'store'])->name('POS.store');
-Route::post('/POS.customerstore', [App\Http\Controllers\POSController::class, 'customerstore'])->name('POS.customerstore');
-Route::get('/showpos/{id}', [App\Http\Controllers\POSController::class, 'show'])->name('showopos');
-Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'destroy'])->name('deletepos');
+ Route::get('/pospage', [App\Http\Controllers\POSController::class, 'showHomepage'])->name('pospage');
+ Route::post('/POS.store', [App\Http\Controllers\POSController::class, 'store'])->name('POS.store');
+ Route::post('/POS.customerstore', [App\Http\Controllers\POSController::class, 'customerstore'])->name('POS.customerstore');
+ Route::get('/showpos/{id}', [App\Http\Controllers\POSController::class, 'show'])->name('showopos');
+ Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'destroy'])->name('deletepos');
+ Route::get('/pos/print-and-redirect/{id}', [App\Http\Controllers\POSController::class, 'printRedirect'])->name('printRedirect');
+
 
 // OrderRequest module
 Route::get('/allorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'index'])->name('allorderrequests');
