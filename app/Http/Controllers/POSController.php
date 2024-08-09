@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon; 
 use PDF;
 
-
-
 class POSController extends Controller
 {
     public function showHomepage()
@@ -37,19 +35,21 @@ class POSController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'contact_number_1' => 'required|string|max:20',
-            'contact_number_2' => 'nullable|string|max:20',
             'address' => 'required|string|max:255',
-            'date_of_birth' => 'required|date',
         ]);
+
+        $otp = rand(100000, 999999);
         
         try {
             $customer = new Customer();
             $customer->name = $validatedData['name'];
-            $customer->contact_number_1 = $validatedData['contact_number_1'];
-            $customer->contact_number_2 = $validatedData['contact_number_2'];
+            $customer->contact = $validatedData['contact_number_1'];
             $customer->address = $validatedData['address'];
-            $customer->date_of_birth = $validatedData['date_of_birth'];
-            $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
+            $customer->otp = $otp;
+            $customer->isVerified = false;
+            $customer->user_id = 1;
+            $customer->customer_type = 1;
+            $customer->registered_time = now();
             $customer->save();
             
             notify()->success('Customer Registerd successfully. ⚡️', 'Success');
@@ -68,6 +68,7 @@ class POSController extends Controller
 
     public function store(Request $request)
     {
+        
         $validator = Validator::make($request->all(),[
             'customer_code' => 'required',
             'items' => 'required|array',
@@ -82,10 +83,7 @@ class POSController extends Controller
             'change' => 'required|numeric',
             'grand_total' => 'required|numeric',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        //dd($request);
 
         DB::beginTransaction();
 
@@ -114,7 +112,7 @@ class POSController extends Controller
                 // Decrease item quantity in Item table
                 $itemModel = Item::where('item_code', $item['item_code'])->first();
                 if ($itemModel) {
-                    $itemModel->quantity -= $item['quantity'];
+                    $itemModel->item_quantity -= $item['quantity'];
                     $itemModel->save();
                 } else {
                     throw new Exception("Item not found: " . $item['item_code']);
@@ -122,29 +120,25 @@ class POSController extends Controller
             }
 
             DB::commit();
-
-            $this->generateAndDownloadBill($pos->id);
+            
 
             notify()->success('Order created successfully. ⚡️', 'Success');
-            return redirect()->route('pospage')->with('success', 'Order created successfully.');
+            return redirect()->route('printRedirect', ['id' => $pos->id]);
         
         } catch (Exception $e) {
-            DB::rollback();
-            Log::error('Failed to create order: ' . $e->getMessage());
-            return redirect()->route('pospage')->withErrors(['error' => 'Failed to create order.']);
+            
+                DB::rollback();
+                Log::error('Failed to create order: ' . $e->getMessage());
+                dd($e->getMessage());  // This will stop execution and show the error message
+                return redirect()->route('pospage')->withErrors(['error' => 'Failed to create order.']);
+            
         }
     }
-    
 
-    public function printBill($orderId)
+    public function printRedirect($id)
     {
-        $order = Order::with('items')->findOrFail($orderId);
-
-        // Generate the PDF
-        $pdf = PDF::loadView('bill', compact('order'));
-
-        // Download the PDF
-        return $pdf->download('order_bill.pdf');
+        $order = Order::findOrFail($id);
+        return view('POS.print', compact('order'));
     }
 
     private function generateOrderCode()
@@ -152,7 +146,7 @@ class POSController extends Controller
         return 'ORD-'  . rand(1000, 9999);
     }
 
-     // Display the specified order request
+    // Display the specified order request
     public function show($id)
     {
         $order = Order::with('items')->findOrFail($id);
@@ -169,5 +163,4 @@ class POSController extends Controller
         return redirect()->route('pospage')->with('success', 'Requested Order deleted successfully.');
     }
 
-    
 }
