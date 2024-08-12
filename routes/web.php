@@ -100,6 +100,26 @@ Route::delete('/customerdestroy/{id}', [App\Http\Controllers\ReportController::c
 Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\ReportController::class,'supplierdestroy'])->name('supplierdestroy');
 Route::delete('/gindestroy/{id}', [App\Http\Controllers\ReportController::class, 'gindestroy'])->name('gindestroy');
 Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
+
+
+//services
+Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
+Route::get('/addservice', [App\Http\Controllers\ServiceController::class, 'create'])->name('addservice');
+Route::post('/services/store', [App\Http\Controllers\ServiceController::class, 'store'])->name('storeservices');
+Route::get('/showservices/{id}', [App\Http\Controllers\ServiceController::class, 'show'])->name('showservices');
+Route::delete('/deleteservices/{id}', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('deleteservices');
+Route::get('/services/{id}', [App\Http\Controllers\ServiceController::class, 'edit'])->name('editservices');
+Route::put('/services/{id}', [App\Http\Controllers\ServiceController::class, 'update'])->name('updateservices');
+
+//packages
+Route::get('/packages', [App\Http\Controllers\PackageController::class, 'index'])->name('packages');
+Route::get('/addpackages', [App\Http\Controllers\PackageController::class, 'create'])->name('addpackages');
+Route::post('/packages/store', [App\Http\Controllers\PackageController::class, 'store'])->name('storepackages');
+Route::delete('/packages/{id}', [App\Http\Controllers\PackageController::class, 'destroy'])->name('deletepackages');
+Route::get('/packages/{id}/edit', [App\Http\Controllers\PackageController::class, 'edit'])->name('editpackage');
+Route::put('/packages/{id}', [App\Http\Controllers\PackageController::class, 'update'])->name('updatepackage');
+
+
 //Settings module
 //company details
 Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');
@@ -119,7 +139,6 @@ Route::view('/add_role', 'setting.roles.add_roles')->name('add_roles');
 Route::view('/role_list', 'setting.roles.role_list')->name('role_list');
 Route::view('/role_edit', 'setting.roles.role_edit')->name('role_edit');
 Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
-
 
 //HRmodule
 //attendance
@@ -160,9 +179,6 @@ Route::delete('/hrm/leave_application/{leave_application}', [LeaveController::cl
 Route::get('/hrm/leave-applications/edit/{id}', [LeaveController::class, 'editLeaveApp'])->name('leave_app_edit');
 Route::put('/hrm/leave-applications/update/{id}', [LeaveController::class, 'updateLeaveApp'])->name('leave_app_update');
 
-
-
-
 //employee module
 Route::get('/employee', [App\Http\Controllers\EmployeeController::class, 'index'])->name('employee');
 Route::get('/createemployee', [App\Http\Controllers\EmployeeController::class, 'create'])->name('createemployee');
@@ -173,7 +189,10 @@ Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::
 
 
 //appointment module
-Route::view('/Appointments', 'appointment.index')->name('appointment');
+Route::get('/appointments', [AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
+
+
+
 Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
 Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
 Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
@@ -183,3 +202,7 @@ Route::post('/Appointments/New-appointment/store', [AppointmentController::class
 Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
 Route::get('/api/monthly-revenue', [RevenueController::class, 'getMonthlyRevenue']);
 Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
+Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
+Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
+
+

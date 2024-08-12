@@ -8,8 +8,8 @@ use App\Models\OrderRequestItem;
 use App\Models\Item;
 use Illuminate\View\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Validator; 
-use Illuminate\Support\Carbon; 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class RequestOrderContraller extends Controller
 {
@@ -29,6 +29,7 @@ class RequestOrderContraller extends Controller
     // Store a newly created order request in storage
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'supplier_code' => 'required|string|max:255',
             'items.*.item_code' => 'required|string|max:255',
@@ -44,8 +45,9 @@ class RequestOrderContraller extends Controller
             'order_request_code' => $this->generateOrderRequestCode(),
             'supplier_code' => $request->supplier_code,
             'date' => Carbon::today(),
+            'status' =>'Processing',
         ]);
-        
+
         foreach ($request->items as $item) {
             OrderRequestItem::create([
                 'order_request_id' => $orderRequest->id,

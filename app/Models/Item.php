@@ -17,5 +17,6 @@ class Item extends Model
         'unit_price',
         'supplier_code',
         'image',
+
     ];
 }

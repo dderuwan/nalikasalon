@@ -29,23 +29,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js'></script>
+
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
+
+
+<!-- FullCalendar JS -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js'></script>
+
+
+
 <script>
   /* defind global options */
   Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
   Chart.defaults.global.defaultFontColor = colors.mutedColor;
 </script>
-<script src="{{asset('js/gauge.min.js')}}"></script>
-<script src="{{asset('js/jquery.sparkline.min.js')}}"></script>
-<script src="{{asset('js/apexcharts.min.js')}}"></script>
-<script src="{{asset('js/apexcharts.custom.js')}}"></script>
-<script src="{{asset('js/jquery.mask.min.js')}}"></script>
-<script src="{{asset('js/select2.min.js')}}"></script>
-<script src="{{asset('js/jquery.steps.min.js')}}"></script>
-<script src="{{asset('js/jquery.validate.min.js')}}"></script>
-<script src="{{asset('js/jquery.timepicker.js')}}"></script>
-<script src="{{asset('js/dropzone.min.js')}}"></script>
-<script src="{{asset('js/uppy.min.js')}}"></script>
-<script src="{{asset('js/quill.min.js')}}"></script>
+<script src="{{asset('assets/js/gauge.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery.sparkline.min.js')}}"></script>
+<script src="{{asset('assets/js/apexcharts.min.js')}}"></script>
+<script src="{{asset('assets/js/apexcharts.custom.js')}}"></script>
+<script src="{{asset('assets/js/jquery.mask.min.js')}}"></script>
+<script src="{{asset('assets/js/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery.steps.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery.timepicker.js')}}"></script>
+<script src="{{asset('assets/js/dropzone.min.js')}}"></script>
+<script src="{{asset('assets/js/uppy.min.js')}}"></script>
+<script src="{{asset('assets/js/quill.min.js')}}"></script>
+
 
 
 
@@ -252,7 +264,7 @@
     });
   }
 </script>
-<script src="js/apps.js"></script>
+<script src="assets/js/apps.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
 <script>

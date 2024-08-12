@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Service;
+use App\Models\Package;
 use App\Models\Appointment;
+use App\Models\Preorder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -13,9 +16,20 @@ class AppointmentController extends Controller
     public function showCustomers()
     {
         $customers = Customer::all();
-        return view('appointment.new_appointment', compact('customers'));
+        $services = Service::all();
+        $packages = Package::all();
+        return view('appointment.new_appointment', compact('customers', 'services', 'packages'));
     }
 
+    public function showAppoinmentsss()
+    {
+        $appointments = Preorder::all(); 
+        return view('appointment.index', compact('appointments'));
+    
+    }
+
+
+    
 
     public function getCustomerDetails($customer_code)
     {
@@ -34,36 +48,78 @@ class AppointmentController extends Controller
         return response()->json([], 404);
     }
 
-
-
-   
-
     public function storeAppointments(Request $request)
     {
-    
         $request->validate([
-            'customer_code' => 'required|string|max:255',
-            'note' => 'nullable|string|max:255',
-            'event_type' => 'nullable|string|max:255',
-            'start_date' => 'required|date_format:Y-m-d',
-            'appointment_time' => 'nullable|date_format:H:i',
+            'contact_number_1' => 'required|string',
+            'service_id' => 'required|string',
+            'package_id_1' => 'required|string',
+            'start_date' => 'required|date',
+            'appointment_time' => 'required|string',
+            'main_job_holder_name' => 'required|string',
+            'payment_method' => 'required|string',
+            'advanced_payment' => 'required|numeric',
         ]);
+        //dd($request);
+        
     
-        $start_date = $request->start_date;
-    
-        // Convert times to 12-hour format with AM/PM
-        $appointment_time = $request->appointment_time ? (new \DateTime($request->appointment_time))->format('h:i A') : null;
-    
-        Appointment::create([
+        //dd($request);
+        $preorder = Preorder::create([
+            'Auto_serial_number' => $this->generateautoserial(),
+            'booking_reference_number' => $this->generatebookingRef(),
             'customer_code' => $request->customer_id,
+            'customer_name' => $request->customer_name,
+            'customer_contact_1' => $request->contact_number_1,
+            'customer_address' => $request->customer_address,
+            'customer_dob' => $request->customer_dob,
+            'Service_type' => $request->service_id,
+            'Package_name_1' => $request->package_id_1,
+            'Package_name_2' => $request->package_id_2,
+            'Package_name_3' => $request->package_id_3,
+            'appointment_date' => $request->start_date,
+            'today' =>Carbon::today(),
+            'appointment_time' => $request->appointment_time,
+            'main_job_holder' => $request->main_job_holder_name,
+            'Assistant_1' => $request->assistant_1_name,
+            'Assistant_2' => $request->assistant_2_name,
+            'Assistant_3' => $request->assistant_3_name,
             'note' => $request->note,
-            'event_type' => $request->event_type,
-            'start_date' => $start_date,
-            'appointment_time' => $appointment_time,
+            'payment_type' => $request->payment_method,
+            'Advanced_price' => $request->advanced_payment,
+            'Total_price' => $request->total_price,
         ]);
-    
-        return redirect()->back()->with('success', 'Appointment added successfully.');
+
+        notify()->success('Order created successfully. ⚡️', 'Success');
+        return redirect()->route('printAndRedirect', ['id' => $preorder->id]);
+        return redirect()->route('Appoinments')->with('success', 'Appointment added successfully.');
+
     }
+
+    private function generateautoserial()
+    {
+        return 'ASN-'  . rand(1000, 9999);
+    }
+
+    private function generatebookingRef()
+    {
+        return 'BREF-'  . rand(1000, 9999);
+    }
+
+    public function getPackagesByService(Request $request)
+    {
+        $serviceCode = $request->input('service_code');
+        $packages = Package::where('services_id', $serviceCode)->get();
+        return response()->json(['packages' => $packages]);
+    }
+
+    public function printAndRedirect($id)
+    {
+        $preorder = Preorder::findOrFail($id);
+        return view('appointment.print', compact('preorder'));
+    }
+
+
+
 
 
     
