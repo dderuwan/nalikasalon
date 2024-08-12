@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\DashboardController;
@@ -18,7 +21,13 @@ use App\Http\Controllers\AttendanceController;
 
 Auth::routes();
 
- Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
+
+Route::view('/home', 'home')->name('home');
+Route::get('/store', [HomeController::class, 'getproducts'])->name('store');
+
+Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
+
+
 
 // supplier module
 
@@ -204,5 +213,18 @@ Route::get('/api/monthly-revenue', [RevenueController::class, 'getMonthlyRevenue
 Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
 Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
 Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
+
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/cart', [CartController::class, 'showCart'])->name('shopping_cart');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::delete('/cart/delete/{title}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+
+
+
 
 

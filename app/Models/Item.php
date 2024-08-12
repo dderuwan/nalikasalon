@@ -13,7 +13,7 @@ class Item extends Model
         'item_code',
         'item_name',
         'item_description',
-        'item_quentity',
+        'item_quantity',
         'unit_price',
         'supplier_code',
         'image',

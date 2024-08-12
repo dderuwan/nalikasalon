@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CompanyDetails;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -24,5 +25,8 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('todayOrdersCount', 'todayRevenue', 'totalCustomers'));
     }
+
+
+
 }
 

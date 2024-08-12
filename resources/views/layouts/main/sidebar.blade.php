@@ -5,11 +5,13 @@
     </a>
     <nav class="vertnav navbar navbar-light">
       <!-- nav bar -->
-      <div class="w-100 mb-4 d-flex">
-        <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{route('/')}}">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width:170px; margin-left:25px;">
-        </a>
+      <div class="w-100 mb-4 ml-3 d-flex">
+          <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('/') }}">
+            <img src="{{ asset('images/logos/' . app(\App\Http\Controllers\CompanySettingController::class)->getCompanyLogo()) }}"
+            style="width:auto; height: 35px;" class="mt-2" alt="Company Logo">
+          </a>
       </div>
+
       <ul class="navbar-nav flex-fill w-100 mb-2">
         <li class="nav-item active sidebar_li">
             <i class="fe fe-home fe-16"></i>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,103 +7,112 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <title>NALIKA SALON</title>
+    <title>{{ config('app.name', 'NALIKA SALON') }}</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    @include('layouts.web.css')
 
+  <style>
+    .navbar-nav .nav-link {
+        text-transform: uppercase;
+        color: black;
+        font-size: 15px;
+        
+        font-family: 'Poppins', sans-serif;
+    }
 
-    <link href="assets/web/website_assets/css/animate.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/themify/themify-icons.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/owl-carousel/dist/assets/owl.carousel.min.css" rel="stylesheet">
-      <link href="assets/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
-      <link href="assets/web/website_assets/plugins/owl-carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/select2/dist/css/select2-bootstrap.min.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet">
-      <link href="assets/web/website_assets/plugins/fancybox/dist/jquery.fancybox.min.css" rel="stylesheet">
-      <script src="assets/web/website_assets/plugins/jQuery/jquery-3.5.1.min.js"></script>
-      <link href="https://fonts.googleapis.com/css?family=Caveat:400,700|Playfair+Display:400,400i,700,700i,900,900i|Sarabun:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800&display=swap" rel="stylesheet" />
-      <link href="assets/web/website_assets/css/style.css?v=3" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    .navbar {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    }
 
+    .btn-login {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+  </style>
 
-
-      <!-- Food cart CSS File -->
-    <link href="assets/web/css/foodcart/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/web/css/foodcart/aos/aos.css" rel="stylesheet">
-    <link href="assets/web/css/foodcart/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="assets/web/css/foodcart/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link href="assets/web/css/foodcart/main.css" rel="stylesheet">
-
-    
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/styles.css'])
 </head>
 <body>
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{ mix('js/sweetalert.js') }}"></script>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
 
-                    </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="navbar-brand mt-2 mt-lg-0 me-5" href="{{ route('home') }}">
+          <img src="/images/logo.png" height="30" width="170" />
+        </a>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link me-3" href="{{ route('store') }}">Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Appointments</a>
+          </li>
+        </ul>
+      </div>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+      <div class="d-flex align-items-center">
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+        @guest
+          @if (Route::has('login'))
+            <a href="{{ route('login') }}" class="btn-login me-3">
+              Login
+            </a>
+          @endif
+        @else
+          <div class="dropdown me-3">
+            <a id="navbarDropdown" class="text-reset dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+              <div class="icon-circle">
+                {{ Auth::user()->name[0] }}
+              </div>
+            </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                 onclick="event.preventDefault();
+                           document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+              </a>
+
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+              </form>
             </div>
-        </nav>
+          </div>
+        @endguest
+      </div>
+    </div>
+  </nav>
 
-        <main class="py-4">
+
+
+        <main class="mb-5">
             @yield('content')
+            
         </main>
     </div>
+
+
+    @include('layouts.web.script')
+ 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 </html>
