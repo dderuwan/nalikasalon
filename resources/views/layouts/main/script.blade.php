@@ -35,8 +35,7 @@
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
 
 
-<!-- FullCalendar JS -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
 
 
 

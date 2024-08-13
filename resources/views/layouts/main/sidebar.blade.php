@@ -16,7 +16,7 @@
         <li class="nav-item active sidebar_li">
             <i class="fe fe-home fe-16"></i>
           <a href="{{route('/')}}" class="sidebar_text" >
-            <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
+            <span class="ml-3 item-text">Dashboard</span><span class="sr-only"> (current)</span>
           </a>
         </li>
         <li class="nav-item sidebar_li">
@@ -239,6 +239,12 @@
                         </li>
                     </ul>
                     </li>
+
+                    <li class="nav-item sidebar_li">
+                        <a href="{{route('employee')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Employee</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -264,12 +270,7 @@
 
 
 
-            <li class="nav-item sidebar_li">
-                <i class="fe fe-user fe-16"></i>
-                <a href="{{route('employee')}}" class="sidebar_text">
-                    <span class="ml-3 item-text">Employee</span><span class="sr-only">(current)</span>
-                </a>
-            </li>
+            
             
 
             <li class="nav-item dropdown">
@@ -294,12 +295,19 @@
                           </a>
                       </li>
                       <li class="nav-item active mb-2">
-                          <a href="{{route('add_roles')}}" class="sidebar_text">
+                          <a href="{{ route('addPermission') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Add Permission</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      
+                     
+                      <li class="nav-item active mb-2">
+                          <a href="{{route('addRole')}}" class="sidebar_text">
                               <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
                       <li class="nav-item active mb-2">
-                          <a href="{{route('role_list')}}" class="sidebar_text">
+                          <a href="{{route('showRole')}}" class="sidebar_text">
                               <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
                           </a>
                       </li>

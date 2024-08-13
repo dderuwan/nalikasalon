@@ -24,11 +24,14 @@
       border-radius: 4px; 
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
       background-color: #FAF9F9; 
+      display: flex; 
+      flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+      gap: 10px; /* Space between time slots */
   }
 
   .time-slot {
       padding: 10px;
-      margin: 5px;
+      margin: 0;
       width: 100px; 
       text-align: center;
       border: 1px solid #ccc; 
@@ -36,6 +39,7 @@
       background-color: #fff; 
       cursor: pointer; 
       transition: background-color 0.3s, border-color 0.3s;
+      flex: 0 1 auto; /* Flex item can grow and shrink as needed */
   }
 
   .time-slot:hover {
@@ -165,88 +169,78 @@
                               </div>
                           </div>
 
-                          <div class="form-group row">
-                              <label for="package-select-2" class="col-sm-2 col-form-label" style="color:black;">Package 02 : <i class="text-danger"></i></label>
-                              <div class="col-md-6">
-                                  <select class="form-control" id="package-select-2" name="package_id_2">
-                                      <option value="">Select Package</option>
-                                  </select>
-                              </div>
-                          </div>
-
-                          <div class="form-group row">
-                              <label for="package-select-3" class="col-sm-2 col-form-label" style="color:black;">Package 03 : <i class="text-danger"></i></label>
-                              <div class="col-md-6">
-                                  <select class="form-control" id="package-select-3" name="package_id_3">
-                                      <option value="">Select Package</option>
-                                  </select>
-                              </div>
-                          </div>
-
-                          <div class="form-group row">
-                            <label for="start_date" class="col-sm-2 col-form-label" style="color:black;">Date <i class="text-danger">*</i></label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control" id="start_date" name="start_date" required>
-                            </div>
-                        </div>
+                            <!-- Date Selection -->
+                                    <div class="form-group row">
+                                        <label for="start_date" class="col-sm-2 col-form-label" style="color:black;">Date <i class="text-danger">*</i></label>
+                                        <div class="col-md-6">
+                                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                        </div>
+                                    </div>
 
 
-                          <!-- Time Slots -->
-                          <div id="timeSlots" class="mt-3">
-                            <label style="color:black;">Available Time Slots</label>
-                            <div class="d-flex flex-wrap">
-                              <div class="time-slot">08:00-08:30 AM</div>
-                              <div class="time-slot">08:30-09:00 AM</div>
-                              <div class="time-slot">09:00-09:30 AM</div>
-                              <div class="time-slot">09:30-10:00 AM</div>
-                              <div class="time-slot">10:00-10:30 AM</div>
-                              <div class="time-slot">10:30-11:00 AM</div>
-                              <div class="time-slot">11:00-11:30 AM</div>
-                              <div class="time-slot">11:30-12:00 PM</div>
-                              <div class="time-slot">01:00-01:30 PM</div>
-                              <div class="time-slot">01:30-02:00 PM</div>
-                            </div>
-                          </div>
-                          <br>
 
-                          <div class="form-group row">
-                              <label for="appointmentTime" class="col-sm-2 col-form-label" style="color:black;">Appointment Time <i class="text-danger">*</i></label>
-                              <div class="col-md-6">
-                                  <input type="text" class="form-control" id="appointmentTime" name="appointment_time">
-                              </div>
-                          </div>
+                                    <!-- Time Slot Selection -->
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" style="color:black;">Time Slots <i class="text-danger">*</i></label>
+                                        <div class="col-md-6">
+                                            <div id="timeSlots">
+                                                <!-- Time slots will be dynamically populated here -->
+                                            </div>
+                                            <input type="hidden" id="appointment_time" name="appointment_time" required>
+                                        </div>
+                                    </div>
 
-                          <!-- Main Job Holder Name -->
-                            <div class="form-group row">
-                                <label for="mainJobHolderName" class="col-sm-2 col-form-label" style="color:black;">Main Job Holder : <i class="text-danger">*</i></label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="mainJobHolderName" name="main_job_holder_name" required>
+                                    <!-- Appointment Time Display -->
+                                    <div class="form-group row">
+                                        <label for="appointmentTime" class="col-sm-2 col-form-label" style="color:black;">Appointment Time <i class="text-danger">*</i></label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="appointmentTime" name="appointment_time" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                    <label for="main_dresser" class="col-sm-2 col-form-label" style="color:black;">Main Dresser <i class="text-danger">*</i></label>
+                                    <div class="col-md-6">
+                                        <select id="main_dresser" name="main_dresser" class="form-control" required>
+                                            <option value="">Select Main Dresser</option>
+                                            <!-- Options will be dynamically populated here -->
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+
+
+
 
                             <!-- Assistant 1 Name -->
                             <div class="form-group row">
-                                <label for="assistant1Name" class="col-sm-2 col-form-label" style="color:black;">Assistant 1 : <i class="text-danger"></i></label>
+                                <label for="assistant_1" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger">*</i></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" id="assistant1Name" name="assistant_1_name" >
+                                    <select class="form-control" id="assistant_1" name="assistant_1_name">
+                                        <option value="">Select Assistant</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <!-- Assistant 2 Name -->
                             <div class="form-group row">
-                                <label for="assistant2Name" class="col-sm-2 col-form-label" style="color:black;">Assistant 2 : <i class="text-danger"></i></label>
+                                <label for="assistant_2" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger"></i></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" id="assistant2Name" name="assistant_2_name" >
+                                    <select class="form-control" id="assistant_2" name="assistant_2_name">
+                                        <option value="">Select Assistant</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <!-- Assistant 3 Name -->
                             <div class="form-group row">
-                                <label for="assistant3Name" class="col-sm-2 col-form-label" style="color:black;">Assistant 3 : <i class="text-danger"></i></label>
+                                <label for="assistant_3" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger"></i></label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" id="assistant3Name" name="assistant_3_name" >
+                                    <select class="form-control" id="assistant_3" name="assistant_3_name">
+                                        <option value="">Select Assistant</option>
+                                    </select>
                                 </div>
                             </div>
+
 
 
                           <!-- Note -->
@@ -311,6 +305,58 @@
         </div>
       </div>
     </div>
+
+    <!-- Add New Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                        
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                            
+                                    <form action="{{ route('POS.customerstore') }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="name">Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="contact_number_1">Contact Number 1 : </label>
+                                                    <input type="text" class="form-control" id="contact_number_1" name="contact_number_1"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="contact_number_2">Contact Number 2 : </label>
+                                                    <input type="text" class="form-control" id="contact_number_2" name="contact_number_2" >
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="address">Address</label>
+                                                    <input type="text" class="form-control" id="address" name="address"  required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="date_of_birth">Date of Birth</label>
+                                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"  required>
+                                                </div>
+
+
+                                                <div class="text-center">
+                                                <button type="submit" class="btn btn-primary float-center">Submit</button>
+                                                </div>
+
+                                            </form>
+                                            
+                                </div>
+                                       
+                        </div>
+                </div>
+                            
+            </div>
   </div>
 </main>
 
@@ -473,6 +519,144 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<script>
+    // Show modal to add customer
+    $('#add-customer-btn').on('click', function() {
+        new bootstrap.Modal(document.getElementById('addCustomerModal')).show();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+<!-- JavaScript to Handle Dynamic Time Slot Population -->
+<script>
+
+    
+document.getElementById('start_date').addEventListener('change', function() {
+    var date = this.value;
+    if (date) {
+        console.log('Fetching available time slots for date:', date);
+        fetchAvailableTimeSlots(date);
+    }
+});
+
+document.getElementById('start_date').addEventListener('change', function() {
+    var date = this.value;
+    var serviceSelect = document.getElementById('service-select');
+    var serviceId = serviceSelect.value;
+    if (date && serviceId) {
+        console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
+        fetchAvailableTimeSlots(date, serviceId);
+    }
+});
+
+function fetchAvailableTimeSlots(date, serviceId) {
+    console.log(`Fetching available time slots for date: ${date} and service: ${serviceId}`);
+    fetch(`/get-available-time-slots?date=${date}&service_id=${serviceId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Available time slots data:', data);
+            var timeSlotsContainer = document.getElementById('timeSlots');
+            timeSlotsContainer.innerHTML = '';
+
+            data.available_time_slots.forEach(function(timeSlot) {
+                var timeSlotDiv = document.createElement('div');
+                timeSlotDiv.className = 'time-slot';
+                timeSlotDiv.textContent = timeSlot;
+                timeSlotDiv.addEventListener('click', function() {
+                    selectTimeSlot(timeSlot, date);
+                });
+                timeSlotsContainer.appendChild(timeSlotDiv);
+            });
+
+            if (data.available_time_slots.length === 0) {
+                console.log('No available time slots found.');
+            }
+        })
+        .catch(error => console.error('Error fetching time slots:', error));
+}
+
+document.getElementById('service-select').addEventListener('change', function() {
+    var serviceId = this.value;
+    var date = document.getElementById('start_date').value;
+    if (date && serviceId) {
+        console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
+        fetchAvailableTimeSlots(date, serviceId);
+    }
+});
+
+
+function selectTimeSlot(timeSlot, date) {
+    console.log(`Selected time slot: ${timeSlot} on date: ${date}`);
+    document.getElementById('appointment_time').value = timeSlot;
+    document.getElementById('appointmentTime').value = timeSlot;
+    var timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+        slot.style.backgroundColor = '#fff';
+        slot.style.borderColor = '#ccc';
+    });
+    var selectedSlot = [...timeSlots].find(slot => slot.textContent === timeSlot);
+    if (selectedSlot) {
+        selectedSlot.style.backgroundColor = '#d0e9ff';
+        selectedSlot.style.borderColor = '#4a90e2';
+    }
+    fetchAvailableMainDressers(date, timeSlot);
+    fetchAvailableAssistants(date, timeSlot, 'assistant_1');
+    fetchAvailableAssistants(date, timeSlot, 'assistant_2');
+    fetchAvailableAssistants(date, timeSlot, 'assistant_3');
+}
+
+function fetchAvailableMainDressers(date, timeSlot) {
+    fetch(`/get-available-main-dressers?date=${date}&time_slot=${timeSlot}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Available Dressers:', data.available_dressers);
+            var mainDresserSelect = document.getElementById('main_dresser');
+            mainDresserSelect.innerHTML = '<option value="">Select Main Dresser</option>';
+
+            data.available_dressers.forEach(function(dresser) {
+                var option = document.createElement('option');
+                option.value = dresser.id;
+                option.textContent = `${dresser.firstname} ${dresser.lastname}`;
+                mainDresserSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching available dressers:', error));
+}
+
+function fetchAvailableAssistants(date, timeSlot, assistantSelectId) {
+    fetch(`/get-available-assistants?date=${date}&time_slot=${timeSlot}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Available Assistants for ${assistantSelectId}:`, data.available_assistants);
+            var assistantSelect = document.getElementById(assistantSelectId);
+            assistantSelect.innerHTML = '<option value="">Select Assistant</option>';
+
+            data.available_assistants.forEach(function(assistant) {
+                var option = document.createElement('option');
+                option.value = assistant.id;
+                option.textContent = `${assistant.firstname} ${assistant.lastname}`;
+                assistantSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error(`Error fetching available assistants for ${assistantSelectId}:`, error));
+}
+
+</script>
+
 
 
 @endsection
