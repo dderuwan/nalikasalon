@@ -13,7 +13,6 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttendanceController;
 
 
-
 //Route::get('/', function () {
 //    return view('dashboard.index');
 //});
@@ -21,8 +20,6 @@ use App\Http\Controllers\AttendanceController;
 Auth::routes();
 
  Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
-
-
 
 // supplier module
  Route::get('/allsupplier', [App\Http\Controllers\SupplierController::class,'index'])->name('allsupplier');
