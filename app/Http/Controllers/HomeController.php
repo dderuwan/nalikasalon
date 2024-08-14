@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Item;
 
 use Illuminate\Http\Request;
 
@@ -25,4 +26,15 @@ class HomeController extends Controller
     {
         return view('dashboard.index');
     }
+
+
+    public function getproducts()
+    {
+    $item_list = Item::all();
+    return view('store', compact('item_list'));
+
+    }
+
+
+    
 }
