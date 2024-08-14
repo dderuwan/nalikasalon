@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+
+<style>
+.register_lable  {
+    text-align: right;
+}
+.register_lable a {
+    text-align: right;
+    font-weight: bold;
+    text-decoration:none;
+    color: black;
+}
+
+    </style>
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <p class=" register_lable"><a href="{{ route('register') }}">Register here</a></p>
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
