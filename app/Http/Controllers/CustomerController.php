@@ -20,7 +20,7 @@ class CustomerController extends Controller
         return view('customers.create');
     }
 
-    public function store(Request $request)
+    public function insertcustomer(Request $request)
     {
 
         $validatedData = $request->validate([

@@ -98,7 +98,7 @@ class RequestOrderContraller extends Controller
     public function getItemStock($itemCode)
     {
         $item = Item::where('item_code', $itemCode)->first();
-        return response()->json(['instock' => $item ? $item->item_quentity : 0]);
+        return response()->json(['instock' => $item ? $item->item_quantity : 0]);
     }
 
     // Generate a unique order request code

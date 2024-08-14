@@ -17,7 +17,7 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::all();
-        return view('suppliers.index', compact('suppliers'));
+        return view('Suppliers.index', compact('suppliers'));
     }
 
     /**
@@ -26,7 +26,7 @@ class SupplierController extends Controller
     // create supplier
     public function create():View
     {
-        return view('suppliers.create');
+        return view('Suppliers.create');
     }
 
     /**
@@ -76,7 +76,7 @@ class SupplierController extends Controller
     {
         try {
             $supplier = Supplier::findOrFail($id);
-            return view('suppliers.show', compact('supplier'));
+            return view('Suppliers.show', compact('supplier'));
         } catch (ModelNotFoundException $e) {
             
             notify()->success('Supplier not found. ⚡️', 'Fail');
@@ -96,7 +96,7 @@ class SupplierController extends Controller
     {
         try {
             $supplier = Supplier::findOrFail($id);
-            return view('suppliers.edit', compact('supplier'));
+            return view('Suppliers.edit', compact('supplier'));
         } catch (ModelNotFoundException $e) {
             
             notify()->success('Supplier not found. ⚡️', 'Fail');

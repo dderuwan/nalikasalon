@@ -154,6 +154,21 @@ class AppointmentController extends Controller
         return view('appointment.index', compact('appointments'));
     }
 
+    public function showPreOrders()
+    {
+        $appointments = Preorder::all(); 
+        return view('appointment.preorderList', compact('appointments'));
+    }
+    
+
+    public function showPreOrderDetails($id)
+    {
+        $preorder = Preorder::findOrFail($id);
+        return view('appointment.showPreOrderDetails', compact('preorder'));
+    }
+
+
+
     public function getCustomerDetails($customer_code)
     {
         $customer = Customer::where('customer_code', $customer_code)->first();

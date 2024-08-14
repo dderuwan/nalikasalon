@@ -22,8 +22,9 @@ Auth::routes();
 
  Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
 
-// supplier module
 
+
+// supplier module
  Route::get('/allsupplier', [App\Http\Controllers\SupplierController::class,'index'])->name('allsupplier');
  Route::get('/createsupplier',[App\Http\Controllers\SupplierController::class,'create'])->name('createsupplier');
  Route::post('/insertsupplier', [App\Http\Controllers\SupplierController::class,'store'])->name('insertsupplier');
@@ -45,7 +46,7 @@ Auth::routes();
  //Customer
  Route::get('/allcustomer', [App\Http\Controllers\CustomerController::class, 'index'])->name('allcustomer');
  Route::get('/createcustomer', [App\Http\Controllers\CustomerController::class, 'create'])->name('createcustomer');
- Route::post('/insertcustomer', [App\Http\Controllers\CustomerController::class, 'store'])->name('insertcustomer');
+ Route::post('/insertcustomer', [App\Http\Controllers\CustomerController::class, 'insertcustomer'])->name('insertcustomer');
  Route::get('/editcustomer/{id}', [App\Http\Controllers\CustomerController::class, 'edit'])->name('editcustomer');
  Route::get('/showcustomer/{id}', [App\Http\Controllers\CustomerController::class, 'show'])->name('showcustomer');
  Route::put('/updatecustomer/{id}', [App\Http\Controllers\CustomerController::class, 'update'])->name('updatecustomer');
@@ -90,20 +91,20 @@ Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'ge
 
 
 //reports
-Route::get('/orderreport', [App\Http\Controllers\ReportController::class, 'orderreport'])->name('orderreport');
-Route::get('/productreport', [App\Http\Controllers\ReportController::class, 'productreport'])->name('productreport');
-Route::get('/customerreport', [App\Http\Controllers\ReportController::class, 'customerreport'])->name('customerreport');
-Route::get('/supplierreport', [App\Http\Controllers\ReportController::class, 'supplierreport'])->name('supplierreport');
-Route::get('/ginreport', [App\Http\Controllers\ReportController::class, 'ginreport'])->name('ginreport');
-Route::get('/ginshow/{id}', [App\Http\Controllers\ReportController::class, 'ginshow'])->name('ginshow');
-Route::get('/purchaseorderreport', [App\Http\Controllers\ReportController::class, 'purchaseorderreport'])->name('purchaseorderreport');
-Route::get('/purchaseordershow/{id}', [App\Http\Controllers\ReportController::class, 'purchaseordershow'])->name('purchaseordershow');
-Route::get('orderreport/print/{id}', [App\Http\Controllers\ReportController::class, 'printOrderReport'])->name('orderreport.print');
-Route::delete('/deleteorderreport/{id}', [App\Http\Controllers\ReportController::class, 'destroy'])->name('orderreport.destroy');
-Route::delete('/customerdestroy/{id}', [App\Http\Controllers\ReportController::class, 'customerdestroy'])->name('customerdestroy');
-Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\ReportController::class,'supplierdestroy'])->name('supplierdestroy');
-Route::delete('/gindestroy/{id}', [App\Http\Controllers\ReportController::class, 'gindestroy'])->name('gindestroy');
-Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\ReportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
+Route::get('/orderreport', [App\Http\Controllers\reportController::class, 'orderreport'])->name('orderreport');
+Route::get('/productreport', [App\Http\Controllers\reportController::class, 'productreport'])->name('productreport');
+Route::get('/customerreport', [App\Http\Controllers\reportController::class, 'customerreport'])->name('customerreport');
+Route::get('/supplierreport', [App\Http\Controllers\reportController::class, 'supplierreport'])->name('supplierreport');
+Route::get('/ginreport', [App\Http\Controllers\reportController::class, 'ginreport'])->name('ginreport');
+Route::get('/ginshow/{id}', [App\Http\Controllers\reportController::class, 'ginshow'])->name('ginshow');
+Route::get('/purchaseorderreport', [App\Http\Controllers\reportController::class, 'purchaseorderreport'])->name('purchaseorderreport');
+Route::get('/purchaseordershow/{id}', [App\Http\Controllers\reportController::class, 'purchaseordershow'])->name('purchaseordershow');
+Route::get('orderreport/print/{id}', [App\Http\Controllers\reportController::class, 'printOrderReport'])->name('orderreport.print');
+Route::delete('/deleteorderreport/{id}', [App\Http\Controllers\reportController::class, 'destroy'])->name('orderreport.destroy');
+Route::delete('/customerdestroy/{id}', [App\Http\Controllers\reportController::class, 'customerdestroy'])->name('customerdestroy');
+Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\reportController::class,'supplierdestroy'])->name('supplierdestroy');
+Route::delete('/gindestroy/{id}', [App\Http\Controllers\reportController::class, 'gindestroy'])->name('gindestroy');
+Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\reportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
 
 
 //services
@@ -118,7 +119,7 @@ Route::put('/services/{id}', [App\Http\Controllers\ServiceController::class, 'up
 //packages
 Route::get('/packages', [App\Http\Controllers\PackageController::class, 'index'])->name('packages');
 Route::get('/addpackages', [App\Http\Controllers\PackageController::class, 'create'])->name('addpackages');
-Route::post('/packages/store', [App\Http\Controllers\PackageController::class, 'store'])->name('storepackages');
+Route::post('/packages/store', [App\Http\Controllers\PackageController::class, 'storepackages'])->name('storepackages');
 Route::delete('/packages/{id}', [App\Http\Controllers\PackageController::class, 'destroy'])->name('deletepackages');
 Route::get('/packages/{id}/edit', [App\Http\Controllers\PackageController::class, 'edit'])->name('editpackage');
 Route::put('/packages/{id}', [App\Http\Controllers\PackageController::class, 'update'])->name('updatepackage');
@@ -200,8 +201,9 @@ Route::post('/storeemployee', [App\Http\Controllers\EmployeeController::class, '
 Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('deleteemployee');
 
 
-//appointment module
+//appointment module(PreOrders)
 Route::get('/appointments', [AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
+Route::get('/showPreOrders', [AppointmentController::class, 'showPreOrders'])->name('showPreOrders');
 Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
 Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
 Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
@@ -209,11 +211,20 @@ Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackag
 Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
 Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
+Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
+
+
+//RealTimeAppoinments
+Route::get('/RealTimepage1', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'RealTimepage1'])->name('RealTimepage1');
+Route::get('/get-appointments', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'getAppointmentsByCustomer'])->name('getAppointmentsByCustomer');
+Route::get('/Appointments/realtime2page', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'realtime2page'])->name('realtime2page');
+Route::post('/Appointments/New-appointment/storerealtime2', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storerealtime2'])->name('storerealtime2');
+
 // web.php or api.php (depending on your routes file)
 Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);
 Route::get('/get-available-main-dressers', [AppointmentController::class, 'getAvailableMainDressers']);
 Route::get('/get-available-assistants', [AppointmentController::class, 'getAvailableAssistants']);
-
+Route::get('/get-available-time', [ReaTimeAppoinmentConttroller::class, 'getAvailableTime']);
 
 
 

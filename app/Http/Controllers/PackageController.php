@@ -22,9 +22,8 @@ class PackageController extends Controller
             return view('packages.create', compact('packages','services'));
     }
 
-    
 
-    public function store(Request $request)
+    public function storepackages(Request $request)
     {
         try {
             $request->validate([
@@ -39,6 +38,7 @@ class PackageController extends Controller
             $package->package_name = $request->package_name;
             $package->description = $request->description; // This will store the HTML content
             $package->price = $request->price;
+            $package->duration=0;
             $package->save();
 
             notify()->success('Package Created successfully. ⚡️', 'Success');

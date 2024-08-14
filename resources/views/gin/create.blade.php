@@ -28,14 +28,13 @@
             <table class="table table-bordered" id="items-table">
                 <thead>
                     <tr>
-                        <th>Item Code</th>
-                        <th>Ordered Count</th>
-                        <th>Item Name</th>
-                        <th>Pack Size</th>
-                        <th>Unit Price</th>
-                        <th>In Quantity</th>
-                        <th>Total Cost</th>
-                        <th>Payment</th>
+                        <th style='color:Black'>Item Code</th>
+                        <th style='color:Black'>Ordered Count</th>
+                        <th style='color:Black'>Pack Size <span style='color:Red'>*<span ></th>
+                        <th style='color:Black'>Unit Price <span style='color:Red'>*<span ></th>
+                        <th style='color:Black'>In Quantity <span style='color:Red'>*<span ></th>
+                        <th style='color:Black'>Total Cost</th>
+                        <th style='color:Black'>Payment</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +67,6 @@
                     <tr>
                         <td><input type="text" name="orderItems[${index}][item_code]" class="form-control" value="${item.item_code}" readonly></td>
                         <td><input type="text" name="orderItems[${index}][quantity]" class="form-control" value="${item.quantity}" readonly></td>
-                        <td><input type="text" name="orderItems[${index}][item_name]" class="form-control" value="${item.item_name}" readonly></td>
                         <td><input type="number" name="orderItems[${index}][pack_size]" class="form-control"></td>
                         <td><input type="number" name="orderItems[${index}][unit_price]" class="form-control unit-price" data-index="${index}" required></td>
                         <td><input type="number" name="orderItems[${index}][in_quantity]" class="form-control in-quantity" data-index="${index}" required></td>

@@ -38,12 +38,12 @@ class GinController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request);
         $validatedData = $request->validate([
             'order_request_code' => 'required|string',
             'orderItems' => 'required|array',
             'orderItems.*.item_code' => 'required|string',
-            'orderItems.*.item_name' => 'required|string',
-            'orderItems.*.pack_size' => 'required|numeric',
+            'orderItems.*.pack_size' => 'nullable|numeric',
             'orderItems.*.unit_price' => 'required|numeric',
             'orderItems.*.in_quantity' => 'required|numeric',
             'orderItems.*.total_cost' => 'required|numeric',
