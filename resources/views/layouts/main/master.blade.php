@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="icon" href="favicon.ico">
 
         <title>NALIKA SALON</title>
@@ -15,6 +16,8 @@
     <link href="css/styles.css">
     
     @include('layouts.main.css')
+
+    
 
 
 

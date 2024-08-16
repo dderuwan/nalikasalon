@@ -85,9 +85,16 @@
                 </div>
             </div>
 
-            <div class="col-8 mt-3" id="next">
-              <a href="{{ route('realtime2page') }}"><button type="button" class="btn btn-primary" data-toggle="modal">Next</button></a>
+            <div class="col-8 mt-3">
+                <!-- Form to submit data -->
+                <form id="preorderForm" action="{{ route('realtime3page') }}" method="POST">
+                    @csrf
+                    <!-- Hidden field for the selected appointment number -->
+                    <input type="hidden" name="selected_appointment_number" id="selectedAppointmentNumber">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </form>
             </div>
+
 
         </div>
     </div>
@@ -99,7 +106,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     $('#customer_code').select2({
         placeholder: "Select Customer",
         allowClear: true
@@ -110,13 +117,13 @@
 
         if (contactNumber) {
             $.ajax({
-                url: '{{ route("getAppointmentsByCustomer") }}', // Update this route
+                url: '{{ route("getAppointmentsByCustomer") }}',
                 type: 'GET',
                 data: { contact_number_1: contactNumber },
                 success: function(data) {
                     $('#appointment_number').empty().append('<option value="">Select Appointment</option>');
                     $.each(data, function(key, value) {
-                        $('#appointment_number').append('<option value="'+ value.booking_reference_number +'" data-date="'+ value.appointment_date +'" data-time="'+ value.appointment_time +'">'+ value.booking_reference_number +'</option>');
+                        $('#appointment_number').append('<option value="'+ value.Auto_serial_number +'" data-date="'+ value.appointment_date +'" data-time="'+ value.appointment_time +'" data-preorder-id="'+ value.preorder_id +'">'+ value.Auto_serial_number +'</option>');
                     });
                 }
             });
@@ -126,19 +133,22 @@
     });
 
     $('#appointment_number').change(function() {
-        var appointmentNumber = $(this).val();
+        var autoSerialNumber = $(this).val();
         var appointmentDate = $('#appointment_number option:selected').data('date');
         var appointmentTime = $('#appointment_number option:selected').data('time');
+        var preorderId = $('#appointment_number option:selected').data('preorder-id');
 
         // Format the date to YYYY-MM-DD
         var formattedDate = appointmentDate.split('T')[0];
 
-        $('#selectedAppointment').val(appointmentNumber);
+        $('#selectedAppointment').val(autoSerialNumber);
         $('#selectedDate').val(formattedDate);
         $('#selectedTime').val(appointmentTime);
+        $('#selectedPreorderId').val(preorderId); // Correctly set the preorder ID in the hidden field
+        $('#selectedAppointmentNumber').val(autoSerialNumber); // Set the selected Auto_serial_number in the hidden field
     });
 });
-
+  
 </script>
 
 

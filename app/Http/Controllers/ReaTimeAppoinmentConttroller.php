@@ -26,14 +26,20 @@ class ReaTimeAppoinmentConttroller extends Controller
 
     public function getAppointmentsByCustomer(Request $request)
     {
-        $contactNumber = $request->contact_number_1;
+        $contactNumber = $request->input('contact_number_1');
 
-        $appointments = Preorder::where('customer_contact_1', $contactNumber)
-            ->select('booking_reference_number', 'appointment_date', 'appointment_time')
-            ->get();
+        if ($contactNumber) {
+            // Filter preorders by status 'pending' and the provided contact number
+            $preorders = Preorder::where('customer_contact_1', $contactNumber)
+                ->where('status', 'pending') // Only select preorders with status 'pending'
+                ->get();
 
-        return response()->json($appointments);
+            return response()->json($preorders);
+        }
+
+        return response()->json([]);
     }
+
 
     public function realtime2page()
     {
@@ -127,25 +133,25 @@ class ReaTimeAppoinmentConttroller extends Controller
 
     public function storerealtime2(Request $request)
     {
-        dd($request);
         $request->validate([
+            'customer_id' => 'required|string',
             'contact_number_1' => 'required|string',
             'service_id' => 'required|string',
             'package_id_1' => 'required|string',
-            'start_date' => 'required|date',
             'appointment_time' => 'required|string',
             'main_dresser' => 'required|string',
+            'assistant_1_name' => 'required|string',
             'payment_method' => 'required|string',
-            'advanced_payment' => 'required|numeric',
+            'total_price' => 'required|numeric',
         ]);
-    
+        
         $preorder = null; // Initialize preorder variable
-    
+
         \DB::transaction(function () use ($request, &$preorder) {
             try {
                 // Create the preorder
-                $realTimeBooking = RealTimeBooking::create([
-                    'real_time_app_no' => $this->generateAutoSerial(), 
+                $preorder = RealTimeBooking::create([
+                    'real_time_app_no' => $this->generateRealTime(), 
                     'customer_code' => $request->customer_id,
                     'customer_name' => $request->customer_name,
                     'customer_contact_1' => $request->contact_number_1,
@@ -162,21 +168,20 @@ class ReaTimeAppoinmentConttroller extends Controller
                     'Assistant_2' => $request->assistant_2_name,
                     'Assistant_3' => $request->assistant_3_name,
                     'note' => $request->note,
-                    'preorder_id'=> $request->preorder_id,
-                    'Advanced_price'=> $request->advanced_payment,
-                    'gift_voucher_No'=> $request->advanced_payment,
-                    'gift_voucher_price'=> $request->advanced_payment,
-                    'promotional_code_No'=> $request->advanced_payment,
-                    'promotional_price'=> $request->advanced_payment,
+                    'preorder_id'=> NULL,
+                    'gift_voucher_No'=> $request->gift_voucher_No,
+                    'gift_voucher_price'=> $request->gift_voucher_price,
+                    'promotional_code_No'=> $request->promotional_code_No,
+                    'promotional_price'=> $request->promotional_price,
                     'payment_type' => $request->payment_method,
-                    'Advanced_price' => $request->advanced_payment,
-                    'Total discount'=> $request->advanced_payment,
-                    'vat'=> $request->advanced_payment,
+                    'Advanced_price' => 0,
+                    'Total_discount'=> $request->discount,
+                    'vat'=> 0,
                     'Total_price' => $request->total_price,
                 ]);
-    
+
                 \Log::info('Preorder created:', ['preorder' => $preorder]);
-    
+
                 // Save the schedule for the main dresser and assistants
                 $employees = [$request->main_dresser];
                 if (!empty($request->assistant_1_name)) {
@@ -188,29 +193,122 @@ class ReaTimeAppoinmentConttroller extends Controller
                 if (!empty($request->assistant_3_name)) {
                     $employees[] = $request->assistant_3_name;
                 }
-    
+
                 foreach ($employees as $employee) {
                     Schedule::create([
                         'employee_id' => $employee,
-                        'date' => $request->start_date,
+                        'date' => Carbon::today(),
                         'time_slot' => $request->appointment_time,
                         'is_booked' => true,
                     ]);
                 }
-    
+
                 \Log::info('Schedules updated for employees');
             } catch (\Exception $e) {
                 \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
                 throw $e;
             }
         });
-    
+
         if ($preorder) {
-            return redirect()->route('printAndRedirect', ['id' => $preorder->id]);
+            return redirect()->route('printAndRedirectReal', ['id' => $preorder->id]);
         } else {
-            return redirect()->route('Appoinments')->withErrors('Failed to create appointment.');
+            return redirect()->route('RealTimepage1')->withErrors('Failed to create appointment.');
         }
     }
+
+
+    private function generateRealTime()
+    {
+        return 'RTO-'  . rand(1000, 9999);
+    }
+
+    public function printAndRedirectReal($id)
+    {
+        $preorder = RealTimeBooking::findOrFail($id);
+        return view('appointment.print2', compact('preorder'));
+    }
+
+
+    public function realtime3page(Request $request)
+    {
+        // dd($request); // Uncomment this for debugging to see the incoming request data
+
+        // Retrieve the selected appointment number from the request
+        $autoSerialNumber = $request->input('selected_appointment_number');
+
+        // Fetch the preorder details using the Auto_serial_number field
+        $preorderDetails = Preorder::where('Auto_serial_number', $autoSerialNumber)->first();
+
+        // Check if preorder details were found
+        if (!$preorderDetails) {
+            return redirect()->back()->withErrors(['error' => 'Preorder not found.']);
+        }
+
+        // Pass the details to the view
+        return view('appointment.realtime3', compact('preorderDetails'));
+    }
+
+
+    public function storerealtime34(Request $request)
+    {
+        //dd($request); 
+        $request->validate([
+            'customer_code' => 'required|string', 
+        ]);
+        //dd($request); 
+        $preorder = null; // Initialize preorder variable
+
+        \DB::transaction(function () use ($request, &$preorder) {
+            try {
+                // Create the preorder
+                $preorder = RealTimeBooking::create([
+                    'real_time_app_no' => $this->generateRealTime(), 
+                    'customer_code' => $request->customer_code,
+                    'customer_name' => $request->customer_name,
+                    'customer_contact_1' => $request->customer_contact_1,
+                    'customer_address' => $request->customer_address,
+                    'customer_dob' => $request->customer_dob,
+                    'Service_type' => $request->Service_type,
+                    'Package_name_1' => $request->Package_name_1,
+                    'Package_name_2' => $request->Package_name_2,
+                    'Package_name_3' => $request->Package_name_3,
+                    'today' => Carbon::today(),
+                    'appointment_time' => $request->selected_time,
+                    'main_job_holder' => $request->main_job_holder,
+                    'Assistant_1' => $request->Assistant_1,
+                    'Assistant_2' => $request->Assistant_2,
+                    'Assistant_3' => $request->Assistant_3,
+                    'note' => $request->note,
+                    'preorder_id'=>  $request->Auto_serial_number,
+                    'gift_voucher_No'=> $request->gift_voucher_No,
+                    'gift_voucher_price'=> $request->gift_voucher_price,
+                    'promotional_code_No'=> $request->promotional_code_No,
+                    'promotional_price'=> $request->promotional_price,
+                    'payment_type' => $request->payment_method,
+                    'Advanced_price' => $request->Advanced_price,
+                    'Total_discount'=> $request->discount,
+                    'vat'=> 0,
+                    'Total_price' => $request->Total_price,
+                ]);
+
+                Preorder::where('Auto_serial_number', $request->Auto_serial_number)
+                ->update(['status' => 'completed']);
+
+            } catch (\Exception $e) {
+                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
+                throw $e;
+            }
+        });
+
+        if ($preorder) {
+            return redirect()->route('printAndRedirectReal', ['id' => $preorder->id]);
+        } else {
+            return redirect()->route('RealTimepage1')->withErrors('Failed to create appointment.');
+        }
+    }
+
+
 
 
 }

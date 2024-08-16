@@ -66,6 +66,12 @@
     margin-top:20px;
     padding:20px 20px 20px 50px;
   }
+
+  #paymentopen{
+    width: 600px;
+    background-color: #FAF9F9;  
+
+  }
 </style>
 
 <main role="main" class="main-content">
@@ -95,24 +101,26 @@
                 <div class="col-12">
                   <div class="card shadow mb-4 p-2 pl-3">
                     <div class="card-body">
-                    <form id="mainForm"  method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('storerealtime2') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group row">
                           <label for="customerSelect" class="col-sm-2 col-form-label" style="color:black;">Customer <i class="text-danger">*</i></label>
                           <div class="col-sm-8 d-flex align-items-center">
                               <select name="contact_number_1" class="form-control" id="customer_code" required>
                                   <option value="">Select Customer</option>
-                                  @foreach($customers->unique('supplier_code') as $customer)
-                                      <option 
-                                          value="{{ $customer->contact_number_1 }}" 
-                                          data-name="{{ $customer->name }}" 
-                                          data-contact="{{ $customer->contact_number_1 }}" 
-                                          data-address="{{ $customer->address }}" 
-                                          data-dob="{{ $customer->date_of_birth }}" 
-                                          data-code="{{ $customer->supplier_code }}">
-                                          {{ $customer->contact_number_1 }}
-                                      </option>
-                                  @endforeach
+                                  @foreach($customers as $customer)
+                                        <option 
+                                            value="{{ $customer->contact_number_1 }}" 
+                                            data-name="{{ $customer->name }}" 
+                                            data-contact="{{ $customer->contact_number_1 }}" 
+                                            data-address="{{ $customer->address }}" 
+                                            data-dob="{{ $customer->date_of_birth }}" 
+                                            data-code="{{ $customer->customer_code }}">
+                                            {{ $customer->contact_number_1 }}
+                                        </option>
+                                    @endforeach
+
+
                               </select>
                               <button class="btn btn-outline-secondary ml-2" type="button" id="add-customer-btn">
                                   <i class="fe fe-10 fe-plus"></i>
@@ -235,11 +243,68 @@
                               <textarea class="form-control" id="eventNote" name="note" placeholder="Add some note for your event"></textarea>
                           </div>
 
-                          <div class="form-group row">
-                                <div class="col-sm-10 mt-5">
-                                    <button type="button" class="btn btn-primary" id="nextButton">Next</button>
+                          <div class="custom-card" id="card02pre">
+
+                                <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+                                
+                            <br>
+                                <!-- Payment fields -->
+                                <div class="form-group">
+                                    <label for="paymentMethod">Payment Method</label>
+                                    <select class="form-control" id="paymentMethod" name="payment_method" required>
+                                        <option value="">Select Payment Method</option>
+                                        <option value="credit_card">Credit Card</option>
+                                        <option value="debit_card">Debit Card</option>
+                                        <option value="paypal">PayPal</option>
+                                        <option value="cash">Cash</option>
+                                    </select>
                                 </div>
+
+                                <!-- Gift Voucher and Promotional Code in one row each -->
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="gift_voucher_No">Gift Voucher No</label>
+                                        <input type="text" class="form-control" id="gift_voucher_No" name="gift_voucher_No">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="gift_voucher_price">Gift Voucher Price</label>
+                                        <input type="number" class="form-control" id="gift_voucher_price" name="gift_voucher_price" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="promotional_code_No">Promotional Code No</label>
+                                        <input type="text" class="form-control" id="promotional_code_No" name="promotional_code_No">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="promotional_price">Promotional Price</label>
+                                        <input type="number" class="form-control" id="promotional_price" name="promotional_price" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="form-group col-md-6">
+                                        <label for="discount">Discount</label>
+                                        <input type="number" class="form-control" id="discount" name="discount" >
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="totalPrice">Total Price</label>
+                                        <input type="text" class="form-control" id="totalPrice" name="total_price" readonly>
+                                    </div>
+                                </div>
+
+                                
+                            
+
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-10 mt-5">
+                              <button type="submit" class="btn btn-primary">Save Appointment</button>
                             </div>
+                          </div>
                       </form>
                     </div>
                   </div>
@@ -252,50 +317,6 @@
 
         
       </div>
-    </div>
-
-    <!-- Payment section -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form id="paymentForm" >
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Payment fields -->
-                        <div class="form-group">
-                            <label for="paymentMethod">Payment Method</label>
-                            <select class="form-control" id="paymentMethod" name="payment_method" required>
-                                <option value="">Select Payment Method</option>
-                                <option value="credit_card">Credit Card</option>
-                                <option value="debit_card">Debit Card</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="advancedPayment">Advanced Payment</label>
-                            <input type="number" class="form-control" id="advancedPayment" name="advanced_payment" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="totalPrice">Total Price</label>
-                            <input type="text" class="form-control" id="totalPrice" name="total_price" readonly>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="savePaymentButton">Save Payment</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 
 
@@ -356,6 +377,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    console.log(@json($customers));
+</script>
 
 <script>
 $(document).ready(function() {
@@ -470,17 +494,37 @@ timeSlots.forEach(function(timeSlot) {
 
 <script>
 $(document).ready(function() {
+    
     // Function to update total price
     function updateTotalPrice() {
         var total = 0;
+
+        // Calculate the total package price
         $('#package-select-1, #package-select-2, #package-select-3').each(function() {
             var packagePrice = $(this).find('option:selected').data('price');
             if (packagePrice) {
                 total += parseFloat(packagePrice);
             }
         });
+
+        // Get the discount value
+        var discount = parseFloat($('#discount').val()) || 0;
+        var giftvoucher = parseFloat($('#gift_voucher_price').val()) || 0;
+        var promotional = parseFloat($('#promotional_price').val()) || 0;
+        // Subtract the discount from the total price
+        total = total- (discount+giftvoucher+promotional);
+
+        // Update the total price input field
         $('#totalPrice').val(total.toFixed(2));
     }
+
+    // Attach the updateTotalPrice function to the discount input field
+    $('#discount').on('input', function() {
+        updateTotalPrice();
+    });
+
+    // Call the updateTotalPrice function initially to set the initial value
+    updateTotalPrice();
 
     // Event handler for package dropdown change
     $('#package-select-1, #package-select-2, #package-select-3').change(updateTotalPrice);
@@ -639,59 +683,6 @@ function fetchAvailableAssistants(date, timeSlot, assistantSelectId) {
         })
         .catch(error => console.error(`Error fetching available assistants for ${assistantSelectId}:`, error));
 }
-
-</script>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
-
-
-
-<script>
-
-document.getElementById('nextButton').addEventListener('click', function() {
-    // Display the payment modal
-    $('#paymentModal').modal('show');
-});
-
-document.getElementById('paymentForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    // Combine the data from both forms
-    const mainFormData = new FormData(document.getElementById('mainForm'));
-    const paymentFormData = new FormData(document.getElementById('paymentForm'));
-
-    for (let [key, value] of paymentFormData.entries()) {
-        mainFormData.append(key, value);
-    }
-
-    // Send the combined data to the server
-    fetch('{{ route("storerealtime2") }}', {
-        method: 'POST',
-        body: mainFormData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Handle success
-        console.log(data);
-        // Optionally close the modal and show a success message
-        $('#paymentModal').modal('hide');
-        // Optionally reset the form or redirect the user
-    })
-    .catch(error => {
-        // Handle error
-        console.error(error);
-    });
-});
-
 
 </script>
 

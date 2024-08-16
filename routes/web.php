@@ -225,14 +225,17 @@ Route::get('/RealTimepage1', [App\Http\Controllers\ReaTimeAppoinmentConttroller:
 Route::get('/get-appointments', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'getAppointmentsByCustomer'])->name('getAppointmentsByCustomer');
 Route::get('/Appointments/realtime2page', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'realtime2page'])->name('realtime2page');
 Route::post('/Appointments/New-appointment/storerealtime2', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storerealtime2'])->name('storerealtime2');
+Route::post('/Appointments/New-appointment/storeCompleteDetails', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storeCompleteDetails'])->name('storeCompleteDetails');
+Route::get('/appointment/print-and-redirect-real/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'printAndRedirectReal'])->name('printAndRedirectReal');
+Route::post('/realtime3page', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'realtime3page'])->name('realtime3page');
+Route::post('/Appointments/New-appointment/storerealtime34', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storerealtime34'])->name('storerealtime34');
+
 
 // web.php or api.php (depending on your routes file)
 Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);
 Route::get('/get-available-main-dressers', [AppointmentController::class, 'getAvailableMainDressers']);
 Route::get('/get-available-assistants', [AppointmentController::class, 'getAvailableAssistants']);
 Route::get('/get-available-time', [ReaTimeAppoinmentConttroller::class, 'getAvailableTime']);
-
-
 
 
 //revenue
@@ -250,8 +253,6 @@ Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updat
 Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::delete('/cart/delete/{title}', [CartController::class, 'removeFromCart'])->name('cart.remove');
-
-
 
 
 
