@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\HomeAppoinmentController;
 
 
 //Route::get('/', function () {
@@ -27,6 +28,14 @@ Route::view('/home', 'home')->name('home');
 Route::get('/store', [HomeController::class, 'getproducts'])->name('store');
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('/');
+
+
+//home Appoinments
+Route::get('/showApp', [HomeAppoinmentController::class, 'showApp'])->name('showApp');
+Route::get('/get-packages', [HomeAppoinmentController::class, 'getPackagesByService']);
+Route::get('/get-available-time-slots', [HomeAppoinmentController::class, 'getAvailableTimeSlots']);
+Route::get('/get-package-price', [HomeAppoinmentController::class, 'getPackagePrice']);
+Route::post('/storeAppointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
 
 
 

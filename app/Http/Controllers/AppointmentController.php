@@ -46,70 +46,70 @@ class AppointmentController extends Controller
 
 
     public function getAvailableTimeSlots(Request $request)
-{
-    $date = $request->input('date');
-    $serviceId = $request->input('service_id'); // Added service_id parameter
-    $roleId = 4; // Main dresser role ID
-    
-    // Get all main dresser IDs
-    $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
-        $query->where('role_id', $roleId);
-    })->pluck('id');
-    
-    // Initialize array to hold available time slots
-    $availableTimeSlots = [];
+    {
+        $date = $request->input('date');
+        $serviceId = $request->input('service_id'); // Added service_id parameter
+        $roleId = 4; // Main dresser role ID
+        
+        // Get all main dresser IDs
+        $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
+            $query->where('role_id', $roleId);
+        })->pluck('id');
+        
+        // Initialize array to hold available time slots
+        $availableTimeSlots = [];
 
-    if ($serviceId == 'SERVICE-5284') {
-        // Fetch all time slots for bridal service
-        $timeSlotsBridals = TimeSlotBridel::all();
-
-        foreach ($timeSlotsBridals as $bridalSlot) {
-            // Check if the time slot is fully booked
-            $isFullyBooked = Schedule::whereIn('employee_id', $employees)
-                ->where('date', $date)
-                ->where('time_slot', $bridalSlot->time_range)
-                ->where('is_booked', true)
-                ->count() == $employees->count();
-
-            // If the time slot is not fully booked, add it to the available time slots
-            if (!$isFullyBooked) {
-                $availableTimeSlots[] = $bridalSlot->time_range;
-            }
-        }
-    } else {
-        // Fetch all regular time slots
-        $timeSlots = TimeSlot::all();
-
-        foreach ($timeSlots as $timeSlot) {
-            // Check if the time slot is fully booked
-            $isFullyBooked = Schedule::whereIn('employee_id', $employees)
-                ->where('date', $date)
-                ->where('time_slot', $timeSlot->time_range)
-                ->where('is_booked', true)
-                ->count() == $employees->count();
-
-            // If the time slot is not fully booked, add it to the available time slots
-            if (!$isFullyBooked) {
-                $availableTimeSlots[] = $timeSlot->time_range;
-            }
-        }
-    }
-
-    // If no bookings exist, all time slots should be available
-    if (Schedule::where('date', $date)->count() == 0) {
         if ($serviceId == 'SERVICE-5284') {
-            $availableTimeSlots = TimeSlotBridel::pluck('time_range')->toArray();
-        } else {
-            $availableTimeSlots = TimeSlot::pluck('time_range')->toArray();
-        }
-    }
-    
-    // Log the available time slots
-    Log::debug('Available Time Slots:', $availableTimeSlots);
+            // Fetch all time slots for bridal service
+            $timeSlotsBridals = TimeSlotBridel::all();
 
-    // Return available time slots as JSON response
-    return response()->json(['available_time_slots' => $availableTimeSlots]);
-}
+            foreach ($timeSlotsBridals as $bridalSlot) {
+                // Check if the time slot is fully booked
+                $isFullyBooked = Schedule::whereIn('employee_id', $employees)
+                    ->where('date', $date)
+                    ->where('time_slot', $bridalSlot->time_range)
+                    ->where('is_booked', true)
+                    ->count() == $employees->count();
+
+                // If the time slot is not fully booked, add it to the available time slots
+                if (!$isFullyBooked) {
+                    $availableTimeSlots[] = $bridalSlot->time_range;
+                }
+            }
+        } else {
+            // Fetch all regular time slots
+            $timeSlots = TimeSlot::all();
+
+            foreach ($timeSlots as $timeSlot) {
+                // Check if the time slot is fully booked
+                $isFullyBooked = Schedule::whereIn('employee_id', $employees)
+                    ->where('date', $date)
+                    ->where('time_slot', $timeSlot->time_range)
+                    ->where('is_booked', true)
+                    ->count() == $employees->count();
+
+                // If the time slot is not fully booked, add it to the available time slots
+                if (!$isFullyBooked) {
+                    $availableTimeSlots[] = $timeSlot->time_range;
+                }
+            }
+        }
+
+        // If no bookings exist, all time slots should be available
+        if (Schedule::where('date', $date)->count() == 0) {
+            if ($serviceId == 'SERVICE-5284') {
+                $availableTimeSlots = TimeSlotBridel::pluck('time_range')->toArray();
+            } else {
+                $availableTimeSlots = TimeSlot::pluck('time_range')->toArray();
+            }
+        }
+        
+        // Log the available time slots
+        Log::debug('Available Time Slots:', $availableTimeSlots);
+
+        // Return available time slots as JSON response
+        return response()->json(['available_time_slots' => $availableTimeSlots]);
+    }
 
     
     public function getAvailableMainDressers(Request $request)
@@ -268,15 +268,15 @@ class AppointmentController extends Controller
     }
     
 
-private function generateAutoSerial()
-{
-    return 'ASN-' . rand(1000, 9999);
-}
+    private function generateAutoSerial()
+    {
+        return 'ASN-' . rand(1000, 9999);
+    }
 
-private function generateBookingRef()
-{
-    return 'BREF-' . rand(1000, 9999);
-}
+    private function generateBookingRef()
+    {
+        return 'BREF-' . rand(1000, 9999);
+    }
 
 
     public function getPackagesByService(Request $request)

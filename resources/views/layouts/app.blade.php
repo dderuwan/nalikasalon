@@ -63,7 +63,7 @@
             <a class="nav-link me-3" href="{{ route('store') }}">Store</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Appointments</a>
+            <a class="nav-link" href="{{ route('showApp') }}">Appointments</a>
           </li>
         </ul>
       </div>

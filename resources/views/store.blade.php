@@ -70,7 +70,6 @@
 
     .container1 {
         width: 100%;
-        max-width: 1500px;
         margin: 0 ;
     }
 </style>
