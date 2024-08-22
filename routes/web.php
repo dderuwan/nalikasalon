@@ -36,9 +36,10 @@ Route::get('/get-packages', [HomeAppoinmentController::class, 'getPackagesByServ
 Route::get('/get-available-time-slots', [HomeAppoinmentController::class, 'getAvailableTimeSlots']);
 Route::get('/get-package-price', [HomeAppoinmentController::class, 'getPackagePrice']);
 Route::post('/storeAppointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
+Route::get('/appointment/print-and-redirect/{id}', [HomeAppoinmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 
 
-
+           
 // supplier module
  Route::get('/allsupplier', [App\Http\Controllers\SupplierController::class,'index'])->name('allsupplier');
  Route::get('/createsupplier',[App\Http\Controllers\SupplierController::class,'create'])->name('createsupplier');

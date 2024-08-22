@@ -86,9 +86,7 @@
         <li class="custom-nav-item">
           <a class="custom-nav-link active" id="pre-tab" data-toggle="tab" href="#pre" role="tab" aria-controls="home" aria-selected="true">Pre Booking</a>
         </li>
-        <li class="custom-nav-item">
-          <a class="custom-nav-link" id="real-time-tab" data-toggle="tab" href="#real-time" role="tab" aria-controls="profile" aria-selected="false">Real Time Booking</a>
-        </li>
+        
       </ul>
       <div class="custom-tab-content" id="myTabContent">
         <div class="custom-tab-pane active" id="pre" role="tabpanel" aria-labelledby="pre-tab">
@@ -102,20 +100,21 @@
                         
                         <div class="form-group row">
                           <label for="customerSelect" class="col-sm-2 col-form-label" style="color:black;">Customer <i class="text-danger">*</i></label>
-                          <div class="col-sm-8 d-flex align-items-center">
-                              <select name="contact_number_1" class="form-control" id="customer_code" required>
+                          <div class="col-sm-6 d-flex align-items-center">
+                                <select name="contact_number_1" class="form-control" id="customer_code" required>
                                   <option value="">Select Customer</option>
-                                  @foreach($customers->unique('supplier_code') as $customer)
-                                      <option 
-                                          value="{{ $customer->contact_number_1 }}" 
-                                          data-name="{{ $customer->name }}" 
-                                          data-contact="{{ $customer->contact_number_1 }}" 
-                                          data-address="{{ $customer->address }}" 
-                                          data-dob="{{ $customer->date_of_birth }}" 
-                                          data-code="{{ $customer->supplier_code }}">
-                                          {{ $customer->contact_number_1 }}
-                                      </option>
-                                  @endforeach
+                                  @foreach($customers as $customer)
+                                        <option 
+                                            value="{{ $customer->contact_number_1 }}" 
+                                            data-name="{{ $customer->name }}" 
+                                            data-contact="{{ $customer->contact_number_1 }}" 
+                                            data-address="{{ $customer->address }}" 
+                                            data-dob="{{ $customer->date_of_birth }}" 
+                                            data-code="{{ $customer->customer_code }}">
+                                            {{ $customer->contact_number_1 }}
+                                        </option>
+                                    @endforeach
+
                               </select>
                               <button class="btn btn-outline-secondary ml-2" type="button" id="add-customer-btn">
                                   <i class="fe fe-10 fe-plus"></i>
@@ -299,10 +298,7 @@
             </div>
         </div>
 
-        <div class="custom-tab-pane" id="real-time" role="tabpanel" aria-labelledby="real-time-tab">
-          <!-- Content for Real Time Booking -->
-          kavidu
-        </div>
+        
       </div>
     </div>
 

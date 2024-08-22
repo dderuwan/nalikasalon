@@ -43,10 +43,11 @@ class HomeAppoinmentController extends Controller
 
     public function getPackagesByService(Request $request)
     {
-        $serviceCode = $request->input('service_code');
+        $serviceCode = $request->query('service_code'); // For GET, use query() to get query parameters
         $packages = Package::where('services_id', $serviceCode)->get();
         return response()->json(['packages' => $packages]);
     }
+
 
     public function getAvailableTimeSlots(Request $request)
     {
@@ -122,8 +123,150 @@ class HomeAppoinmentController extends Controller
         return response()->json(['price' => $package->price]);
     }
 
-    public function storeAppointments(Request $request){
-        dd($request);
+
+    public function storeAppointments(Request $request)
+    {
+        $request->validate([
+            'contact_number_1' => 'required|string',
+            'service_id' => 'required|string',
+            'package' => 'required|string',
+            'start_date' => 'required|date',
+            'appointment_time' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
+
+        $preorder = null;
+
+        \DB::transaction(function () use ($request, &$preorder) {
+            try {
+                // Check if the contact number already exists in the customers table
+                $customer = Customer::where('contact_number_1', $request->contact_number_1)->first();
+
+                if ($customer) {
+                    // If the customer exists, get their customer code
+                    $customerCode = $customer->customer_code;
+                } else {
+                    // If the customer doesn't exist, create a new customer
+                    $customerDob = $request->has('date_of_birth') ? $request->input('date_of_birth') : null;
+
+                    $newCustomer = Customer::create([
+                        'name' => $request->name,
+                        'contact_number_1' => $request->contact_number_1,
+                        'contact_number_2' => $request->contact_number_2 ?? null,
+                        'address' => $request->address,
+                        'date_of_birth' => $customerDob,
+                        'customer_code' => $this->generateCustomerCode()
+                    ]);
+
+                    $customerCode = $newCustomer->customer_code;
+                }
+
+                // Find available main dresser
+                $roleIdMainDresser = 4;
+                $availableMainDresser = Employee::whereHas('roles', function ($query) use ($roleIdMainDresser) {
+                    $query->where('role_id', $roleIdMainDresser);
+                })
+                ->whereDoesntHave('schedules', function ($query) use ($request) {
+                    $query->where('date', $request->start_date)
+                        ->where('time_slot', $request->appointment_time);
+                })
+                ->first();
+
+                // Find available assistant
+                $roleIdAssistant = 5;
+                $availableAssistant = Employee::whereHas('roles', function ($query) use ($roleIdAssistant) {
+                    $query->where('role_id', $roleIdAssistant);
+                })
+                ->whereDoesntHave('schedules', function ($query) use ($request) {
+                    $query->where('date', $request->start_date)
+                        ->where('time_slot', $request->appointment_time);
+                })
+                ->first();
+
+                // If no main dresser is available, you might want to handle it (e.g., show an error)
+                if (!$availableMainDresser) {
+                    throw new \Exception('No available main dresser for the selected time slot.');
+                }
+
+                // Create the preorder
+                $preorder = Preorder::create([
+                    'Auto_serial_number' => $this->generateAutoSerial(),
+                    'booking_reference_number' => $this->generateBookingRef(),
+                    'customer_code' => $customerCode,
+                    'customer_name' => $request->name,
+                    'customer_contact_1' => $request->contact_number_1,
+                    'customer_address' => $request->address,
+                    'customer_dob' => $customerDob ?? Carbon::today(),
+                    'Service_type' => $request->service_id,
+                    'Package_name_1' => $request->package,
+                    'appointment_date' => $request->start_date,
+                    'today' => Carbon::today(),
+                    'appointment_time' => $request->appointment_time,
+                    'main_job_holder' => $availableMainDresser->id,
+                    'Assistant_1' => $availableAssistant ? $availableAssistant->id : null,
+                    'note' => $request->note,
+                    'payment_type' => $request->payment_method,
+                    'Advanced_price' => $request->advance_price,
+                    'Total_price' => $request->total_price,
+                    'status' => 'pending',
+                ]);
+
+                // Log the preorder creation
+                \Log::info('Preorder created:', ['preorder' => $preorder]);
+
+                // Save the schedule for the main dresser and assistant
+                Schedule::create([
+                    'employee_id' => $availableMainDresser->id,
+                    'date' => $request->start_date,
+                    'time_slot' => $request->appointment_time,
+                    'is_booked' => true,
+                ]);
+
+                if ($availableAssistant) {
+                    Schedule::create([
+                        'employee_id' => $availableAssistant->id,
+                        'date' => $request->start_date,
+                        'time_slot' => $request->appointment_time,
+                        'is_booked' => true,
+                    ]);
+                }
+
+                \Log::info('Schedules updated for main dresser and assistant');
+            } catch (\Exception $e) {
+                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
+                throw $e;
+            }
+        });
+
+        if ($preorder) {
+            return redirect()->route('printAndRedirect', ['id' => $preorder->id]);
+        } else {
+            return redirect()->route('Appointments')->withErrors('Failed to create appointment.');
+        }
     }
+
+    public function printAndRedirect($id)
+    {
+        $preorder = Preorder::findOrFail($id);
+        return view('appointment.print3', compact('preorder'));
+    }
+
+
+    // Example method to generate a unique customer code (implement as needed)
+    private function generateCustomerCode()
+    {
+        return 'CUS' . strtoupper(uniqid());
+    }
+
+    private function generateAutoSerial()
+    {
+        return 'ASN-' . rand(1000, 9999);
+    }
+
+    private function generateBookingRef()
+    {
+        return 'BREF-' . rand(1000, 9999);
+    }
+
 
 }

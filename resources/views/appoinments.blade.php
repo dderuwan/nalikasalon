@@ -277,14 +277,14 @@
                     <h3>Select Service and Package</h3>
                     <div class="form-group12">
                         <label for="service">Service:</label>
-                        <select id="service" name="service" class="form-control12">
-                            <option value="">Select Service</option>
-                            @foreach($services as $service)
-                                <option value="{{ $service->service_code }}" data-name="{{ $service->service_name }}">
-                                    {{ $service->service_name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <select class="form-control" id="service-select" name="service_id" required>
+                                      <option value="">Select Service</option>
+                                      @foreach($services as $service)
+                                          <option value="{{ $service->service_code }}" data-name="{{ $service->service_name }}">
+                                              {{ $service->service_code }} - {{ $service->service_name }}
+                                          </option>
+                                      @endforeach
+                                  </select>
                     </div>
                     <div class="form-group12">
                         <label for="package">Package:</label>
@@ -381,11 +381,6 @@
                         <input type="text" class="form-control" id="address" name="address"  required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="date_of_birth">Date of Birth : *</label>
-                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"  required>
-                    </div>
-
                     <div>
                         <button class="btn btn-secondary" onclick="previousSection(2)">Back</button>
                         <button class="btn btn-primary" onclick="nextSection(4)">Next</button>
@@ -456,6 +451,61 @@
 </div>
 
 <script>
+    // Object to store selected service details
+    let selectedService = {};
+    let packagePrice = 0;
+
+    // Function to handle service selection and fetch packages
+    document.getElementById('service-select').addEventListener('change', function() {
+        const selectedServiceCode = this.value; // Get the selected service_code
+        selectedService.service_code = selectedServiceCode; // Store the selected service code
+
+        // Send AJAX request to fetch packages based on selected service
+        fetchPackages(selectedService.service_code);
+    });
+
+    function fetchPackages(serviceCode) {
+    const packageSelect = document.getElementById('package');
+    axios.get(`/get-packages`, {
+        params: {
+            service_code: serviceCode
+        }
+    })
+    .then(response => {
+        const packages = response.data.packages;
+        packageSelect.innerHTML = '<option value="">Select Package</option>';
+        packages.forEach(package => {
+            packageSelect.innerHTML += `<option value="${package.id}" data-price="${package.price}">${package.package_name}</option>`;
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching packages:', error);
+        alert('There was an error fetching the packages.');
+    });
+    }
+
+    // Function to handle package selection and display the price
+    document.getElementById('package').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            packagePrice = parseFloat(selectedOption.getAttribute('data-price')); // Get the price from the data attribute
+            document.getElementById('total_price').value = packagePrice.toFixed(2); // Display the price in the total price field
+            updateTotalPrice(); // Update the total price field based on the advanced payment
+        });
+
+        // Function to handle advanced payment and update total price
+        document.getElementById('advance_price').addEventListener('input', function() {
+            updateTotalPrice();
+        });
+
+        function updateTotalPrice() {
+            const advancePrice = parseFloat(document.getElementById('advance_price').value) || 0;
+            const totalPrice = packagePrice - advancePrice;
+            document.getElementById('total_price').value = totalPrice.toFixed(2); // Update the total price field
+        }
+
+</script>
+
+<script>
     function nextSection(sectionNumber) {
         document.querySelector('.section.active').classList.remove('active');
         document.querySelector(`#section${sectionNumber}`).classList.add('active');
@@ -468,35 +518,7 @@
     }
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const serviceSelect = document.getElementById('service');
-        const packageSelect = document.getElementById('package');
 
-        serviceSelect.addEventListener('change', function () {
-            const serviceCode = this.value;
-            
-            if (serviceCode) {
-                fetchPackages(serviceCode);
-            } else {
-                // Clear the package dropdown if no service is selected
-                packageSelect.innerHTML = '<option value="">Select Package</option>';
-            }
-        });
-
-        function fetchPackages(serviceCode) {
-            fetch(`/get-packages?service_code=${serviceCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    packageSelect.innerHTML = '<option value="">Select Package</option>';
-                    data.packages.forEach(package => {
-                        packageSelect.innerHTML += `<option value="${package.services_id}">${package.package_name}</option>`;
-                    });
-                })
-                .catch(error => console.error('Error fetching packages:', error));
-        }
-    });
-</script>
 
 <script>    
 document.getElementById('start_date').addEventListener('change', function() {
@@ -548,7 +570,7 @@ function fetchAvailableTimeSlots(date, serviceId) {
         .catch(error => console.error('Error fetching time slots:', error));
 }
 
-document.getElementById('service-select').addEventListener('change', function() {
+document.getElementById('service').addEventListener('change', function() {
     var serviceId = this.value;
     var date = document.getElementById('start_date').value;
     if (date && serviceId) {
@@ -556,6 +578,7 @@ document.getElementById('service-select').addEventListener('change', function() 
         fetchAvailableTimeSlots(date, serviceId);
     }
 });
+
 
 
 function selectTimeSlot(timeSlot, date) {
@@ -637,6 +660,7 @@ $(document).ready(function() {
 
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 @endsection
