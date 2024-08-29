@@ -16,7 +16,7 @@
       <ul class="navbar-nav flex-fill w-100 mb-2">
         <li class="nav-item active sidebar_li">
             <i class="fe fe-home fe-16"></i>
-          <a href="{{route('/')}}" class="sidebar_text" >
+          <a href="{{route('wellcome')}}" class="sidebar_text" >
             <span class="ml-3 item-text">Dashboard</span><span class="sr-only"> (current)</span>
           </a>
         </li>
@@ -313,7 +313,7 @@
 
                       <li class="nav-item active mb-2">
                           <a href="{{route('assign_user_role')}}" class="sidebar_text">
-                              <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>
+                              <span class="ml-3 item-text">Assigned User Roles</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
                   </ul>
