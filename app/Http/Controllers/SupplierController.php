@@ -10,10 +10,10 @@ use Exception;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // all supplier list view
+     
+
+
+
     public function index()
     {
         $suppliers = Supplier::all();

@@ -18,11 +18,11 @@
             <table class="table table-bordered" id="items-table">
                 <thead>
                     <tr>
-                        <th>Item Name *</th>
-                        <th>Description</th>
-                        <th>Selling Price</th>
-                        <th>Image</th>
-                        <th>Actions</th>
+                        <th style="color: black;">Item Name *</th>
+                        <th style="color: black;">Description</th>
+                        <th style="color: black;">Selling Price</th>
+                        <th style="color: black;">Image</th>
+                        <th style="color: black;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

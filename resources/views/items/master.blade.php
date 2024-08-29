@@ -7,15 +7,15 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th >Image</th>
-                    <th>Item Code</th>
-                    <th>Item Name</th>
-                    <th>Item Description</th>
-                    <th>Pack Size</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total Amount</th>
-                    <th>Supplier Code</th>
+                    <th style="color: black;">Image</th>
+                    <th style="color: black;">Item Code</th>
+                    <th style="color: black;">Item Name</th>
+                    <th style="color: black;">Item Description</th>
+                    <th style="color: black;">Pack Size</th>
+                    <th style="color: black;">Quantity</th>
+                    <th style="color: black;">Unit Price</th>
+                    <th style="color: black;">Total Amount</th>
+                    <th style="color: black;">Supplier Code</th>
                 </tr>
             </thead>
             <tbody>

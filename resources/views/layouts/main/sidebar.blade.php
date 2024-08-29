@@ -6,10 +6,11 @@
     <nav class="vertnav navbar navbar-light">
       <!-- nav bar -->
       <div class="w-100 mb-4 ml-3 d-flex">
-          <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('/') }}">
-            <img src="{{ asset('images/logos/' . app(\App\Http\Controllers\CompanySettingController::class)->getCompanyLogo()) }}"
-            style="width:auto; height: 35px;" class="mt-2" alt="Company Logo">
-          </a>
+      <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('home') }}">
+    <img src="{{ asset('images/logo.png') }}"
+    style="width:auto; height: 35px;" class="mt-2" alt="Company Logo">
+</a>
+
       </div>
 
       <ul class="navbar-nav flex-fill w-100 mb-2">
@@ -146,11 +147,8 @@
                 <a href="{{route('orderreport')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Sales Report</span><span class="sr-only">(current)</span>
                 </a>
-
                 </li>
-
-
-
+                
               </ul>
             </li>
 
@@ -270,6 +268,12 @@
                               <span class="ml-3 item-text">Real Time Order</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{ route('RealTimeOrderList') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Real Time Order List</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      
                   </ul>
             </li>               
 
@@ -306,11 +310,7 @@
                               <span class="ml-3 item-text">Add Role</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
-                      <li class="nav-item active mb-2">
-                          <a href="{{route('showRole')}}" class="sidebar_text">
-                              <span class="ml-3 item-text">Role List</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
+
                       <li class="nav-item active mb-2">
                           <a href="{{route('assign_user_role')}}" class="sidebar_text">
                               <span class="ml-3 item-text">Assign User Roles</span><span class="sr-only">(current)</span>

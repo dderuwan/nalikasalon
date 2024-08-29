@@ -6,6 +6,9 @@ use App\Models\Employee;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rules;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -13,12 +16,10 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $employees = Employee::paginate(10);
-    return view('employee.index', [
-        'employees' => $employees
-    ]);
-}
+    {
+        $employees = Employee::all();
+        return view('employee.index', compact('employees'));
+    }
 
 
     /**
@@ -26,14 +27,18 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employee.create');
+        // Pluck the roles with the ID as the key and name as the value
+        $roles = Role::pluck('name', 'name')->all();
+        return view('employee.create', compact('roles'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
@@ -44,25 +49,33 @@ class EmployeeController extends Controller
             'Email' => 'required|email|max:255',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'zipecode' => 'required|string|max:10',
             'status' => 'nullable|boolean',
+            'roles' => 'nullable|array',
         ]);
 
-        Employee::create([
+
+        //dd($request);
+        $employee = Employee::create([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
             'DOB' => $request->DOB,
             'NIC' => $request->NIC,
             'contactno' => $request->contactno,
-            'Email' => $request->Email,
+            'email' => $request->Email,
             'address' => $request->address,
             'city' => $request->city,
+            'password' =>Hash::make($request->password),
             'zipecode' => $request->zipecode,
             'status' => $request->status == true ? 1 : 0,
         ]);
 
-        return redirect('/employee');
+        $employee->syncRoles($request->roles);
+
+
+        return redirect('employee');
     }
     /**
      * Display the specified resource.
@@ -75,47 +88,65 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit( Employee $employee)
+    public function edit($id)
     {
-        return view('employee.edit', compact('employee'));
+        $employee = Employee::findOrFail($id); 
+        $roles = Role::all()->pluck('name'); 
+        return view('employee.edit', compact('employee', 'roles')); 
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-{
-    $request->validate([
-        'firstname' => 'required|string|max:255',
-        'middlename' => 'nullable|string|max:255',
-        'lastname' => 'required|string|max:255',
-        'DOB' => 'required|date',
-        'NIC' => 'required|string|max:20',
-        'contactno' => 'required|string|max:20',
-        'Email' => 'required|email|max:255',
-        'address' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'zipecode' => 'required|string|max:10',
-        'status' => 'required|boolean',
-    ]);
+    public function updateemp(Request $request, $id)
+    {
+        
+        // Validate the request data
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'middlename' => 'nullable|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'DOB' => 'required|date',
+            'NIC' => 'required|string|max:20',
+            'contactno' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zipecode' => 'required|string|max:10',
+            'status' => 'required|boolean', 
+        ]);
+        
+        // Find the employee by ID or fail
+        $employee = Employee::findOrFail($id);
 
-    $employee = Employee::findOrFail($id);
-    $employee->update([
-        'firstname' => $request->firstname,
-        'middlename' => $request->middlename,
-        'lastname' => $request->lastname,
-        'DOB' => $request->DOB,
-        'NIC' => $request->NIC,
-        'contactno' => $request->contactno,
-        'Email' => $request->Email,
-        'address' => $request->address,
-        'city' => $request->city,
-        'zipecode' => $request->zipecode,
-        'status' => $request->status,
-    ]);
+        // Update the employee details
+        $data=[
+            'firstname' => $request->firstname,
+            'middlename' => $request->middlename,
+            'lastname' => $request->lastname,
+            'DOB' => $request->DOB,
+            'NIC' => $request->NIC,
+            'contactno' => $request->contactno,
+            'Email' => $request->email, 
+            'address' => $request->address,
+            'city' => $request->city,
+            'zipecode' => $request->zipecode,
+            'status' => $request->status,
+        ];
 
-    return redirect()->route('employee.index')->with('status', 'Employee updated successfully');
-}
+        if(!empty($request->password)){
+            $data += [
+                'password'=>Hash::make($request->password),
+            ];;
+        }
+
+        $employee->update($data);
+        $employee->syncRoles($request->roles);
+
+        // Redirect back to the employee index with a success message
+        return redirect()->route('employee')->with('status', 'Employee updated successfully');
+    }
+
 
 
     /**

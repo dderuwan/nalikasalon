@@ -16,8 +16,6 @@ use App\Models\TimeSlotBridel;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Log;
 
-
-
 class AppointmentController extends Controller
 {
     public function showCustomers()
@@ -29,12 +27,12 @@ class AppointmentController extends Controller
         $timeSlotsBridels = TimeSlotBridel::all();
 
         //dd($timeSlots);
-        $roleId = 4;
+        $roleId = 2;
         $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
             $query->where('role_id', $roleId);
         })->get();
 
-        $roleId2 = 5;
+        $roleId2 = 3;
         $assemployees = Employee::whereHas('roles', function ($query) use ($roleId2) {
             $query->where('role_id', $roleId2);
         })->get();
@@ -49,7 +47,7 @@ class AppointmentController extends Controller
     {
         $date = $request->input('date');
         $serviceId = $request->input('service_id'); // Added service_id parameter
-        $roleId = 4; // Main dresser role ID
+        $roleId = 2; // Main dresser role ID
         
         // Get all main dresser IDs
         $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
@@ -116,7 +114,7 @@ class AppointmentController extends Controller
     {
         $date = $request->input('date');
         $timeSlot = $request->input('time_slot');
-        $roleId = 4;
+        $roleId = 2;
 
         $availableDressers = Employee::whereHas('roles', function ($query) use ($roleId) {
             $query->where('role_id', $roleId);
@@ -133,7 +131,7 @@ class AppointmentController extends Controller
     {
         $date = $request->input('date');
         $timeSlot = $request->input('time_slot');
-        $roleId = 5;
+        $roleId = 3;
 
         $availableAssistants = Employee::whereHas('roles', function ($query) use ($roleId) {
             $query->where('role_id', $roleId);

@@ -18,10 +18,10 @@
             <table class="table table-bordered" id="items-table">
                 <thead>
                     <tr>
-                        <th>Item Code</th>
-                        <th>In Stock</th>
-                        <th>Quantity *</th>
-                        <th>Actions</th>
+                        <th style="color: black;">Item Code</th>
+                        <th style="color: black;">In Stock</th>
+                        <th style="color: black;">Quantity *</th>
+                        <th style="color: black;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -11,13 +11,13 @@
             <h3><strong class="card-title">Permissions</strong></h3>
             <a href="{{ route('addPermission') }}" class="btn btn-primary">Add Permission</a>
           </div>
+
           <div class="card-body">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Name</th>
-                  <th>Description</th>
                   <th>Actions</th>
                 </tr>
               </thead>

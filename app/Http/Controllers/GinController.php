@@ -83,7 +83,7 @@ class GinController extends Controller
                 // Update the item quantity in the items table
                 $itemRecord = Item::where('item_code', $item['item_code'])->first();
                 if ($itemRecord) {
-                    $itemRecord->item_quentity += $item['in_quantity'];
+                    $itemRecord->item_quantity += $item['in_quantity'];
                     $itemRecord->save();
                 }
             }

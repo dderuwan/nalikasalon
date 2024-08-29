@@ -7,55 +7,47 @@
         <h1>Add Permission</h1>
         <form action="{{ route('storePermission') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
             <div class="form-group">
-              <div class="form-group row">
-                  <label for="inputCategory" class="col-sm-2 col-form-label" style="color:black;">Section Name <i class="text-danger">*</i></label>
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="category" name="category" placeholder="category name" required>
-                  </div>
-                </div>
+                <label for="name">Permission Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Permission Name" required>
             </div>
-            <table class="table table-bordered" id="items-table">
+
+            <button type="submit" class="btn btn-primary">Add Permission</button>
+        </form>
+
+    </div>
+    <br><br><br>
+    <div class="container">
+        <h1>All Permissions</h1>
+        <div class="card-body">
+                <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Permission Name *</th>
-                        <th>Description</th>
+                    <th style="color: black;">#</th>
+                    <th style="color: black;">Name</th>
+                    <th style="color: black;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($permissions as $permission)
                     <tr>
-                        <td><input type="text" name="items[0][name]" class="form-control" required></td>
-                        <td><input type="text" name="items[0][description]" class="form-control" ></td>
-                        <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>
+                        <td>{{ $permission->id }}</td>
+                        <td>{{ $permission->name }}</td>
+                        <td>
+                        <a href="{{ route('addPermission', $permission->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete({{ $permission->id }})">Delete</button>
+                        <form id="delete-form-{{ $permission->id }}" action="{{ route('deletePermission', $permission->id) }}" method="POST" style="display:none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                        </td>
                     </tr>
+                    @endforeach
                 </tbody>
-            </table>
-            <button type="button" class="btn btn-primary" id="add-row">Add New Permission</button>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-    </div>
+                </table>
+            </div>
+          </div>
 </main>
 
-<script>
-    let rowIndex = 1;
-
-    document.getElementById('add-row').addEventListener('click', function() {
-        const table = document.getElementById('items-table').getElementsByTagName('tbody')[0];
-        const newRow = table.insertRow();
-        newRow.innerHTML = `
-            <tr>
-                <td><input type="text" name="items[${rowIndex}][name]" class="form-control" required></td>
-                <td><input type="text" name="items[${rowIndex}][description]" class="form-control" ></td>
-                <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>
-            </tr>
-        `;
-        rowIndex++;
-    });
-
-    document.getElementById('items-table').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-row')) {
-            e.target.closest('tr').remove();
-        }
-    });
-</script>
 @endsection

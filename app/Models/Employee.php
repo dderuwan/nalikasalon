@@ -4,40 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
-class Employee extends Model
+
+class Employee extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable, HasRoles;
 
     protected $table = 'employee';
 
     protected $fillable = [
         'firstname',
-        'middlename' ,
-        'lastname' ,
-        'DOB' ,
-        'NIC' ,
-        'contactno' ,
-        'Email' ,
-        'address' ,
-        'city' ,
+        'middlename',
+        'lastname',
+        'DOB',
+        'NIC',
+        'contactno',
+        'email',
+        'address',
+        'city',
         'zipecode',
-        'status'
+        'password',
+        'status',
     ];
+
+    // Hide attributes for arrays
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // Cast attributes to native types
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * Relationships
+     */
 
     public function appointments()
     {
         return $this->hasMany(Preorder::class);
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'employee_roles');
-    }
 
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
     }
-   
+
+
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
-use App\Models\Role;
-use App\Models\Permission;
 use App\Models\Employee;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -22,169 +22,160 @@ class RoleController extends Controller
         return view('setting.roles.assign_user_role', compact('employees','roles','employeeRoles'));
     }
 
+    //permissions
+
 
     public function addPermission()
     {
-        return view('setting.roles.add_permissions');
+        $permissions = Permission::all();
+        return view('role-permission.permission.create', compact('permissions'));
     }
 
-    
-   
     public function storePermission(Request $request)
     {
+        $request->validate([
+            'name' =>[
+                'required',
+                'string',
+                'unique:permissions,name'
+            ]
+        ]);
 
-        //dd($request);
-        try {
-            $request->validate([
-                'category' => 'required',
-                'items.*.name' => 'required|string|max:255',
-                'items.*.description' => 'nullable|string',
-            ]);
+        Permission::create([
+            'name'=> $request->name
+        ]);
 
-            foreach ($request->items as $itemData) {
-                $item = new Permission();
-                
-                $item->name = $itemData['name'];
-                $item->description = $itemData['description'];
-                $item->section = $request->category;
-
-                $item->save();
-            }
-
-            return redirect()->route('showPermission')->with('success', 'Permission added successfully!');
-        } catch (Exception $e) {
-            return back()->withError($e->getMessage())->withInput();
-        }
+        return redirect('addPermission')->with('ststus','Permission Created Succesfully');
     }
 
-    public function showPermission()
+    public function edit($id)
     {
-        $permissions = Permission::all();
-        return view('setting.roles.show_permissions', compact('permissions'));
+        $permission = Permission::findOrFail($id);
+        return view('role-permission.permission..edit', compact('permission'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $permission = Permission::findOrFail($id);
+        $permission->name = $request->name;
+        $permission->save();
+
+        return redirect()->route('addPermission')
+                        ->with('success', 'Permission updated successfully');
     }
 
     
     public function deletePermission($id)
     {
-        try {
-            $permission = Permission::findOrFail($id);
-            $permission->delete();
-            return redirect()->route('showPermission')->with('success', 'Permission deleted successfully.');
-        } catch (Exception $e) {
-            return redirect()->route('showPermission')->withErrors(['error' => 'Failed to delete permission.']);
-        }
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
+
+        return redirect()->route('addPermission')
+                        ->with('success', 'Permission deleted successfully');
     }
 
+
+
+
+
+
+    //roles
     public function addRole()
     {
-        $permissions = Permission::all()->groupBy('category');
-        return view('setting.roles.add_roles', compact('permissions'));
+        $roles = Role::all();
+        return view('role-permission.Roles.create', compact('roles'));
     }
 
 
 
     public function storeRole(Request $request)
     {
-        //dd($request);
-        // Validate the incoming request data
-        $validator = Validator::make($request->all(), [
-            'role_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'permissions' => 'nullable|array',
-            'permissions.*' => 'exists:permissions,id',
+        $request->validate([
+            'name' =>[
+                'required',
+                'string',
+                'unique:roles,name'
+            ]
         ]);
 
-        // Begin a transaction
-        DB::beginTransaction();
+        Role::create([
+            'name'=> $request->name
+        ]);
 
-        try {
-            // Create the new role
-            $role = Role::create([
-                'name' => $request->input('role_name'),
-                'description' => $request->input('description'),
-            ]);
-
-            // Attach the selected permissions to the role
-            if ($request->has('permissions')) {
-                $role->permissions()->sync($request->input('permissions'));
-            }
-
-            // Commit the transaction
-            DB::commit();
-
-            // Redirect or return a success response
-            return redirect()->route('showRole')->with('success', 'Role created successfully.');
-        } catch (\Exception $e) {
-            // Rollback the transaction if an error occurs
-            DB::rollback();
-
-            // Redirect or return an error response
-            return redirect()->back()->with('error', 'Failed to create role: ' . $e->getMessage());
-        }
-    }
-
-    public function showRole()
-    {
-        $roles = Role::with('permissions')->get();
-        return view('setting.roles.role_list', compact('roles'));
+        return redirect('addRole')->with('ststus','Role Created Succesfully');
     }
 
     public function editRole($id)
     {
-        $role = Role::with('permissions')->findOrFail($id);
-        return view('setting.roles.role_edit', compact('role'));
+        $role = Role::findOrFail($id);
+        return view('role-permission.Roles.edit', compact('role'));
     }
 
     public function updateRole(Request $request, $id)
     {
         $request->validate([
-            'role_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'permissions' => 'required|array'
+            'name' => 'required|string|max:255',
         ]);
 
         $role = Role::findOrFail($id);
-        $role->update([
-            'name' => $request->role_name,
-            'description' => $request->description,
-        ]);
+        $role->name = $request->name;
+        $role->save();
 
-        $role->permissions()->delete();
-
-        foreach ($request->permissions as $permission => $value) {
-            $role->permissions()->create([
-                'permission' => $permission,
-                'can_create' => $value['can_create'] ?? 0,
-                'can_read' => $value['can_read'] ?? 0,
-                'can_edit' => $value['can_edit'] ?? 0,
-                'can_delete' => $value['can_delete'] ?? 0,
-            ]);
-        }
-
-        return redirect()->route('showRole')->with('success', 'Role updated successfully');
+        return redirect()->route('addRole')
+                        ->with('success', 'Role updated successfully');
     }
 
     public function deleteRole($id)
     {
         $role = Role::findOrFail($id);
-
-        // Delete the permissions associated with the role
-        $role->permissions()->delete();
-
-        // Delete the role
         $role->delete();
 
-        return redirect()->route('showRole')->with('success', 'Role deleted successfully');
+        return redirect()->route('addRole')
+                        ->with('success', 'Role deleted successfully');
     }
+
+
+
+    public function addPermitionToRole($id) {
+        $permissions = Permission::all(); // Get all permissions
+        $role = Role::findOrFail($id); // Find the role by ID
+        $rolePermissions = $role->permissions->pluck('id')->toArray(); // Get the IDs of permissions assigned to the role
+    
+        return view('role-permission.Roles.add-permission', [
+            'role' => $role,
+            'permissions' => $permissions,
+            'rolePermissions' => $rolePermissions
+        ]);
+    }
+    
+
+
+    public function givePermissionToRole(Request $request, $id)
+    {
+        $request->validate([
+            'permissions' => 'required|array'
+        ]);
+
+        $role = Role::findOrFail($id);
+        $role->permissions()->sync($request->permissions);
+
+        return redirect()->route('addRole')->with('status', 'Permissions updated successfully');
+    }
+
     
 
     public function assignRole(Request $request)
     {
+        
         $request->validate([
-            'employee_id' => 'required|exists:employee,id',
-            'role_id' => 'required|exists:roles,id',
+            'employee_id' => 'required',
+            'role_id' => 'required',
         ]);
-
+        //dd($request);
         $employee = Employee::findOrFail($request->employee_id);
         $role = Role::findOrFail($request->role_id);
 

@@ -8,7 +8,7 @@
         <h2 class="page-title">Add Employee</h2>
         <p class="text-muted"></p>
 
-        <div class="card-deck">
+        <div class="card-deck"> 
           <div class="card shadow mb-4">
             <div class="card-header">
               <strong class="card-title">Add</strong>
@@ -97,6 +97,39 @@
                     @enderror
                   </div>
                 </div>
+
+                <!-- Password -->
+                <div class="form-row">
+                <div class="form-group col-md-6">
+                    <x-input-label for="password" :value="__('Password *')" />
+                    <x-text-input id="password" class="form-control"
+                                    type="password"
+                                    name="password"
+                                    required autocomplete="new-password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group col-md-6">
+                    <x-input-label for="password_confirmation" :value="__('Confirm Password *')" />
+                    <x-text-input id="password_confirmation" class="form-control"
+                                    type="password"
+                                    name="password_confirmation" required autocomplete="new-password" />
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="roles">Roles</label>
+                  <select name="roles[]" class="form-control" multiple>
+                      <option value="">Select Role</option>
+                      @foreach($roles as $role)
+                          <option value="{{ $role }}">{{ $role }}</option>
+                      @endforeach
+                  </select>
+              </div>
+
+
 
                 <div class="form-group">
                   <label for="inputStatus">Status</label>

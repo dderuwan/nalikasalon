@@ -42,6 +42,13 @@ return [
         ],
     ],
 
+    'guards' => [
+        'Employee' => [
+            'driver' => 'session',
+            'provider' => 'Employee',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -62,7 +69,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Models\Employee::class),
+        ],
+
+        'Employee' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Employee::class),
         ],
 
         // 'users' => [

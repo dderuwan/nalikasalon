@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('DOB');
             $table->string('NIC', 20);
             $table->string('contactno', 20);
-            $table->string('Email', 255)->unique();
+            $table->string('email', 255)->unique();
             $table->string('address', 255);
             $table->string('city', 255);
             $table->string('zipecode', 10);

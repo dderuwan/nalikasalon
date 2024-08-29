@@ -52,16 +52,11 @@
                                     <thead>
                                         <tr>
 
-                                            <th>First Name</th>
-                                            <th>Middle Name</th>
-                                            <th>Last Name</th>
+                                            <th>Name</th>
                                             <th>Date of Birth</th>
-                                            <th>NIC</th>
                                             <th>Contact No</th>
                                             <th>Email</th>
-                                            <th>Address</th>
-                                            <th>City</th>
-                                            <th>Zip Code</th>
+                                            <th>Roles</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,31 +65,29 @@
                                         @foreach ($employees as $employee)
                                     <tr>
 
-                                        <td>{{ $employee->firstname }}</td>
-                                        <td>{{ $employee->middlename }}</td>
-                                        <td>{{ $employee->lastname }}</td>
+                                        <td>{{ $employee->firstname }} </td>
                                         <td>{{ $employee->DOB }}</td>
-                                        <td>{{ $employee->NIC }}</td>
                                         <td>{{ $employee->contactno }}</td>
-                                        <td>{{ $employee->Email }}</td>
-                                        <td>{{ $employee->address }}</td>
-                                        <td>{{ $employee->city }}</td>
-                                        <td>{{ $employee->zipecode }}</td>
+                                        <td>{{ $employee->email }}</td>
+                                        <td>
+                                            @if(!empty($employee->getRoleNames()))
+                                            @foreach($employee->getRoleNames() as $rolename)
+                                            <label class="badge badge-info"> {{$rolename}}</label>
+                                            @endforeach
+                                            @endif
+                                        </td>
                                         <td>{{ $employee->status == 1 ? 'Active' : 'Inactive' }}</td>
                                       <td>
-                      <div class="action-icons">
-                          <a href="{{ route('editemployee', $employee->id) }}" class="action-icon edit-icon" title="Edit">
-                            <i class="fe fe-edit text-primary"></i>
-                          </a>
-                        <button class="action-icon delete-icon" onclick="confirmDelete('{{ $employee->id }}')" title="Delete">
-                            <i class="fe fe-trash-2 text-danger"></i>
-                        </button>
-                            <form id="delete-form-{{ $employee->id }}" action="{{ route('deleteemployee', $employee->id) }}" method="POST" style="display: none;">
-                            @csrf
-                            @method('DELETE')
-                            </form>
-                      </div>
-                  </td>     
+                                        <div class="action-icons">
+                                            <a href="{{ route('editemployee', $employee->id) }}" class="btn btn-warning"><i class="fe fe-edit fe-16"></i></a>
+                                            <button class="btn btn-danger" onclick="confirmDelete({{ $employee->id }})"><i class="fe fe-trash fe-16"></i></button>
+                                            <form id="delete-form-{{ $employee->id }}" action="{{ route('deleteemployee', $employee->id) }}" method="POST" style="display:none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            
+                                        </div>
+                                    </td>     
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -108,41 +101,26 @@
         </div>
     </div>
 
-   <!-- Delete Confirmation Modal -->
-   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this Employee?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Yes, Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmDelete(holidayId) {
-        const deleteForm = document.getElementById('delete-form-' + holidayId);
-        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
-
-        $('#deleteModal').modal('show');
-
-        confirmDeleteButton.onclick = function() {
-            deleteForm.submit();
-        }
+    function confirmDelete(itemId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + itemId).submit();
+            }
+        })
     }
 </script>
-@endsection

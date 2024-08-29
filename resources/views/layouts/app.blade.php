@@ -68,36 +68,30 @@
         </ul>
       </div>
 
-      <div class="d-flex align-items-center">
-
-        @guest
-          @if (Route::has('login'))
-            <a href="{{ route('login') }}" class="btn-login me-3">
-              Login
-            </a>
-          @endif
-        @else
-          <div class="dropdown me-3">
-            <a id="navbarDropdown" class="text-reset dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-              <div class="icon-circle">
-                {{ Auth::user()->name[0] }}
-              </div>
-            </a>
-
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{ route('logout') }}"
-                 onclick="event.preventDefault();
-                           document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-              </a>
-
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-              </form>
+      <div class="dropdown me-3">
+        <a id="navbarDropdown" class="text-reset dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+            <div class="icon-circle">
+                @if (Auth::check() && Auth::user()->name)
+                    {{ Auth::user()->name[0] }}
+                @else
+                    <i class="fas fa-user-circle"></i> <!-- Or any default icon -->
+                @endif
             </div>
-          </div>
-        @endguest
-      </div>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+              onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+        </div>
+    </div>
+
     </div>
   </nav>
 

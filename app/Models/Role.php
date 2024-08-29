@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+    protected $table = 'roless';
     protected $fillable = ['name', 'description'];
 
     public function permissions()
