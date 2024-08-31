@@ -148,6 +148,18 @@
                   <span class="ml-3 item-text">Sales Report</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
+
+                <li class="nav-item mb-2">
+                  <a href="{{route('PreOrderReport')}}" class="sidebar_text text-decoration-none"  >
+                    <span class="ml-3 item-text">Pre Order Report</span><span class="sr-only">(current)</span>
+                  </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                  <a href="{{route('RealOrderReport')}}" class="sidebar_text text-decoration-none"  >
+                    <span class="ml-3 item-text">Real Time Order Report</span><span class="sr-only">(current)</span>
+                  </a>
+                </li>
                 
               </ul>
             </li>

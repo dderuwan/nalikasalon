@@ -5,13 +5,21 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
+                <div class="row mb-2">    
+                    <div class="col-md-12">
+                        <a href="{{ route('showPreOrders') }}" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <h2>Pre Order Details</h2>
                     </div>
                 </div>
+                
                 <div class="card shadow">
                     <div class="card-body">
+                        
                         <h5 class="card-title">Customer Details</h5>
                         <p><strong>Customer Name:</strong> {{ $preorder->customer_name }}</p>
                         <p><strong>Customer Contact Number:</strong> {{ $preorder->customer_contact_1 }}</p>
@@ -42,9 +50,7 @@
                         <p><strong>Total Price:</strong> {{ $preorder->Total_price }}</p>
                         <p><strong>Status:</strong> {{ $preorder->status }}</p>
 
-                        <br><br>
-                        <a href="{{ route('editservices', $preorder->id) }}" class="btn btn-primary">Edit</a>
-                        <a href="{{ route('showPreOrders') }}" class="btn btn-secondary">Back to List</a>
+                        
                     </div>
                 </div>
             </div>

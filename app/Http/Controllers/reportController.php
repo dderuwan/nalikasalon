@@ -10,7 +10,8 @@ use App\Models\Customer;
 use App\Models\Gin;
 use App\Models\OrderRequest;
 use App\Models\OrderRequestItem;
-
+use App\Models\Preorder;
+use App\Models\RealTimeBooking;
 
 class reportController extends Controller
 {
@@ -150,7 +151,19 @@ class reportController extends Controller
         return redirect()->route('purchaseorderreport')->with('success', 'Order Request deleted successfully.');
     }
 
+    public function PreOrderReport()
+    {
+        $preorders = Preorder::all();
+        return view('reports.preorder', compact('preorders'));
 
+    }
 
+    
+    public function RealOrderReport()
+    {
+        $realtime = RealTimeBooking::all();
+        return view('reports.realtimeorder', compact('realtime'));
+
+    }
 
 }

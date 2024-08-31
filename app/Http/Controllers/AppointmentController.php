@@ -330,5 +330,15 @@ class AppointmentController extends Controller
             return redirect()->route('new_appointment')->withErrors(['error' => 'Failed to update Customer.']);
         }
     }
+
+    public function destroy($id)
+    {
+        // Find the preorder by ID and delete it
+        $preorder = Preorder::findOrFail($id);
+        $preorder->delete();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Preorder deleted successfully.');
+    }
     
 }

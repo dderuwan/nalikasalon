@@ -53,7 +53,7 @@
 
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger" onclick="confirmDelete({{ $appointment->id }})"><i class="fe fe-trash fe-16"></i></button>
-                                            <form id="delete-form-{{ $appointment->id }}" action="{{ route('deleteservices', $appointment->id) }}" method="POST" style="display:none;">
+                                            <form id="delete-form-{{ $appointment->id }}" action="{{ route('deletepreorder', $appointment->id) }}" method="POST" style="display:none;">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>

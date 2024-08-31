@@ -44,7 +44,7 @@
                                             <td>{{ $item->item_code }}</td>
                                             <td>{{ $item->item_name }}</td>
                                             <td>{{ $item->item_description }}</td>
-                                            <td>{{ $item->item_quentity }}</td>
+                                            <td>{{ $item->item_quantity }}</td>
                                             <td>{{ $item->unit_price }}</td>
                                             <td>{{ $item->supplier_code }}</td>
                                             

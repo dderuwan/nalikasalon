@@ -314,6 +314,22 @@ class ReaTimeAppoinmentConttroller extends Controller
         return view('appointment.realtimeOrderList', compact('realtimeOrders'));
     }
 
+    public function destroy($id)
+    {
+        // Find the preorder by ID and delete it
+        $preorder = RealTimeBooking::findOrFail($id);
+        $preorder->delete();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Preorder deleted successfully.');
+    }
+
+    public function showRealOrderDetails($id)
+    {
+        $preorder = RealTimeBooking::findOrFail($id);
+        return view('appointment.showRealtimeDetails', compact('preorder'));
+    }
+
 
 
 }

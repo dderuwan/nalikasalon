@@ -33,7 +33,7 @@
                                     <tbody>
                                     @foreach ($customers as $customer)
                                         <tr>
-                                            <td>{{ $customer->supplier_code }}</td>
+                                            <td>{{ $customer->customer_code }}</td>
                                             <td>{{ $customer->name }}</td>
                                             <td>{{ $customer->contact_number_1 }}</td>
                                             <td>{{ $customer->contact_number_2 }}</td>

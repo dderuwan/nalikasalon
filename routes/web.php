@@ -124,7 +124,8 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::delete('/supplierdestroy/{id}',[App\Http\Controllers\reportController::class,'supplierdestroy'])->name('supplierdestroy');
      Route::delete('/gindestroy/{id}', [App\Http\Controllers\reportController::class, 'gindestroy'])->name('gindestroy');
      Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\reportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
-    
+     Route::get('/PreOrderReport', [App\Http\Controllers\reportController::class, 'PreOrderReport'])->name('PreOrderReport');
+     Route::get('/RealOrderReport', [App\Http\Controllers\reportController::class, 'RealOrderReport'])->name('RealOrderReport');
     
      //services
      Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
@@ -236,7 +237,8 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
      Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
      Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
-    
+     Route::delete('/preorders/{id}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('deletepreorder');
+     
     
      //RealTimeAppoinments
      Route::get('/RealTimepage1', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'RealTimepage1'])->name('RealTimepage1');
@@ -248,6 +250,8 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::post('/realtime3page', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'realtime3page'])->name('realtime3page');
      Route::post('/Appointments/New-appointment/storerealtime34', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storerealtime34'])->name('storerealtime34');
      Route::get('/RealTimeOrderList', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'RealTimeOrderList'])->name('RealTimeOrderList');
+     Route::delete('/realtimeorders/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'destroy'])->name('deleterealorder');
+     Route::get('/showRealOrderDetails/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'showRealOrderDetails'])->name('showRealOrderDetails');
     
      // web.php or api.php (depending on your routes file)
      Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);

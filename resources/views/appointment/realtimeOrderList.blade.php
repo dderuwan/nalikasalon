@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="row mb-2">
                 <div class="col-md-6" >
-                     <h2>Pre Order List</h2>
+                     <h2>Real Time Order List</h2>
                 </div>
                 <div class="col-md-6">
                     @if ($message = Session::get('succes'))
@@ -49,11 +49,11 @@
                                         <td>{{ $appointment->today }}</td>
                                         <td>
                                             <!-- Show Button -->
-                                            <a href="{{ route('showPreOrderDetails', $appointment->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
+                                            <a href="{{ route('showRealOrderDetails', $appointment->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
 
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger" onclick="confirmDelete({{ $appointment->id }})"><i class="fe fe-trash fe-16"></i></button>
-                                            <form id="delete-form-{{ $appointment->id }}" action="{{ route('deleteservices', $appointment->id) }}" method="POST" style="display:none;">
+                                            <form id="delete-form-{{ $appointment->id }}" action="{{ route('deleterealorder', $appointment->id) }}" method="POST" style="display:none;">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
