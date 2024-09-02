@@ -14,9 +14,7 @@
                         <button type="button" class="btn btn-primary float-end" data-toggle="modal" data-target="#checkInModal">
                             Single Check In
                         </button>
-                        <a href="{{ route('manage_attendance_list') }}"><button type="button" class="btn btn-primary float-end">
-                             Manage Attendance
-                        </button></a>
+                        
                     </div>
                 </div>
                 <p class="card-text"></p>
@@ -41,24 +39,29 @@
                                         @foreach($attendance_list as $index => $attendance)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $attendance->employee->firstname }} {{ $attendance->employee->lastname }}</td>
+                                            <td>@if($attendance->employee)
+                                                    {{ $attendance->employee->firstname }} {{ $attendance->employee->lastname }}
+                                                @else
+                                                    No Employee Assigned
+                                                @endif
+                                            </td>
                                             <td>{{ $attendance->date }}</td>
                                             <td>{{ $attendance->sign_in }}</td>
                                             <td>{{ $attendance->sign_out }}</td>
                                             <td>{{ $attendance->stayed_time }}</td>
                                             <td>
                                                 <div class="action-icons">
-                                                    @if($attendance->sign_out)
-                                                        <span>Checked Out</span>
-                                                    @else
-                                                        <button type="button" style="color:white; background-color:green;" class="btn checkOutButton" 
-                                                            data-toggle="modal" data-target="#checkOutModal" 
-                                                            data-attendance-id="{{ $attendance->id }}">
-                                                            Check Out
-                                                        </button>
-                                                    @endif
+                                                    <button 
+                                                        type="button" 
+                                                        class="btn btn-primary checkOutButton" 
+                                                        data-toggle="modal" 
+                                                        data-target="#checkOutModal"
+                                                        data-employee-id="{{ $attendance->employee ? $attendance->employee->id : 'N/A' }}"
+                                                        data-employee-name="{{ $attendance->employee ? $attendance->employee->firstname . ' ' . $attendance->employee->lastname : 'N/A' }}">
+                                                        Check Out
+                                                    </button>
                                                 </div>
-                                            </td>                                         
+                                            </td>                                                                           
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -106,7 +109,7 @@
 
 
 
-    <!-- Check Out Modal -->
+<!-- Check Out Modal -->
 <div class="modal fade" id="checkOutModal" tabindex="-1" role="dialog" aria-labelledby="checkOutModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -119,19 +122,43 @@
             <div class="modal-body">
                 <form id="checkOutForm" method="POST" action="{{ route('attendance.check-out') }}">
                     @csrf
-                    <input type="hidden" id="attendanceId" name="attendance_id">
-                    <h3 class="text-center"><span id="currentTime"></span></h3>
+                    <input type="hidden" id="employeeId" name="employee_id">
+                    <input type="hidden" id="employeeName" name="employee_name">
+                    <p class="text-center">Are you sure you want to check out?</p>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="confirmCheckOutButton">Confirm</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
                     </div>
                 </form>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
 
+
+
+</div>
+
 </main>
+
+
+<script>
+    // Handle the modal display
+    $('#checkOutModal').on('shown.bs.modal', function (event) {
+        const button = $(event.relatedTarget); // Button that triggered the modal
+        const attendanceId = button.data('attendance-id'); // Extract info from data-* attributes
+        const modal = $(this);
+        
+        // Set the attendance ID in the form
+        modal.find('#attendanceId').val(attendanceId);
+    });
+
+    // Handle the confirm button click
+    document.getElementById('confirmCheckOutButton').addEventListener('click', function() {
+        document.getElementById('checkOutForm').submit();
+    });
+</script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -159,57 +186,31 @@ $(document).ready(function() {
         });
     });
 
-    // Check Out functionality
-    let timeInterval;
-
-    $(document).on('click', '.checkOutButton', function() {
-        const attendanceId = $(this).data('attendance-id');
-        
-        $('#checkOutModal').data('attendance-id', attendanceId).modal('show');
-
-        function updateTime() {
-            var currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            $('#currentTime').text(currentTime);
-        }
-        if (timeInterval) {
-            clearInterval(timeInterval);
-        }
-        updateTime();
-        timeInterval = setInterval(updateTime, 1000);
-    });
-
-    $(document).on('click', '#confirmCheckOutButton', function() {
-        const attendanceId = $('#checkOutModal').data('attendance-id');
-        const signOutTime = $('#currentTime').text();
-
-        $.ajax({
-            url: '{{ route('attendance.check-out') }}',
-            type: 'POST',
-            data: {
-                attendance_id: attendanceId,
-                sign_out: signOutTime,
-                _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
-            },
-            success: function(response) {
-                console.log(response.message);
-
-                $(`button[data-attendance-id="${attendanceId}"]`).closest('tr').find('td').eq(4).text(signOutTime); 
-                $(`button[data-attendance-id="${attendanceId}"]`).closest('tr').find('td').eq(5).text(response.attendance.stayed_time);
-
-                $(`button[data-attendance-id="${attendanceId}"]`).replaceWith('<span>Checked Out</span>');
-
-                $('#checkOutModal').modal('hide');
-                if (timeInterval) {
-                    clearInterval(timeInterval);
-                }
-            },
-            error: function(xhr) {
-                console.log(xhr.responseJSON.message);
-            }
-        });
-    });
+    
 });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Handle the Check Out button click
+        $(document).on('click', '.checkOutButton', function() {
+            // Get the employee ID and name from the button's data attributes
+            const employeeId = $(this).data('employee-id');
+            const employeeName = $(this).data('employee-name');
+            
+            // Set the values in the hidden inputs in the modal
+            $('#checkOutModal').find('#employeeId').val(employeeId);
+            $('#checkOutModal').find('#employeeName').val(employeeName);
+             // Log the details to the console
+             console.log('Employee ID:', employeeId);
+            console.log('Employee Name:', employeeName);
+        });
+    });
+</script>
+
+
 
 
 @endsection

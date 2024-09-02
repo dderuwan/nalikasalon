@@ -15,14 +15,6 @@ class AttendanceController extends Controller
         return view('humanResources.attendance.attendance_list', compact('attendance_list', 'employees'));
     }
 
-
-    public function manageAttendance()
-    {
-        $attendance_list = Attendance::with('employee')->get();
-        $employees = Employee::all();
-        return view('humanResources.attendance.manage_attendance_list', compact('attendance_list', 'employees'));
-    }
-
     public function attendanceReport()
     {
         $attendance_list = Attendance::with('employee')->get();
@@ -31,12 +23,7 @@ class AttendanceController extends Controller
     }
 
 
-    public function edit($id)
-    {
-        $attendance = Attendance::with('employee')->findOrFail($id);
-        $employees = Employee::all();
-        return view('humanResources.attendance.update_attendance', compact('attendance', 'employees'));
-    }
+    
 
     public function update(Request $request, $id)
     {
@@ -91,31 +78,51 @@ class AttendanceController extends Controller
     
 
     public function checkOut(Request $request)
-    {
-        try {
-            $request->validate([
-                'attendance_id' => 'required|exists:emp_attendance,id',
-                'sign_out' => 'required',
-            ]);
+{
+    try {
 
-            $attendance = Attendance::find($request->input('attendance_id'));
-            $attendance->sign_out = $request->input('sign_out');
+        
+        // Validate request
+        $request->validate([
+            'employee_id' => 'required',
+        ]);
+        //dd($request);
+        // Get the current time
+        $currentTime = now()->format('h:i:s A');
+        
+        // Find the latest attendance record for the employee
+        $attendance = Attendance::where('emp_id', $request->input('employee_id'))
+            ->whereNull('sign_out') // Ensure we are updating the correct record (no previous check-out)
+            ->latest() // Get the most recent record
+            ->first();
+
+        if ($attendance) {
+            // Update the check-out time
+            $attendance->sign_out = $currentTime;
             
-            if ($attendance->sign_in && $attendance->sign_out) {
-                $signIn = \Carbon\Carbon::parse($attendance->sign_in);
-                $signOut = \Carbon\Carbon::parse($attendance->sign_out);
-                $attendance->stayed_time = $signIn->diff($signOut)->format('%H:%I:%S');
-            }
+            // Calculate the stayed time
+            $signInTime = \Carbon\Carbon::createFromFormat('h:i:s A', $attendance->sign_in);
+            $signOutTime = \Carbon\Carbon::createFromFormat('h:i:s A', $currentTime);
+            $duration = $signInTime->diff($signOutTime); // Calculate stayed time in minutes
             
+            $hours = $duration->h;
+            $minutes = $duration->i;
+            $stayedTime = "{$hours} : {$minutes} ";
+            // Update the stayed time field
+            $attendance->stayed_time = $stayedTime ;
             $attendance->save();
-            return response()->json([
-                'message' => 'Check-out recorded successfully.',
-                'attendance' => $attendance
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error recording check-out.'], 500);
+
+            return redirect()->back()->with('success', 'Check-in recorded successfully');
+        } else {
+            return redirect()->back()->with('success', 'No check-in record found for this employee');
         }
+    } catch (\Exception $e) {
+        return redirect()->back()->with('success', 'An error occurred');
     }
+}
+
+    
+
 
     
     public function destroy($id)

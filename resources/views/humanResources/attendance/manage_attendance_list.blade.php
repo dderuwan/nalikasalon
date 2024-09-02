@@ -72,7 +72,12 @@
                                         @foreach($attendance_list as $index => $attendance)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $attendance->employee->firstname }} {{ $attendance->employee->lastname }}</td>
+                                            <td>@if($attendance->employee)
+                                                    {{ $attendance->employee->firstname }} {{ $attendance->employee->lastname }}
+                                                @else
+                                                    No Employee Assigned
+                                                @endif
+                                            </td>
                                             <td>{{ $attendance->date }}</td>
                                             <td>{{ $attendance->sign_in }}</td>
                                             <td>{{ $attendance->sign_out }}</td>

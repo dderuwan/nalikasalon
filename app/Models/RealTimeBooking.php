@@ -41,4 +41,4 @@ class RealTimeBooking extends Model
         'Total_price',
     ];
 }
- 
+  

@@ -126,6 +126,7 @@ class HomeAppoinmentController extends Controller
 
     public function storeAppointments(Request $request)
     {
+        //dd($request);
         $request->validate([
             'contact_number_1' => 'required|string',
             'service_id' => 'required|string',
@@ -207,7 +208,7 @@ class HomeAppoinmentController extends Controller
                     'note' => $request->note,
                     'payment_type' => $request->payment_method,
                     'Advanced_price' => $request->advance_price,
-                    'Total_price' => $request->total_price,
+                    'Total_price' => $request->package_price,
                     'status' => 'pending',
                 ]);
 

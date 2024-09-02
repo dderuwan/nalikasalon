@@ -56,5 +56,7 @@ class Employee extends Authenticatable
         return $this->hasMany(Schedule::class);
     }
 
+    
+
 
 }

@@ -435,6 +435,8 @@
                             <input type="text" class="form-control" id="total_price" name="total_price" readonly>
                         </div>
                     </div>
+                    <!-- Hidden input to store package price -->
+                    <input type="hidden" id="package_price" name="package_price">
 
                     <div>
                         <button class="btn btn-secondary" onclick="previousSection(3)">Back</button>
@@ -489,6 +491,7 @@
             const selectedOption = this.options[this.selectedIndex];
             packagePrice = parseFloat(selectedOption.getAttribute('data-price')); // Get the price from the data attribute
             document.getElementById('total_price').value = packagePrice.toFixed(2); // Display the price in the total price field
+            document.getElementById('package_price').value = packagePrice.toFixed(2);
             updateTotalPrice(); // Update the total price field based on the advanced payment
         });
 
