@@ -22,7 +22,7 @@ class RequestOrderContraller extends Controller
     // Show the form for creating a new order request
     public function create()
     {
-        $items = Item::all();
+        $items = Item::with('supplier')->get();
         return view('orderrequests.create', compact('items'));
     }
 
@@ -98,7 +98,7 @@ class RequestOrderContraller extends Controller
     public function getItemStock($itemCode)
     {
         $item = Item::where('item_code', $itemCode)->first();
-        return response()->json(['instock' => $item ? $item->item_quantity : 0]);
+        return response()->json(['instock' => $item ? $item->item_quentity : 0]);
     }
 
     // Generate a unique order request code

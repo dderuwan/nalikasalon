@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -121,6 +122,13 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.show')->with('success', 'User deleted successfully.');
+    }
+
+
+    public function showuser(Employee $user)
+    {
+        // Pass the user details to the view
+        return view('setting.userd', compact('user'));
     }
 
 }

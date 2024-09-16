@@ -55,7 +55,8 @@ class ItemController extends Controller
                 $item->item_name = $itemData['item_name'];
                 $item->item_description = $itemData['item_description'];
                 $item->unit_price = $itemData['unit_price'];
-                $item->item_quantity = 0;
+                $item->item_quentity = 0;
+                $item->shots=0;
                 $item->supplier_code = $request->supplier_code;
 
                 if (isset($itemData['image'])) {
@@ -117,14 +118,16 @@ class ItemController extends Controller
                 'item_description' => 'required',
                 'unit_price' => 'nullable|numeric',
                 'supplier_code' => 'required',
+                'shots'=>'nullable|numeric',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
-
+            //dd($request);
             $item = Item::findOrFail($id);
             $item->item_code = $request->item_code;
             $item->item_name = $request->item_name;
             $item->item_description = $request->item_description;
             $item->unit_price = $request->unit_price;
+            $item->shots = $request->shots;
             $item->supplier_code = $request->supplier_code;
 
             if ($request->hasFile('image')) {

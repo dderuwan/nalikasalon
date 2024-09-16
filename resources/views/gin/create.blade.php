@@ -33,6 +33,9 @@
                         <th style='color:Black'>Pack Size <span style='color:Red'>*<span ></th>
                         <th style='color:Black'>Unit Price <span style='color:Red'>*<span ></th>
                         <th style='color:Black'>In Quantity <span style='color:Red'>*<span ></th>
+                        <th style='color:Black'>Shots Count </th>
+                        <th style='color:Black'>Manufacture Date <span style='color:Red'>*<span ></th>
+                        <th style='color:Black'>Expire Date <span style='color:Red'>*<span ></th>
                         <th style='color:Black'>Total Cost</th>
                         <th style='color:Black'>Payment</th>
                     </tr>
@@ -70,6 +73,9 @@
                         <td><input type="number" name="orderItems[${index}][pack_size]" class="form-control"></td>
                         <td><input type="number" name="orderItems[${index}][unit_price]" class="form-control unit-price" data-index="${index}" required></td>
                         <td><input type="number" name="orderItems[${index}][in_quantity]" class="form-control in-quantity" data-index="${index}" required></td>
+                        <td><input type="number" name="orderItems[${index}][shots_count]" class="form-control shots-count" data-index="${index}" ></td>
+                        <td><input type="date" name="orderItems[${index}][manufacture_date]" class="form-control manufacture-date" data-index="${index}" required></td>
+                        <td><input type="date" name="orderItems[${index}][expire_date]" class="form-control expire-date" data-index="${index}" required></td>
                         <td><input type="number" name="orderItems[${index}][total_cost]" class="form-control total-cost" data-index="${index}" readonly></td>
                         <td>
                             <select name="orderItems[${index}][payment]" class="form-control" required>

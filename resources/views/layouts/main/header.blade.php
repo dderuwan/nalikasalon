@@ -74,13 +74,23 @@
                     <!-- Display the authenticated user's avatar -->
                     <img src="{{ Auth::user()->profile_photo_url ?? asset('assets/avatars/face-1.jpg') }}" alt="{{ Auth::user()->name }}" class="avatar-img rounded-circle">
                 </span>
+
+                <span class="ml-2">{{ Auth::user()->name }}</span>
             </a>
+
+            
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                 <!-- Display the authenticated user's name -->
+                <a class="dropdown-item" href="{{ route('user.details', ['user' => Auth::user()->id]) }}">
+                    <i class="fe fe-user mr-2"></i> Profile
+                </a>
+
                 <!-- Logout -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="dropdown-item">Log Out</button>
+                    <button type="submit" class="dropdown-item">
+                        <i class="fe fe-log-out mr-2"></i> Log Out
+                    </button>
                 </form>
             </div>
             @endauth

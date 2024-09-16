@@ -21,7 +21,7 @@
           </a>
         </li>
         <li class="nav-item sidebar_li">
-          <i class="fa-solid fa-user-tie"></i>
+        <i class="fa-solid fa-truck"></i>
           <a href="{{route('allsupplier')}}" class="sidebar_text" >
             <span class="ml-3 item-text">Suppliers</span><span class="sr-only">(current)</span>
           </a>
@@ -39,20 +39,26 @@
           </a>
         </li>
 
-            <li class="nav-item dropdown">
-              <a href="#customer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fa-solid fa-users"></i>
-                <span class="ml-3 item-text">Customers</span><span class="sr-only">(current)</span>
-              </a>
-              <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="customer">
-                <li class="nav-item mb-2">
-                <a href="{{route('allcustomer')}}" class="sidebar_text text-decoration-none"  >
-                  <span class="ml-3 item-text">Customer List</span><span class="sr-only ">(current)</span>
-                </a>
-                </li>
+        <li class="nav-item sidebar_li">
+          <i class="fa-solid fa-box"></i>
+          <a href="{{route('bridelItems')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">Saloon Items</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
 
-              </ul>
-            </li>
+        <li class="nav-item sidebar_li">
+          <i class="fa-solid fa-users"></i>
+          <a href="{{route('allcustomer')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">Customers</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
+
+        <li class="nav-item sidebar_li">
+          <i class="fa-solid fa-scale-balanced"></i>
+          <a href="{{route('pospage')}}" class="sidebar_text"  >
+            <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
+          </a>
+        </li>
 
 
 
@@ -71,23 +77,6 @@
                 <li class="nav-item active">
                 <a href="{{route('allgins')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">GIN</span><span class="sr-only">(current)</span>
-                </a>
-                </li>
-
-              </ul>
-            </li>
-
-
-
-            <li class="nav-item dropdown">
-              <a href="#invoice" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                <i class="fa-solid fa-scale-balanced"></i>
-                <span class="ml-3 item-text">Invoices</span><span class="sr-only">(current)</span>
-              </a>
-              <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="invoice">
-                <li class="nav-item mb-2">
-                <a href="{{route('pospage')}}" class="sidebar_text text-decoration-none"  >
-                  <span class="ml-3 item-text">POS Invoice</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
 
@@ -151,13 +140,13 @@
 
                 <li class="nav-item mb-2">
                   <a href="{{route('PreOrderReport')}}" class="sidebar_text text-decoration-none"  >
-                    <span class="ml-3 item-text">Pre Order Report</span><span class="sr-only">(current)</span>
+                    <span class="ml-3 item-text">Bridel Appoinments Report</span><span class="sr-only">(current)</span>
                   </a>
                 </li>
 
                 <li class="nav-item mb-2">
                   <a href="{{route('RealOrderReport')}}" class="sidebar_text text-decoration-none"  >
-                    <span class="ml-3 item-text">Real Time Order Report</span><span class="sr-only">(current)</span>
+                    <span class="ml-3 item-text">Salon & Thretment Report</span><span class="sr-only">(current)</span>
                   </a>
                 </li>
                 
@@ -177,22 +166,18 @@
                 </li>
 
                 <li class="nav-item mb-2">
-                <a href="{{route('addservice')}}" class="sidebar_text text-decoration-none"  >
-                  <span class="ml-3 item-text">Add Services</span><span class="sr-only">(current)</span>
-                </a>
-                </li>
-
-                <li class="nav-item mb-2">
                 <a href="{{route('packages')}}" class="sidebar_text text-decoration-none"  >
                   <span class="ml-3 item-text">Packages List</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
 
                 <li class="nav-item mb-2">
-                <a href="{{route('addpackages')}}" class="sidebar_text text-decoration-none"  >
-                  <span class="ml-3 item-text">Add Packages</span><span class="sr-only">(current)</span>
+                <a href="{{route('bridelsubcategory')}}" class="sidebar_text text-decoration-none"  >
+                  <span class="ml-3 item-text">Bridel Sub Packages</span><span class="sr-only">(current)</span>
                 </a>
                 </li>
+
+                
 
               </ul>
             </li>
@@ -248,6 +233,13 @@
                             </a>
                         </li>
                     </ul>
+
+                    </li>
+
+                    <li class="nav-item sidebar_li">
+                        <a href="{{route('salary')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Salary Managment</span><span class="sr-only">(current)</span>
+                        </a>
                     </li>
 
                     <li class="nav-item sidebar_li">
@@ -255,39 +247,84 @@
                             <span class="ml-3 item-text">Employee</span><span class="sr-only">(current)</span>
                         </a>
                     </li>
+
+                    <li class="nav-item sidebar_li">
+                        <a href="{{route('commissions-list')}}" class="sidebar_text">
+                            <span class="ml-3 item-text">Commissions</span><span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    
                 </ul>
             </li>
+
+            <li class="nav-item dropdown">
+                  <a href="#Bridelappoinment" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                      <i class="fe fe fe-calendar fe-16"></i>
+                      <span class="ml-3 item-text">Bridel Appointments</span><span class="sr-only">(current)</span>
+                  </a>
+                  <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="Bridelappoinment">
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('appointments') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Bridel Pre Order</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('showPreOrders') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Bridel Pre Order List</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{ route('RealTimepage1') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Order Closing Form</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item active mb-2">
+                          <a href="{{ route('RealTimeOrderList') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">All Bridel Appoinments</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                  </ul>
+            </li>   
 
 
             <li class="nav-item dropdown">
                   <a href="#appoinment" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                       <i class="fe fe fe-calendar fe-16"></i>
-                      <span class="ml-3 item-text">Appointments</span><span class="sr-only">(current)</span>
+                      <span class="ml-3 item-text">Saloon Appointments</span><span class="sr-only">(current)</span>
                   </a>
                   <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="appoinment">
                       <li class="nav-item mb-2">
-                          <a href="{{ route('appointments') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Pre Order</span><span class="sr-only">(current)</span>
+                          <a href="{{ route('SalonThretment') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Saloon Pre Order</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
                       <li class="nav-item mb-2">
-                          <a href="{{ route('showPreOrders') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Pre Order List</span><span class="sr-only">(current)</span>
+                          <a href="{{ route('RealSalonThretment') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Salon Real Time Order</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
-                      <li class="nav-item active mb-2">
-                          <a href="{{ route('RealTimepage1') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Real Time Order</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
-                      <li class="nav-item active mb-2">
-                          <a href="{{ route('RealTimeOrderList') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Real Time Order List</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
-                      
                   </ul>
-            </li>               
+            </li> 
+            
+            <li class="nav-item dropdown">
+                  <a href="#giftvoucher" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                  <i class="fe fe-gift fe-16"></i>
+                    <span class="ml-3 item-text">Gift Vouchers & Promotions</span><span class="sr-only">(current)</span>
+                  </a>
+                  <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="giftvoucher">
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('GiftVoucher') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Gift Vouchers</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('Promotion') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Promotions</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
+                  </ul>
+            </li>
 
             <li class="nav-item dropdown">
                   <a href="#setting" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
@@ -297,19 +334,11 @@
                   <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="setting">
                       <li class="nav-item mb-2">
                           <a href="{{ route('company.index') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Manage Company</span><span class="sr-only">(current)</span>
+                              <span class="ml-3 item-text">Company Details</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
-                      <li class="nav-item active mb-2">
-                          <a href="{{ route('user.index') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Add User</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
-                      <li class="nav-item active mb-2">
-                          <a href="{{ route('user.show') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">User List</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
+                      
+                      
                       <li class="nav-item active mb-2">
                           <a href="{{ route('addPermission') }}" class="sidebar_text">
                               <span class="ml-3 item-text">Add Permission</span><span class="sr-only">(current)</span>

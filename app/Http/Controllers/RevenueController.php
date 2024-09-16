@@ -15,43 +15,39 @@ class RevenueController extends Controller
         return view('dashboard.index');
     }
 
+    
+
     public function getMonthlyRevenue()
     {
-        $currentYear = Carbon::now()->year;
-        $currentMonth = Carbon::now()->month;
-
-        $monthlyRevenue = DB::table('pos')
-            ->select(DB::raw('YEAR(date) as year, MONTH(date) as month, SUM(total_cost_payment) as monthly_revenue'))
-            ->whereBetween('date', [Carbon::now()->subMonths(11)->startOfMonth(), Carbon::now()->endOfMonth()])
-            ->groupBy(DB::raw('YEAR(date), MONTH(date)'))
-            ->orderBy(DB::raw('YEAR(date), MONTH(date)'))
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+    
+        // Get revenue for each day of the current month
+        $dailyRevenue = DB::table('bridelpreorder')
+            ->selectRaw('DATE(today) as date, 
+                (SELECT SUM(total_cost_payment) FROM orders WHERE DATE(date) = DATE(bridelpreorder.today)) as total_orders,
+                (SELECT SUM(total_price) FROM salon_thretments WHERE DATE(today) = DATE(bridelpreorder.today)) as total_bookings,
+                SUM(CASE WHEN status = "NotCompleted" THEN advanced_payment ELSE 0 END) as total_advance,
+                SUM(CASE WHEN status = "completed" THEN Balance_Payment ELSE 0 END) as total_balance')
+            ->whereBetween('today', [$startOfMonth, $endOfMonth])
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
             ->get();
-
-        // Ensure all months are represented
-        $revenueData = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $monthKey = $month->format('Y-n');
-            $revenueData[$monthKey] = 0;
-        }
-
-        foreach ($monthlyRevenue as $revenue) {
-            $monthKey = $revenue->year . '-' . $revenue->month;
-            $revenueData[$monthKey] = $revenue->monthly_revenue;
-        }
-
-        $response = [];
-        foreach ($revenueData as $key => $value) {
-            list($year, $month) = explode('-', $key);
-            $response[] = [
-                'year' => $year,
-                'month' => $month,
-                'monthly_revenue' => $value
+    
+        $revenueData = $dailyRevenue->map(function($day) {
+            return [
+                'date' => $day->date,
+                'daily_revenue' => $day->total_orders + $day->total_bookings + $day->total_advance + $day->total_balance
             ];
-        }
-
-        return response()->json($response);
+        });
+    
+        // Return as JSON response
+        return response()->json($revenueData);
     }
+    
+
+
+    
 
 
 

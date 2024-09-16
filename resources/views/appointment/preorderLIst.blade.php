@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="row mb-2">
                 <div class="col-md-6" >
-                     <h2>Pre Order List</h2>
+                     <h2>Bride Pre Order List</h2>
                 </div>
                 <div class="col-md-6">
                     @if ($message = Session::get('succes'))
@@ -29,24 +29,30 @@
                             <table class="table datatables" id="dataTable-1">
                                 <thead>
                                     <tr>
-                                        <th style="color: black;">Booking_reference_number</th>
-                                        <th style="color: black;">Customer</th>
+                                        <th style="color: black;">Auto_Sirial_number</th>
+                                        <th style="color: black;">Customer Name</th>
                                         <th style="color: black;">Customer Contact Number</th>
-                                        <th style="color: black;">Service Type</th>
                                         <th style="color: black;">Package Name</th>
                                         <th style="color: black;">Appoinment Date</th>
+                                        <th style="color: black;">Going Away to Hotel</th>
                                         <th style="color: black;" width="200px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($appointments as $appointment)
                                     <tr>
-                                        <td>{{ $appointment->booking_reference_number }}</td>
+                                        <td>{{ $appointment->Auto_serial_number }}</td>
                                         <td>{{ $appointment->customer_name }}</td>
-                                        <td>{{ $appointment->customer_contact_1}}</td>
-                                        <td>{{ $appointment->Service_type }}</td>
-                                        <td>{{ $appointment->Package_name_1 }}</td>
-                                        <td>{{ $appointment->appointment_date }}</td>
+                                        <td>{{ $appointment->contact_number_1 }}</td>
+                                        <td>{{ $appointment->package->package_name ?? 'N/A' }}</td>
+                                        <td>{{ $appointment->Appoinment_date }}</td>
+                                        <td>
+                                            @if ($appointment->hotel_dress == 1)
+                                                <span class="red-bulb" title="Hotel Dress Active">&#128308;</span> <!-- Red circle emoji -->
+                                            @else
+                                                <span class="no-hotel-dress">No Hotel Dress</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <!-- Show Button -->
                                             <a href="{{ route('showPreOrderDetails', $appointment->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
@@ -61,6 +67,7 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -91,4 +98,18 @@
         })
     }
 </script>
+
+<style>
+
+.red-bulb {
+    color: red;
+    font-size: 18px; /* Adjust size if needed */
+}
+
+.no-hotel-dress {
+    color: gray;
+}
+
+</style>
+
 @endsection

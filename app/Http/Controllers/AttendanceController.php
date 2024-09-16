@@ -4,6 +4,7 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Commission;
 use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
@@ -135,6 +136,60 @@ class AttendanceController extends Controller
             return redirect()->route('manage_attendance_list')->with('error', 'not found.');
         }
     }
+
+
+    public function commissionsList()
+    {
+        $commission = Commission::with('employee')->get();
+        return view('humanResources.commissions', compact('commission'));
+    }
+
+    public function destroycommission($id)
+    {
+        $attendance = Commission::find($id);
+        if ($attendance) {
+            $attendance->delete();
+            return redirect()->route('commissions-list')->with('success', 'deleted successfully');
+        } else {
+            return redirect()->route('commissions-list')->with('error', 'not found.');
+        }
+    }
+
+
+    public function editcommission($id)
+    {
+        $commission = Commission::findOrFail($id);
+
+        return view('humanResources.editcommission', compact('commission'));
+    }
+
+    
+
+    public function updatecommission(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'employee_id' => 'required|exists:employee,id', // Ensure employee exists in the employee table
+            'order_id' => 'required|string|max:255',
+            'date' => 'required|date',
+            'commission_amount' => 'required|numeric',
+        ]);
+
+        // Find the specific commission by ID
+        $commission = Commission::findOrFail($id);
+
+        // Update the commission details with the new data
+        $commission->update([
+            'employee_id' => $request->employee_id,
+            'order_id' => $request->order_id,
+            'date' => $request->date,
+            'commission_amount' => $request->commission_amount,
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->route('commissions-list')->with('success', 'Commission updated successfully');
+    }
+
 
 
     

@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="row mb-2">
                         <div class="col-md-6">
-                            <h2>Sales Report</h2>
+                            <h2>Salon & Thretment Appoinments Report</h2>
                         </div>
                     </div>
                     <p class="card-text"></p>
@@ -52,8 +52,6 @@
                                                 <th style="color: black;">Customer Code</th>
                                                 <th style="color: black;">Service</th>
                                                 <th style="color: black;">Package</th>
-                                                <th style="color: black;">Appointment Time</th>
-                                                <th style="color: black;">Pre Order Id</th>
                                                 <th style="color: black;">Total Price</th>
                                             </tr>
                                         </thead>
@@ -61,13 +59,11 @@
                                         @foreach ($realtime as $gin)
                                             <tr>
                                                 <td>{{ $gin->today }}</td>
-                                                <td>{{ $gin->real_time_app_no }}</td>
-                                                <td>{{ $gin->customer_code }}</td>
-                                                <td>{{ $gin->Service_type }}</td>
-                                                <td>{{ $gin->Package_name_1 }}</td>
-                                                <td>{{ $gin->appointment_time }}</td>
-                                                <td>{{ $gin->preorder_id }}</td>
-                                                <td>{{ $gin->Total_price }}</td>
+                                                <td>{{ $gin->Booking_number }}</td>
+                                                <td>{{ $gin->customer_id}}</td>
+                                                <td>{{ $gin->service_id }}</td>
+                                                <td>{{ $gin->package_id }}</td>
+                                                <td>{{ $gin->total_price }}</td>
                                                 
                                             </tr>
                                         @endforeach
@@ -89,75 +85,96 @@
     </div>
 </main>
 
+
 <script>
-    $(document).ready(function() {
-        var table = $('#mydata').DataTable({
-            dom: 'Bfrtip', // Layout for DataTables with Buttons
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf', 'print'
-            ],
-            footerCallback: function (row, data, start, end, display) {
-                var api = this.api();
-
-                // Calculate the total across all pages
-                var total = api.column(7, { page: 'current' }).data().reduce(function (a, b) {
-                    return parseFloat(a) + parseFloat(b);
-                }, 0);
-
-                // Update the footer with the total
-                $(api.column(7).footer()).html('LKR ' + total.toFixed(2));
+$(document).ready(function() {
+    var table = $('#mydata').DataTable({
+        dom: 'Bfrtip', // Layout for DataTables with Buttons
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                footer: true
+            },
+            {
+                extend: 'excelHtml5',
+                footer: true
+            },
+            {
+                extend: 'csvHtml5',
+                footer: true
+            },
+            {
+                extend: 'pdfHtml5',
+                footer: true,
+                customize: function (doc) {
+                    // Set a margin for the footer
+                    doc.content[1].margin = [0, 0, 0, 20];
+                }
+            },
+            {
+                extend: 'print',
+                footer: true
             }
-        });
+        ],
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
 
-        // Filter the table based on date range
-        $('#filter-date-range').on('click', function() {
-            var startDate = new Date($('#start-date').val());
-            var endDate = new Date($('#end-date').val());
-            endDate.setDate(endDate.getDate() + 1); // Include the end date
+            // Calculate total price (column index 6 for total_price)
+            var total = api.column(5, { page: 'current' }).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+            }, 0);
 
-            var filteredData = @json($realtime).filter(function(order) {
-                var orderDate = new Date(order.today);
-                return orderDate >= startDate && orderDate < endDate;
-            }).map(function(order) {
-                return [
-                    order.today, 
-                    order.real_time_app_no, 
-                    order.customer_code, 
-                    order.Service_type, 
-                    order.Package_name_1, 
-                    order.appointment_time, 
-                    order.preorder_id, 
-                    order.Total_price,
-                    '<a href="{{ route('ginshow', 'ORDER_ID') }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>' +
-                    '<button class="btn btn-danger" onclick="confirmDelete(ORDER_ID)"><i class="fe fe-trash fe-16"></i></button>' +
-                    '<form id="delete-form-ORDER_ID" action="{{ route('gindestroy', 'ORDER_ID') }}" method="POST" style="display:none;">' +
-                        '@csrf @method('DELETE')' +
-                    '</form>'
-                ].map(cell => cell.replace(/ORDER_ID/g, order.id));
-            });
+            // Update the total cost in the footer
+            $(api.column(5).footer()).html('LKR ' + total.toFixed(2));
+        }
 
-            table.clear().rows.add(filteredData).draw();
-        });
     });
+
+    $('#filter-date-range').on('click', function() {
+        var startDate = $('#start-date').val();
+        var endDate = $('#end-date').val();
+ 
+        // Filter the table data based on date range
+        var filteredData = @json($realtime).filter(function(order) {
+            var orderDate = order.today;
+            return orderDate >= startDate && orderDate <= endDate;
+        });
+
+        // Clear existing table data and populate with filtered data
+        table.clear();
+        filteredData.forEach(function(order) {
+            table.row.add([
+                order.Auto_serial_number,
+                order.customer_name,
+                order.package_id,
+                order.Package_name_1,
+                order.Appoinment_date,
+                order.Appointment_time,
+                order.advanced_payment,
+                order.total_price,
+                order.status
+            ]);
+        });
+        table.draw();
+    });
+});
+
+function confirmDelete(orderRequestId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + orderRequestId).submit();
+        }
+    })
+}
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function confirmDelete(orderRequestId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + orderRequestId).submit();
-            }
-        })
-    }
-</script>
-
 @endsection

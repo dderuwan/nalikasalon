@@ -46,6 +46,9 @@ class GinController extends Controller
             'orderItems.*.pack_size' => 'nullable|numeric',
             'orderItems.*.unit_price' => 'required|numeric',
             'orderItems.*.in_quantity' => 'required|numeric',
+            'orderItems.*.shots_count' => 'required|numeric',
+            'orderItems.*.manufacture_date' => 'required|date',
+            'orderItems.*.expire_date' => 'required|date',
             'orderItems.*.total_cost' => 'required|numeric',
             'orderItems.*.payment' => 'required|string'
         ]);
@@ -76,6 +79,9 @@ class GinController extends Controller
                     'packsize' => $item['pack_size'],
                     'unit_price' => $item['unit_price'],
                     'in_quantity' => $item['in_quantity'],
+                    'shots_Count'=>$item['shots_count'],
+                    'manufacture_date'=>$item['manufacture_date'],
+                    'expire_date'=>$item['expire_date'],
                     'total_cost' => $item['total_cost'],
                     'payment' => $item['payment']
                 ]);
@@ -83,7 +89,12 @@ class GinController extends Controller
                 // Update the item quantity in the items table
                 $itemRecord = Item::where('item_code', $item['item_code'])->first();
                 if ($itemRecord) {
-                    $itemRecord->item_quantity += $item['in_quantity'];
+                    $itemRecord->item_quentity += $item['in_quantity'];
+                    $itemRecord->save();
+                }
+
+                if ($itemRecord) {
+                    $itemRecord->shots+= $item['shots_count'];
                     $itemRecord->save();
                 }
             }

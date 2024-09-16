@@ -7,6 +7,8 @@ use App\Models\Service;
 use App\Models\Package;
 use App\Models\Appointment;
 use App\Models\Preorder;
+use App\Models\promotions;
+use App\Models\GiftVouchers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Employee;
@@ -14,6 +16,10 @@ use App\Models\EmployeeRole;
 use App\Models\TimeSlot;
 use App\Models\TimeSlotBridel;
 use App\Models\Schedule;
+use App\Models\BridelSubCategory;
+use App\Models\AdditionalPackage;
+use App\Models\SubcategoryItem;
+use App\Models\bridelpreorder;
 use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
@@ -21,26 +27,53 @@ class AppointmentController extends Controller
     public function showCustomers()
     {
         $customers = Customer::all();
-        $services = Service::all();
+        $services = Service::whereIn('service_code', ['SERVICE-5284'])->get();
         $packages = Package::all();
         $timeSlots = TimeSlot::all();
         $timeSlotsBridels = TimeSlotBridel::all();
+        $promotions = promotions::all();
+        $giftvouchers = GiftVouchers::all();
 
-        //dd($timeSlots);
-        $roleId = 2;
-        $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
-            $query->where('role_id', $roleId);
-        })->get();
-
-        $roleId2 = 3;
-        $assemployees = Employee::whereHas('roles', function ($query) use ($roleId2) {
-            $query->where('role_id', $roleId2);
-        })->get();
+        $packagesonly = Package::where('services_id', 'SERVICE-6465')->get();
 
         
-        return view('appointment.new_appointment', compact('customers', 'services', 'packages','timeSlots','employees','assemployees','timeSlotsBridels'));
+        return view('appointment.new_appointment', compact('customers', 'services', 'packages','timeSlots','timeSlotsBridels','packagesonly','promotions','giftvouchers'));
     }
 
+    public function getSubcategoriesByPackage(Request $request)
+    {
+        $packageId = $request->input('package_id');
+        
+        // Find the package by ID
+        $package = Package::find($packageId);
+
+        if ($package) {
+            // Get related subcategories
+            $subcategories = $package->subCategories;
+
+            return response()->json(['subcategories' => $subcategories]);
+        }
+
+        return response()->json(['error' => 'Package not found'], 404);
+    }
+    
+
+    public function getItemsBySubcategory(Request $request)
+    {
+        $subcategoryId = $request->input('subcategory_id');
+
+        // Ensure that the subcategory exists and fetch related items
+        $subcategory = BridelSubCategory::find($subcategoryId);
+
+        if ($subcategory) {
+            // Fetch items related to the subcategory
+            $items = $subcategory->bridelItems; // Ensure the relationship is correctly defined
+
+            return response()->json(['items' => $items]);
+        }
+
+        return response()->json(['error' => 'Subcategory not found'], 404);
+    }
 
 
     public function getAvailableTimeSlots(Request $request)
@@ -144,24 +177,30 @@ class AppointmentController extends Controller
         return response()->json(['available_assistants' => $availableAssistants]);
     }
 
+    public function showPackages()
+    {
+        $serviceCode = 'SERVICE-6465';  // Example service code
+        $packages = Package::where('services_id', $serviceCode)->get();
 
+        return view('your-view', compact('packages'));
+    }
 
     public function showAppoinmentsss()
     {
-        $appointments = Preorder::all(); 
+        $appointments = bridelpreorder::all(); 
         return view('appointment.index', compact('appointments'));
     }
 
     public function showPreOrders()
     {
-        $appointments = Preorder::all(); 
+        $appointments = bridelpreorder::with('package')->get(); 
         return view('appointment.preorderList', compact('appointments'));
     }
     
 
     public function showPreOrderDetails($id)
     {
-        $preorder = Preorder::findOrFail($id);
+        $preorder = bridelpreorder::findOrFail($id);
         return view('appointment.showPreOrderDetails', compact('preorder'));
     }
 
@@ -186,72 +225,83 @@ class AppointmentController extends Controller
 
     public function storeAppointments(Request $request)
     {
+        //dd($request);
         $request->validate([
             'contact_number_1' => 'required|string',
             'service_id' => 'required|string',
             'package_id_1' => 'required|string',
             'start_date' => 'required|date',
             'appointment_time' => 'required|string',
-            'main_dresser' => 'required|string',
             'payment_method' => 'required|string',
             'advanced_payment' => 'required|numeric',
+            'total_price'=>'required|numeric',
         ]);
-    
+        //dd($request);
         $preorder = null; // Initialize preorder variable
     
         \DB::transaction(function () use ($request, &$preorder) {
             try {
                 // Create the preorder
-                $preorder = Preorder::create([
+                $preorder = bridelpreorder::create([
                     'Auto_serial_number' => $this->generateAutoSerial(),
-                    'booking_reference_number' => $this->generateBookingRef(),
-                    'customer_code' => $request->customer_id,
+                    'customer_id' => $request->customer_id,
                     'customer_name' => $request->customer_name,
-                    'customer_contact_1' => $request->contact_number_1,
-                    'customer_address' => $request->customer_address,
-                    'customer_dob' => $request->customer_dob,
-                    'Service_type' => $request->service_id,
-                    'Package_name_1' => $request->package_id_1,
-                    'Package_name_2' => $request->package_id_2,
-                    'Package_name_3' => $request->package_id_3,
-                    'appointment_date' => $request->start_date,
-                    'today' => Carbon::today(),
-                    'appointment_time' => $request->appointment_time,
-                    'main_job_holder' => $request->main_dresser,
-                    'Assistant_1' => $request->assistant_1_name,
-                    'Assistant_2' => $request->assistant_2_name,
-                    'Assistant_3' => $request->assistant_3_name,
+                    'contact_number_1' => $request->contact_number_1,
+                    'service_id' => $request->service_id,
+                    'package_id' => $request->package_id_1,
+                    'Appoinment_date' => $request->start_date,
+                    'today'=> Carbon::today(),
+                    'Appointment_time' => $request->appointment_time,
+                    'photographer_name' => $request->photographer_name,
+                    'photographer_contact' => $request->photographer_contact,
                     'note' => $request->note,
-                    'payment_type' => $request->payment_method,
-                    'Advanced_price' => $request->advanced_payment,
-                    'Total_price' => $request->total_price,
-                    'status' => 'pending',
+                    'Main_Dresser'=> $request->Main_Dresser,
+                    'Assistent_Dresser_1'=> $request->Assistent_Dresser_1,
+                    'Assistent_Dresser_2'=> $request->Assistent_Dresser_2,
+                    'Assistent_Dresser_3'=> $request->Assistent_Dresser_3,
+                    'hotel_dress'=> $request->hotel_dress,
+                    'Transport'=> $request->Transport,
+                    'Discount'=> $request->Discount,
+                    'payment_method'=> $request->payment_method,
+                    'Gift_vouchwe_id'=> $request->gift_voucher_Id,
+                    'Gift_voucher_value'=> $request->gift_voucher_price,
+                    'promotion_id'=> $request->promotions_Id,
+                    'Promotiona_value'=> $request->promotional_price,
+                    'advanced_payment'=> $request->advanced_payment,
+                    'Balance_Payment'=> $request->Balance_Payment,
+                    'total_price'=> $request->total_price,
+                    'status'=> "NotCompleted",
                 ]);
     
                 \Log::info('Preorder created:', ['preorder' => $preorder]);
-    
-                // Save the schedule for the main dresser and assistants
-                $employees = [$request->main_dresser];
-                if (!empty($request->assistant_1_name)) {
-                    $employees[] = $request->assistant_1_name;
+
+
+                // Attach Additional Packages
+                if ($request->has('otherpackages')) { // Use the correct key from the form data
+                    foreach ($request->otherpackages as $packageId) {
+                        AdditionalPackage::create([
+                            'bridelpreorder_id' => $preorder->id,
+                            'package_id' => $packageId,
+                        ]);
+                    }
                 }
-                if (!empty($request->assistant_2_name)) {
-                    $employees[] = $request->assistant_2_name;
+
+                // Attach Subcategory Items
+                if ($request->has('subcategory_items') && is_array($request->subcategory_items)) {
+                    foreach ($request->subcategory_items as $subcategoryId => $itemId) {
+                        if ($itemId !== null) { // Ensure itemId is not null
+                            SubcategoryItem::create([
+                                'bridelpreorder_id' => $preorder->id, // Use 'id' for foreign key reference
+                                'subcategory_id' => $subcategoryId,
+                                'item_id' => $itemId,
+                            ]);
+                        }
+                    }
                 }
-                if (!empty($request->assistant_3_name)) {
-                    $employees[] = $request->assistant_3_name;
-                }
-    
-                foreach ($employees as $employee) {
-                    Schedule::create([
-                        'employee_id' => $employee,
-                        'date' => $request->start_date,
-                        'time_slot' => $request->appointment_time,
-                        'is_booked' => true,
-                    ]);
-                }
-    
-                \Log::info('Schedules updated for employees');
+
+                \Log::info('Additional packages and subcategory items saved successfully.');
+
+
             } catch (\Exception $e) {
                 \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
                 throw $e;
@@ -271,11 +321,6 @@ class AppointmentController extends Controller
         return 'ASN-' . rand(1000, 9999);
     }
 
-    private function generateBookingRef()
-    {
-        return 'BREF-' . rand(1000, 9999);
-    }
-
 
     public function getPackagesByService(Request $request)
     {
@@ -284,17 +329,32 @@ class AppointmentController extends Controller
         return response()->json(['packages' => $packages]);
     }
 
+    
+
     public function printAndRedirect($id)
     {
-        $preorder = Preorder::findOrFail($id);
+        // Eager load related additional packages and subcategory items
+        $preorder = bridelpreorder::with(['additionalPackages', 'subcategoryItems'])->findOrFail($id);
         return view('appointment.print', compact('preorder'));
     }
 
     public function getPreorders()
     {
-        $preorders = Preorder::all(['appointment_date as start', 'customer_name as title']);
-        return response()->json($preorders);
+        $preorders = bridelpreorder::all(['Appoinment_date as start', 'customer_name as title', 'hotel_dress']);
+
+        $events = $preorders->map(function ($preorder) {
+            return [
+                'title' => $preorder->title,  // Customer name as the event title
+                'start' => $preorder->start,  // Appointment date as the event start
+                'hotel_dress' => $preorder->hotel_dress,  // Include hotel_dress as an attribute
+            ];
+        });
+
+        return response()->json($events);
     }
+
+
+
 
     public function customerstore(Request $request)
     {
@@ -314,7 +374,7 @@ class AppointmentController extends Controller
             $customer->contact_number_2 = $validatedData['contact_number_2'];
             $customer->address = $validatedData['address'];
             $customer->date_of_birth = $validatedData['date_of_birth'];
-            $customer->supplier_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
+            $customer->customer_code = 'CUS' . strtoupper(uniqid()); // Generate supplier code
             $customer->save();
             
             notify()->success('Customer Registerd successfully. ⚡️', 'Success');

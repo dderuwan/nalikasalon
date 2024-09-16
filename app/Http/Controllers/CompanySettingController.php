@@ -11,6 +11,12 @@ class CompanySettingController extends Controller
     public function index()
     {
         $companyDetail = CompanyDetails::first(); // Get the first and only record
+        return view('setting.company.index', compact('companyDetail'));
+    }
+
+    public function edit($id)
+    {
+        $companyDetail = CompanyDetails::findOrFail($id); // Find the company by ID
         return view('setting.company.companySetting', compact('companyDetail'));
     }
 
@@ -65,5 +71,30 @@ class CompanySettingController extends Controller
         $companyDetail = CompanyDetails::first();
         return $companyDetail ? $companyDetail->logo : 'default-logo.png';
     }
+
+    public function update(Request $request, $id)
+    {
+        //dd($request);
+        $company = CompanyDetails::findOrFail($id);
+        $company->title = $request->input('title');
+        $company->address = $request->input('address');
+        $company->email = $request->input('email');
+        $company->contact = $request->input('contact');
+        $company->website = $request->input('website');
+        $company->poweredbytext = $request->input('poweredByText');
+        $company->footertext = $request->input('footertext');
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/logos'), $filename);
+            $company->logo = $filename;
+        }
+
+        $company->save();
+
+        return redirect()->route('company.index')->with('success', 'Company details updated successfully.');
+    }
+
 }
 

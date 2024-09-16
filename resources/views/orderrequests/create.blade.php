@@ -11,7 +11,7 @@
                 <select name="supplier_code" class="form-control" id="supplier_code" required>
                     <option value="">Select Supplier</option>
                     @foreach($items->unique('supplier_code') as $item)
-                        <option value="{{ $item->supplier_code }}">{{ $item->supplier_code }}</option>
+                        <option value="{{ $item->supplier_code }}">{{ $item->supplier->name ?? 'No supplier assigned' }}</option>
                     @endforeach
                 </select>
             </div>
@@ -72,7 +72,7 @@
                     data.forEach(item => {
                         const option = document.createElement('option');
                         option.value = item.item_code;
-                        option.textContent = item.item_code;
+                        option.textContent = `${item.item_code} - ${item.item_name}`;
                         itemCodeDropdown.appendChild(option);
                     });
                 });
@@ -99,7 +99,7 @@
                     data.forEach(item => {
                         const option = document.createElement('option');
                         option.value = item.item_code;
-                        option.textContent = item.item_code;
+                        option.textContent = `${item.item_code} - ${item.item_name}`;
                         dropdown.appendChild(option);
                     });
                     dropdown.value = currentSelection; // Restore the selection
@@ -120,5 +120,6 @@
         }
     });
 </script>
+
 
 @endsection

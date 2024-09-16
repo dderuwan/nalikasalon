@@ -29,4 +29,9 @@ class Package extends Model
     {
         return $this->hasMany(Preorder::class);
     }
+
+    public function subCategories()
+    {
+        return $this->belongsToMany(BridelSubCategory::class, 'package_sub_category');
+    }
 }

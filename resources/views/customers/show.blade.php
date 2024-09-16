@@ -3,7 +3,7 @@
 @section('content')
 <main role="main" class="main-content">
     <div class="container">
-        <h2>Supplier Details</h2>
+        <h2>Customer Details</h2>
         <div class="mb-3">
             <a href="{{ route('allcustomer') }}" class="btn btn-secondary"><i class="fe fe-arrow-left fe-16"></i></a>
             <a href="{{ route('editcustomer',$customer->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>

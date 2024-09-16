@@ -11,8 +11,9 @@
             <h3><strong class="card-title">Manage Company</strong></h3>
           </div>
           <div class="card-body">
-            <form action="{{ route('company.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('company.update', $companyDetail->id) }}" method="POST" enctype="multipart/form-data">
               @csrf
+              @method('PUT')
               <div class="form-group row">
                 <label for="inputTitle" class="col-sm-2 col-form-label" style="color:black;"> Title <i class="text-danger">*</i></label>
                 <div class="col-sm-8">

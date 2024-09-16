@@ -68,6 +68,7 @@ class POSController extends Controller
 
     public function store(Request $request)
     {
+       // dd($request);
         
         $validator = Validator::make($request->all(),[
             'customer_code' => 'required',
@@ -113,7 +114,7 @@ class POSController extends Controller
                 // Decrease item quantity in Item table
                 $itemModel = Item::where('item_code', $item['item_code'])->first();
                 if ($itemModel) {
-                    $itemModel->item_quantity -= $item['quantity'];
+                    $itemModel->item_quentity -= $item['quantity'];
                     $itemModel->save();
                 } else {
                     throw new Exception("Item not found: " . $item['item_code']);

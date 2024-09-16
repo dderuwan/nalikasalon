@@ -31,7 +31,7 @@
                                 <div class="scrollable-content">
                                     <div class="row" id="item-container">
                                         @foreach ($items as $item)
-                                            @if ($item->item_quantity > 1)
+                                            @if ($item->item_quentity > 1)
                                                 <div class="col-item" data-item='@json($item)' data-item-name="{{ $item->item_name}}">
                                                     <div class="custom-card">
                                                         <img src="{{ asset('images/items/' . $item->image) }}" class="custom-card-img-top" alt="{{ $item->item_name }}">

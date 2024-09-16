@@ -21,4 +21,6 @@ class Service extends Model
     {
         return $this->hasMany(Package::class, 'services_id', 'service_code');
     }
+
+    
 }

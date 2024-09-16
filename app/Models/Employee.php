@@ -56,6 +56,11 @@ class Employee extends Authenticatable
         return $this->hasMany(Schedule::class);
     }
 
+    public function getFullNameAttribute()
+    {
+        return trim($this->firstname . ' ' . $this->middlename . ' ' . $this->lastname);
+    }
+
     
 
 

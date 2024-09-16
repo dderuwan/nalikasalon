@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Package;
+use App\Models\BridelSubCategory;
 use Illuminate\Support\Facades\Validator; 
 
 class PackageController extends Controller
@@ -52,8 +53,9 @@ class PackageController extends Controller
     {
         $services = Service::all();
         $package = Package::findOrFail($id);
+        $subCategories = BridelSubCategory::all();
 
-        return view('packages.edit', compact('package', 'services'));
+        return view('packages.edit', compact('package', 'services','subCategories'));
     }
 
     public function update(Request $request, $id)
@@ -72,6 +74,8 @@ class PackageController extends Controller
             $package->description = $request->description; // This will store the HTML content
             $package->price = $request->price;
             $package->save();
+
+            $package->subCategories()->sync($request->input('sub_categories', []));
 
             notify()->success('Package updated successfully. ⚡️', 'Success');
             return redirect()->route('packages')->with('success', 'Package updated successfully.');

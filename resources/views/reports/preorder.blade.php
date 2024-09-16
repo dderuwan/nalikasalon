@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="row mb-2">
                         <div class="col-md-6">
-                            <h2>Sales Report</h2>
+                            <h2>Bridel Order Reports</h2>
                         </div>
                     </div>
                     <p class="card-text"></p>
@@ -49,25 +49,25 @@
                                             <tr>
                                                 <th style="color: black;">Order ID</th>
                                                 <th style="color: black;">Customer Code</th>
-                                                <th style="color: black;">Service</th>
                                                 <th style="color: black;">Package</th>
                                                 <th style="color: black;">Appointment Date</th>
                                                 <th style="color: black;">Appointment Time</th>
                                                 <th style="color: black;">Advanced Price</th>
                                                 <th style="color: black;">Total Price</th>
+                                                <th style="color: black;">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($preorders as $gin)
                                             <tr>
                                                 <td>{{ $gin->Auto_serial_number }}</td>
-                                                <td>{{ $gin->customer_code }}</td>
-                                                <td>{{ $gin->Service_type }}</td>
-                                                <td>{{ $gin->Package_name_1 }}</td>
-                                                <td>{{ $gin->appointment_date }}</td>
-                                                <td>{{ $gin->appointment_time }}</td>
-                                                <td>{{ $gin->Advanced_price }}</td>
-                                                <td>{{ $gin->Total_price }}</td>
+                                                <td>{{ $gin->customer_name }}</td>
+                                                <td>{{ $gin->package_id }}</td>
+                                                <td>{{ $gin->Appoinment_date }}</td>
+                                                <td>{{ $gin->Appointment_time }}</td>
+                                                <td>{{ $gin->advanced_payment }}</td>
+                                                <td>{{ $gin->total_price }}</td>
+                                                <td>{{ $gin->status }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -121,14 +121,15 @@ $(document).ready(function() {
         footerCallback: function (row, data, start, end, display) {
             var api = this.api();
 
-            // Calculate total price
-            var total = api.column(7, { page: 'current' }).data().reduce(function (a, b) {
+            // Calculate total price (column index 6 for total_price)
+            var total = api.column(6, { page: 'current' }).data().reduce(function (a, b) {
                 return parseFloat(a) + parseFloat(b);
             }, 0);
 
             // Update the total cost in the footer
-            $(api.column(7).footer()).html('LKR' + total.toFixed(2));
+            $(api.column(6).footer()).html('LKR ' + total.toFixed(2));
         }
+
     });
 
     $('#filter-date-range').on('click', function() {
@@ -137,7 +138,7 @@ $(document).ready(function() {
  
         // Filter the table data based on date range
         var filteredData = @json($preorders).filter(function(order) {
-            var orderDate = order.appointment_date;
+            var orderDate = order.Appoinment_date;
             return orderDate >= startDate && orderDate <= endDate;
         });
 
@@ -146,13 +147,14 @@ $(document).ready(function() {
         filteredData.forEach(function(order) {
             table.row.add([
                 order.Auto_serial_number,
-                order.customer_code,
-                order.Service_type,
+                order.customer_name,
+                order.package_id,
                 order.Package_name_1,
-                order.appointment_date,
-                order.appointment_time,
-                order.Advanced_price,
-                order.Total_price
+                order.Appoinment_date,
+                order.Appointment_time,
+                order.advanced_payment,
+                order.total_price,
+                order.status
             ]);
         });
         table.draw();

@@ -125,43 +125,68 @@
             </tr>
             <tr class="tr3">
                 <th>Contact</th>
-                <td class="value-cell">{{ $preorder->customer_contact_1 }}</td>
+                <td class="value-cell">{{ $preorder->contact_number_1 }}</td>
                 <th>Wedding Date</th>
-                <td class="value-cell">{{ \Carbon\Carbon::parse($preorder->appointment_date)->format('Y-m-d') }}</td>
+                <td class="value-cell">{{ \Carbon\Carbon::parse($preorder->Appoinment_date)->format('Y-m-d') }}</td>
             </tr>
             
             <tr>
                 <th>Package</th>
                 <td>
-                    <input type="checkbox" {{ $preorder->Package_name_1 ? 'checked' : '' }}> {{ $preorder->Package_name_1 }}<br>
+                    <input type="checkbox" {{ $preorder->package_id ? 'checked' : '' }}> <br>
                 </td>
                 <th>Bridal Dressing</th>
-                <td><input type="checkbox" {{ $preorder->bridal_dressing ? 'checked' : '' }}> {{ $preorder->bridal_dressing }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 1) ? 'checked' : '' }}> 
+                </td>
             </tr>
             <tr>
                 <th>Fresh Bouquet</th>
-                <td><input type="checkbox" {{ $preorder->fresh_bouquet ? 'checked' : '' }}> {{ $preorder->fresh_bouquet }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 3) ? 'checked' : '' }}> 
+                </td>
                 <th>Headdress</th>
-                <td><input type="checkbox" {{ $preorder->headdress ? 'checked' : '' }}> {{ $preorder->headdress }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 4) ? 'checked' : '' }}>
+                </td>
             </tr>
+
+
             <tr>
                 <th>Jewelry</th>
-                <td><input type="checkbox" {{ $preorder->jewelry ? 'checked' : '' }}> {{ $preorder->jewelry }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 5) ? 'checked' : '' }}> 
+                </td>
                 <th>Bride's Maid</th>
-                <td><input type="checkbox" {{ $preorder->brides_maid ? 'checked' : '' }}> {{ $preorder->brides_maid }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 6) ? 'checked' : '' }}> 
+                </td>
             </tr>
+
+
             <tr>
                 <th>Flower Girls</th>
-                <td><input type="checkbox" {{ $preorder->flower_girls ? 'checked' : '' }}> {{ $preorder->flower_girls }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 7) ? 'checked' : '' }}> 
+                </td>
                 <th>Goingaway Dressing</th>
-                <td><input type="checkbox" {{ $preorder->goingaway_dressing ? 'checked' : '' }}> {{ $preorder->goingaway_dressing }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 8) ? 'checked' : '' }}> 
+                </td>
             </tr>
+
+
             <tr>
                 <th>Homecoming Dress</th>
-                <td><input type="checkbox" {{ $preorder->homecoming_dress ? 'checked' : '' }}> {{ $preorder->homecoming_dress }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 9) ? 'checked' : '' }}>
+                </td>
                 <th>Bouquet Headdress & Jewelry</th>
-                <td><input type="checkbox" {{ $preorder->bouquet_headdress_jewelry ? 'checked' : '' }}> {{ $preorder->bouquet_headdress_jewelry }}</td>
+                <td>
+                    <input type="checkbox" {{ $preorder->subcategoryItems->contains('subcategory_id', 10) ? 'checked' : '' }}>
+                </td>
             </tr>
+
 
             <tr>
                 <th>Photographer & Videographer</th>
@@ -177,27 +202,27 @@
         
             <tr>
                 <th>Pre Shoot Makeup</th>
-                <td><input type="checkbox" {{ $preorder->pre_shoot_makeup ? 'checked' : '' }}> {{ $preorder->pre_shoot_makeup }}</td>
+                <td><input type="checkbox" {{ $preorder->additionalPackages->contains('package_id', 34) ? 'checked' : '' }}></td>
                 <th>Transport</th>
-                <td class="value-cell">{{ $preorder->transport }}</td>
+                <td class="value-cell">{{ $preorder->Transport }}</td>
             </tr>
             <tr>
                 <th>Hair Setting</th>
-                <td><input type="checkbox" {{ $preorder->hair_setting ? 'checked' : '' }}> {{ $preorder->hair_setting }}</td>
+                <td><input type="checkbox" {{ $preorder->additionalPackages->contains('package_id', 35) ? 'checked' : '' }}></td>
                 <th>Total</th>
-                <td class="value-cell">{{ $preorder->Total_price }}</td>
+                <td class="value-cell">{{ $preorder->total_price }}</td>
             </tr>
             <tr>
                 <th>Manicure & Pedicure for Bride</th>
-                <td><input type="checkbox" {{ $preorder->manicure_pedicure ? 'checked' : '' }}> {{ $preorder->manicure_pedicure }}</td>
+                <td><input type="checkbox" {{ $preorder->additionalPackages->contains('package_id', 36) ? 'checked' : '' }}></td>
                 <th>Advanced</th>
-                <td class="value-cell">{{ $preorder->Advanced_price }}</td>
+                <td class="value-cell">{{ $preorder->advanced_payment }}</td>
             </tr>
             <tr>
                 <th>Mother Dressing</th>
-                <td><input type="checkbox" {{ $preorder->mother_dressing ? 'checked' : '' }}> {{ $preorder->mother_dressing }}</td>
+                <td><input type="checkbox" {{ $preorder->additionalPackages->contains('package_id', 37) ? 'checked' : '' }}></td>
                 <th>Balance</th>
-                <td class="value-cell">{{ $preorder->balance }}</td>
+                <td class="value-cell">{{ $preorder->Balance_Payment }}</td>
             </tr>
         </table>
 

@@ -16,9 +16,7 @@
                     </div>
                     @endif
                 </div>
-                <div class="col-md-6">
-                    <a href="{{ route('new_appointment') }}" class="btn btn-primary mb-3">Add Pre Order</a>
-                </div>
+                
             </div>
             <p class="card-text"></p>
             <div class="row my-4">
@@ -41,15 +39,23 @@
                                 <tbody>
                                     @foreach ($realtimeOrders as $appointment)
                                     <tr>
-                                        <td>{{ $appointment->real_time_app_no }}</td>
+                                        <td>{{ $appointment->Auto_serial_number }}</td>
                                         <td>{{ $appointment->customer_name }}</td>
-                                        <td>{{ $appointment->customer_contact_1}}</td>
-                                        <td>{{ $appointment->Service_type }}</td>
-                                        <td>{{ $appointment->Package_name_1 }}</td>
-                                        <td>{{ $appointment->today }}</td>
+                                        <td>{{ $appointment->contact_number_1}}</td>
+                                        <td>{{ $appointment->service_id }}</td>
+                                        <td>{{ $appointment->package_id}}</td>
+                                        <td>{{ $appointment->Appoinment_date }}</td>
                                         <td>
                                             <!-- Show Button -->
                                             <a href="{{ route('showRealOrderDetails', $appointment->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
+
+                                            <!-- Edit Button -->
+                                            @if ($appointment->Main_Dresser || $appointment->Assistent_Dresser_1 || $appointment->Assistent_Dresser_2 || $appointment->Assistent_Dresser_3)
+                                                    <!-- Hide Edit Button if any dresser fields have values -->
+                                            @else
+                                                    <!-- Edit Button -->
+                                                    <a href="{{ route('updateRealOrderDetails', $appointment->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>
+                                            @endif
 
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger" onclick="confirmDelete({{ $appointment->id }})"><i class="fe fe-trash fe-16"></i></button>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\SalonThretment;
+use App\Models\bridelpreorder;
 use App\Models\Item;
 use App\Models\Supplier;
 use App\Models\Customer;
@@ -153,7 +155,7 @@ class reportController extends Controller
 
     public function PreOrderReport()
     {
-        $preorders = Preorder::all();
+        $preorders = bridelpreorder::all();
         return view('reports.preorder', compact('preorders'));
 
     }
@@ -161,7 +163,7 @@ class reportController extends Controller
     
     public function RealOrderReport()
     {
-        $realtime = RealTimeBooking::all();
+        $realtime = SalonThretment::all();
         return view('reports.realtimeorder', compact('realtime'));
 
     }

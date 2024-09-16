@@ -7,6 +7,8 @@ use App\Models\Preorder;
 use App\Models\Customer;
 use App\Models\Service;
 use App\Models\Package;
+use App\Models\promotions;
+use App\Models\GiftVouchers;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use App\Models\Employee;
@@ -14,13 +16,17 @@ use App\Models\EmployeeRole;
 use App\Models\TimeSlot;
 use App\Models\TimeSlotBridel;
 use App\Models\Schedule;
+use App\Models\Item;
+use App\Models\Commission;
+use App\Models\bridelpreorder;
 use App\Models\RealTimeBooking;
 use Illuminate\Support\Facades\Log;
 
 class ReaTimeAppoinmentConttroller extends Controller
 {
     public function RealTimepage1(){
-        $preorders = Preorder::all(); 
+    
+        $preorders = bridelpreorder::all(); 
         return view('appointment.realtime1', compact('preorders'));
     }
 
@@ -28,17 +34,17 @@ class ReaTimeAppoinmentConttroller extends Controller
     {
         $contactNumber = $request->input('contact_number_1');
 
-        if ($contactNumber) {
-            // Filter preorders by status 'pending' and the provided contact number
-            $preorders = Preorder::where('customer_contact_1', $contactNumber)
-                ->where('status', 'pending') // Only select preorders with status 'pending'
-                ->get();
+        // Fetch orders related to the selected contact number and where the status is 'NotCompleted'
+        $appointments = bridelpreorder::where('contact_number_1', $contactNumber)
+                                    ->where('status', 'NotCompleted')
+                                    ->get();
 
-            return response()->json($preorders);
-        }
-
-        return response()->json([]);
+        // Return the filtered data as JSON
+        return response()->json($appointments);
     }
+
+
+
 
 
     public function realtime2page()
@@ -131,193 +137,108 @@ class ReaTimeAppoinmentConttroller extends Controller
     }
 
 
-    public function storerealtime2(Request $request)
-    {
-        $request->validate([
-            'customer_id' => 'required|string',
-            'contact_number_1' => 'required|string',
-            'service_id' => 'required|string',
-            'package_id_1' => 'required|string',
-            'appointment_time' => 'required|string',
-            'main_dresser' => 'required|string',
-            'assistant_1_name' => 'required|string',
-            'payment_method' => 'required|string',
-            'total_price' => 'required|numeric',
-        ]);
-        
-        $preorder = null; // Initialize preorder variable
-
-        \DB::transaction(function () use ($request, &$preorder) {
-            try {
-                // Create the preorder
-                $preorder = RealTimeBooking::create([
-                    'real_time_app_no' => $this->generateRealTime(), 
-                    'customer_code' => $request->customer_id,
-                    'customer_name' => $request->customer_name,
-                    'customer_contact_1' => $request->contact_number_1,
-                    'customer_address' => $request->customer_address,
-                    'customer_dob' => $request->customer_dob,
-                    'Service_type' => $request->service_id,
-                    'Package_name_1' => $request->package_id_1,
-                    'Package_name_2' => $request->package_id_2,
-                    'Package_name_3' => $request->package_id_3,
-                    'today' => Carbon::today(),
-                    'appointment_time' => $request->appointment_time,
-                    'main_job_holder' => $request->main_dresser,
-                    'Assistant_1' => $request->assistant_1_name,
-                    'Assistant_2' => $request->assistant_2_name,
-                    'Assistant_3' => $request->assistant_3_name,
-                    'note' => $request->note,
-                    'preorder_id'=> NULL,
-                    'gift_voucher_No'=> $request->gift_voucher_No,
-                    'gift_voucher_price'=> $request->gift_voucher_price,
-                    'promotional_code_No'=> $request->promotional_code_No,
-                    'promotional_price'=> $request->promotional_price,
-                    'payment_type' => $request->payment_method,
-                    'Advanced_price' => 0,
-                    'Total_discount'=> $request->discount,
-                    'vat'=> 0,
-                    'Total_price' => $request->total_price,
-                ]);
-
-                \Log::info('Preorder created:', ['preorder' => $preorder]);
-
-                // Save the schedule for the main dresser and assistants
-                $employees = [$request->main_dresser];
-                if (!empty($request->assistant_1_name)) {
-                    $employees[] = $request->assistant_1_name;
-                }
-                if (!empty($request->assistant_2_name)) {
-                    $employees[] = $request->assistant_2_name;
-                }
-                if (!empty($request->assistant_3_name)) {
-                    $employees[] = $request->assistant_3_name;
-                }
-
-                foreach ($employees as $employee) {
-                    Schedule::create([
-                        'employee_id' => $employee,
-                        'date' => Carbon::today(),
-                        'time_slot' => $request->appointment_time,
-                        'is_booked' => true,
-                    ]);
-                }
-
-                \Log::info('Schedules updated for employees');
-            } catch (\Exception $e) {
-                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
-                throw $e;
-            }
-        });
-
-        if ($preorder) {
-            return redirect()->route('printAndRedirectReal', ['id' => $preorder->id]);
-        } else {
-            return redirect()->route('RealTimepage1')->withErrors('Failed to create appointment.');
-        }
-    }
-
-
-    private function generateRealTime()
-    {
-        return 'RTO-'  . rand(1000, 9999);
-    }
-
-    public function printAndRedirectReal($id)
-    {
-        $preorder = RealTimeBooking::findOrFail($id);
-        return view('appointment.print2', compact('preorder'));
-    }
 
 
     public function realtime3page(Request $request)
     {
-        // dd($request); // Uncomment this for debugging to see the incoming request data
-
-        // Retrieve the selected appointment number from the request
         $autoSerialNumber = $request->input('selected_appointment_number');
-
-        // Fetch the preorder details using the Auto_serial_number field
-        $preorderDetails = Preorder::where('Auto_serial_number', $autoSerialNumber)->first();
-
+        $preorderDetails = bridelpreorder::where('Auto_serial_number', $autoSerialNumber)->first();
+        
         // Check if preorder details were found
         if (!$preorderDetails) {
             return redirect()->back()->withErrors(['error' => 'Preorder not found.']);
         }
 
-        // Pass the details to the view
-        return view('appointment.realtime3', compact('preorderDetails'));
+        // Fetch the service details using the service_code from preorder details
+        $service = Package::where('id', $preorderDetails->package_id)->first();
+
+        $promotions = promotions::all();
+        $giftvouchers = GiftVouchers::all();
+
+        // Pass the details and the service to the view
+        return view('appointment.realtime3', compact('preorderDetails', 'service','promotions','giftvouchers'));
     }
 
-
-    public function storerealtime34(Request $request)
+    public function getGiftVoucherPrice($giftVoucherId)
     {
-        //dd($request); 
-        $request->validate([
-            'customer_code' => 'required|string', 
-        ]);
-        //dd($request); 
-        $preorder = null; // Initialize preorder variable
+        // Fetch the gift voucher by its ID
+        $giftVoucher = GiftVouchers::where('gift_voucher_Id', $giftVoucherId)->first();
 
-        \DB::transaction(function () use ($request, &$preorder) {
-            try {
-                // Create the preorder
-                $preorder = RealTimeBooking::create([
-                    'real_time_app_no' => $this->generateRealTime(), 
-                    'customer_code' => $request->customer_code,
-                    'customer_name' => $request->customer_name,
-                    'customer_contact_1' => $request->customer_contact_1,
-                    'customer_address' => $request->customer_address,
-                    'customer_dob' => $request->customer_dob,
-                    'Service_type' => $request->Service_type,
-                    'Package_name_1' => $request->Package_name_1,
-                    'Package_name_2' => $request->Package_name_2,
-                    'Package_name_3' => $request->Package_name_3,
-                    'today' => Carbon::today(),
-                    'appointment_time' => $request->selected_time,
-                    'main_job_holder' => $request->main_job_holder,
-                    'Assistant_1' => $request->Assistant_1,
-                    'Assistant_2' => $request->Assistant_2,
-                    'Assistant_3' => $request->Assistant_3,
-                    'note' => $request->note,
-                    'preorder_id'=>  $request->Auto_serial_number,
-                    'gift_voucher_No'=> $request->gift_voucher_No,
-                    'gift_voucher_price'=> $request->gift_voucher_price,
-                    'promotional_code_No'=> $request->promotional_code_No,
-                    'promotional_price'=> $request->promotional_price,
-                    'payment_type' => $request->payment_method,
-                    'Advanced_price' => $request->Advanced_price,
-                    'Total_discount'=> $request->discount,
-                    'vat'=> 0,
-                    'Total_price' => $request->Total_price,
-                ]);
-
-                Preorder::where('Auto_serial_number', $request->Auto_serial_number)
-                ->update(['status' => 'completed']);
-
-            } catch (\Exception $e) {
-                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
-                throw $e;
-            }
-        });
-
-        if ($preorder) {
-            return redirect()->route('printAndRedirectReal', ['id' => $preorder->id]);
+        // Check if the gift voucher exists
+        if ($giftVoucher) {
+            return response()->json([
+                'success' => true,
+                'price' => $giftVoucher->price,
+            ]);
         } else {
-            return redirect()->route('RealTimepage1')->withErrors('Failed to create appointment.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Gift voucher not found',
+            ]);
         }
     }
 
+    public function getPromotionPrice($id)
+    {
+        $promotion = promotions::where('promotions_Id', $id)->first();
+
+        if ($promotion) {
+            return response()->json([
+                'success' => true,
+                'price' => $promotion->price
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promotion not found.'
+            ]);
+        }
+    }
+
+    public function storerealtime34(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'Auto_serial_number' => 'required|string',
+        ]);
+
+        // Find the preorder by Auto_serial_number
+        $preorder = bridelpreorder::where('Auto_serial_number', $request->Auto_serial_number)->first();
+
+        if ($preorder) {
+            // Update the preorder status to "completed"
+            $preorder->status = 'completed';
+            $preorder->save();
+
+            // Redirect to the printAndRedirect route if the preorder was successfully updated
+            return redirect()->route('printlast', ['id' => $preorder->id]);
+        } else {
+            // Return back with error if preorder was not found
+            return redirect()->route('Appoinments')->withErrors('Failed to update preorder.');
+        }
+    }
+
+    public function printlast($id)
+    {
+        // Eager load related additional packages and subcategory items
+        $preorder = bridelpreorder::with(['additionalPackages', 'subcategoryItems'])->findOrFail($id);
+
+        // Redirect to the print view with the preorder details
+        return view('appointment.print2', compact('preorder'));
+    }
+
+
+
 
     public function RealTimeOrderList(){
-        $realtimeOrders = RealTimeBooking::all(); 
+        $realtimeOrders = bridelpreorder::all(); 
         return view('appointment.realtimeOrderList', compact('realtimeOrders'));
     }
 
     public function destroy($id)
     {
         // Find the preorder by ID and delete it
-        $preorder = RealTimeBooking::findOrFail($id);
+        $preorder = bridelpreorder::findOrFail($id);
         $preorder->delete();
 
         // Redirect back with a success message
@@ -326,9 +247,83 @@ class ReaTimeAppoinmentConttroller extends Controller
 
     public function showRealOrderDetails($id)
     {
-        $preorder = RealTimeBooking::findOrFail($id);
+        $preorder = bridelpreorder::findOrFail($id);
         return view('appointment.showRealtimeDetails', compact('preorder'));
     }
+
+    public function updateRealOrderDetails($id)
+    {
+        $preorder = bridelpreorder::findOrFail($id);
+ 
+        $items = Item::where('shots', '>', 0)->get();
+        
+        $roleId = 2;
+        $employees = Employee::whereHas('roles', function ($query) use ($roleId) {
+            $query->where('role_id', $roleId);
+        })->get();
+
+        $roleId2 = 3;
+        $assemployees = Employee::whereHas('roles', function ($query) use ($roleId2) {
+            $query->where('role_id', $roleId2);
+        })->get();
+
+        return view('appointment.updateorders', compact('preorder','employees','assemployees','items')); 
+    }
+
+    public function storeupdate(Request $request)
+    {
+        //dd($request);
+        // Getting current date
+        $currentDate = Carbon::now()->toDateString();
+        
+        // Retrieve the assistants, commission type, and price from the request
+        $assistants = array_filter($request->assistants);
+        $bookingNumber = $request->input('Booking_number'); // order_id
+        $commissionPrices = $request->input('price');
+        $mainDresser = $request->input('main_dresser');
+
+        // Loop through assistants and insert commission details into the table
+        foreach ($assistants as $index => $assistantId) {
+            // Create a new commission record for each assistant
+            Commission::create([
+                'employee_id' => $assistantId,           // The assistant's ID
+                'order_id' => $bookingNumber,            // Use the booking number as the order ID
+                'date' => $currentDate,                  // Set the date as today's date
+                'commission_amount' => $commissionPrices[$index], // Get the corresponding price from the "price" array
+            ]);
+        }
+
+        $salonThretment = bridelpreorder::where('Auto_serial_number', $bookingNumber)->firstOrFail();
+
+        $salonThretment->update([
+            'Main_Dresser' => $mainDresser,                   // Update Main Dresser
+            'Assistent_Dresser_1' => $assistants[0] ?? null,  // Update Assistant Dresser 1
+            'Assistent_Dresser_2' => $assistants[1] ?? null,  // Update Assistant Dresser 2
+            'Assistent_Dresser_3' => $assistants[2] ?? null,  // Update Assistant Dresser 3
+        ]);
+
+        $items = $request->input('items');
+
+        foreach ($items as $itemData) {
+            $itemId = $itemData['item_name']; // Assuming item_name is the item ID
+            $vastageSlots = $itemData['vastage_slots'];
+
+            // Find the item in the database
+            $item = Item::find($itemId);
+
+            if ($item) {
+                // Decrease the item quantity by the vastage slots
+                $item->shots -= $vastageSlots;
+
+                // Save the updated item quantity
+                $item->save();
+            }
+        }
+
+        return redirect('appointment.realtimeOrderList')->with('success', 'Update Details successfully');
+    }
+
+
 
 
 

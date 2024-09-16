@@ -11,7 +11,8 @@
                     <th style="color: black;">Item Code</th>
                     <th style="color: black;">Item Name</th>
                     <th style="color: black;">Item Description</th>
-                    <th style="color: black;">Quantity</th>
+                    <th style="color: black;">Quentity</th>
+                    <th style="color: black;">Shots</th>
                     <th style="color: black;">Unit Price</th>
                     <th style="color: black;">Supplier Code</th>
                 </tr>
@@ -29,7 +30,8 @@
                     <td>{{ $item->item_code }}</td>
                     <td>{{ $item->item_name }}</td>
                     <td>{{ $item->item_description }}</td>
-                    <td>{{ $item->item_quantity }}</td> 
+                    <td>{{ $item->item_quentity }}</td> 
+                    <td>{{ $item->shots }}</td>
                     <td>{{ $item->unit_price }}</td>
                     <td>{{ $item->supplier_code }}</td>
                     

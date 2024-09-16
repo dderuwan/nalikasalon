@@ -145,15 +145,44 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/packages/{id}/edit', [App\Http\Controllers\PackageController::class, 'edit'])->name('editpackage');
      Route::put('/packages/{id}', [App\Http\Controllers\PackageController::class, 'update'])->name('updatepackage');
     
+
+     //BridelSub packages
+     Route::get('/bridelsubcategory', [App\Http\Controllers\BridelSubCategoryContoller::class, 'index'])->name('bridelsubcategory');
+     Route::get('/addbridelsubcategory', [App\Http\Controllers\BridelSubCategoryContoller::class, 'create'])->name('addbridelsubcategory');
+     Route::post('/storebridelsubcategory', [App\Http\Controllers\BridelSubCategoryContoller::class, 'store'])->name('storebridelsubcategory');
+     Route::get('/subpackages/{id}/edit', [App\Http\Controllers\BridelSubCategoryContoller::class, 'edit'])->name('editbridelsubcategory');
+     Route::put('/subpackages/{id}', [App\Http\Controllers\BridelSubCategoryContoller::class, 'update'])->name('updatebridelsubcategory');
+     Route::delete('/subpackages/{id}', [App\Http\Controllers\BridelSubCategoryContoller::class, 'destroy'])->name('deletebridelsubcategory');
+
     
+     Route::get('/getSubcategoriesByPackage', [AppointmentController::class, 'getSubcategoriesByPackage'])->name('getSubcategoriesByPackage');
+     Route::get('/getItemsBySubcategory', [AppointmentController::class, 'getItemsBySubcategory'])->name('getItemsBySubcategory');
+     Route::get('/show-packages', [AppointmentController::class, 'showPackages'])->name('showPackages');
+
+
+
+
+     //BridelItems
+     Route::get('/bridelItems', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'index'])->name('bridelItems');
+     Route::get('/addbridelItems', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'create'])->name('addbridelItems');
+     Route::post('/storebridelItems', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'store'])->name('storebridelItems');
+     Route::get('/subitems/{id}/edit', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'edit'])->name('editbridelItems');
+     Route::put('/subitems/{id}', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'update'])->name('updatebridelItems');
+     Route::delete('/subitems/{id}', [App\Http\Controllers\BridelSubCategoryItemsContoller::class, 'destroy'])->name('deletebridelItems');
+
+
+
      //Settings module
      //company details
      Route::get('company-settings', [CompanySettingController::class, 'index'])->name('company.index');
+     Route::get('/company/edit/{id}', [CompanySettingController::class, 'edit'])->name('company.edit');
+     Route::put('/company/update/{id}', [CompanySettingController::class, 'update'])->name('company.update');
      Route::post('company-settings', [CompanySettingController::class, 'store'])->name('company.store');
     
      //users
      Route::resource('users', UserController::class);
      Route::get('/users', [UserController::class, 'index'])->name('user.index');
+     Route::get('/profile/{user}', [UserController::class, 'showuser'])->name('user.details');
      Route::post('/users/add-user', [UserController::class, 'store'])->name('user.store');
      Route::post('/users/user-list', [UserController::class, 'show'])->name('user.show');
      Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
@@ -190,7 +219,12 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::post('/attendance/{id}/update', [AttendanceController::class, 'update'])->name('attendance.update');
      Route::view('/hrm/update_attendance', 'humanResources.attendance.update_attendance')->name('update_attendance');
      Route::get('/hrm/attendance_reports', [AttendanceController::class, 'attendanceReport'])->name('attendance_reports');
-    
+     Route::get('/commissions-list', [AttendanceController::class, 'commissionsList'])->name('commissions-list');
+     Route::delete('/destroycommission/{id}', [AttendanceController::class, 'destroycommission'])->name('destroycommission');
+     Route::get('/editcommission/{id}', [App\Http\Controllers\AttendanceController::class, 'editcommission'])->name('editcommission');
+     Route::put('/updatecommission/{id}', [App\Http\Controllers\AttendanceController::class, 'updatecommission'])->name('updatecommission');
+
+
      //Leave
      Route::resource('leave', LeaveController::class);
      Route::post('/leave/update', [LeaveController::class, 'update'])->name('leave.update');
@@ -224,7 +258,37 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::put('/employees/{id}', [App\Http\Controllers\EmployeeController::class, 'updateemp'])->name('updateemp');
      Route::post('/storeemployee', [App\Http\Controllers\EmployeeController::class, 'store'])->name('storeemployee');
      Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('deleteemployee');
+
+     //salary Managment module
+     Route::get('/salary', [App\Http\Controllers\SallaryContoller::class, 'index'])->name('salary');
+     Route::get('/createsalary', [App\Http\Controllers\SallaryContoller::class, 'create'])->name('createsalary');
+     Route::get('/editsalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'edit'])->name('editsalary');
+     Route::put('/updatesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'updatess'])->name('updatesalary');
+     Route::post('/storesalary', [App\Http\Controllers\SallaryContoller::class, 'store'])->name('storesalary');
+     Route::delete('/deletesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'destroy'])->name('deletesalary');
+     Route::get('/get-employee-attendance-count', [App\Http\Controllers\SallaryContoller::class, 'getAttendanceCount'])->name('getEmployeeAttendanceCount');
+     Route::get('/get-employee-total-allowance', [App\Http\Controllers\SallaryContoller::class, 'getTotalAllowance'])->name('getEmployeeTotalAllowance');
+
+
+     //gift vouchers
+     Route::get('/GiftVoucher', [App\Http\Controllers\GiftVoucherContoller::class, 'index'])->name('GiftVoucher');
+     Route::get('/createGiftVoucher', [App\Http\Controllers\GiftVoucherContoller::class, 'create'])->name('createGiftVoucher');
+     Route::post('/storeGiftVoucher', [App\Http\Controllers\GiftVoucherContoller::class, 'store'])->name('storeGiftVoucher');
+     Route::get('/editGiftVoucher/{id}', [App\Http\Controllers\GiftVoucherContoller::class, 'edit'])->name('editGiftVoucher');
+     Route::put('/updateGiftVoucher/{id}', [App\Http\Controllers\GiftVoucherContoller::class, 'update'])->name('updateGiftVoucher');
+     Route::delete('/gift-voucher/delete/{id}', [App\Http\Controllers\GiftVoucherContoller::class, 'destroy'])->name('deleteGiftVoucher');
+     Route::get('/get-gift-voucher-price/{giftVoucherId}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'getGiftVoucherPrice']);
+     Route::get('/get-promotion-price/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'getPromotionPrice']);
      
+
+
+     //Promotions
+     Route::get('/Promotion', [App\Http\Controllers\PromotionContoller::class, 'index'])->name('Promotion');
+     Route::get('/createPromotion', [App\Http\Controllers\PromotionContoller::class, 'create'])->name('createPromotion');
+     Route::post('/storePromotion', [App\Http\Controllers\PromotionContoller::class, 'store'])->name('storePromotion');
+     Route::get('/editPromotion/{id}', [App\Http\Controllers\PromotionContoller::class, 'edit'])->name('editPromotion');
+     Route::put('/updatePromotion/{id}', [App\Http\Controllers\PromotionContoller::class, 'update'])->name('updatePromotion');
+     Route::delete('/deleteGiftVoucher/{id}', [App\Http\Controllers\PromotionContoller::class, 'destroy'])->name('deletePromotion');
     
      //appointment module(PreOrders)
      Route::get('/appointments', [AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
@@ -239,6 +303,9 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
      Route::delete('/preorders/{id}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('deletepreorder');
      
+
+     Route::get('/get-appointments', [BridalAppointmentController::class, 'getAppointments'])->name('getAppointments');
+     Route::get('/get-appointment-details', [BridalAppointmentController::class, 'getAppointmentDetails'])->name('getAppointmentDetails');
     
      //RealTimeAppoinments
      Route::get('/RealTimepage1', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'RealTimepage1'])->name('RealTimepage1');
@@ -252,7 +319,31 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/RealTimeOrderList', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'RealTimeOrderList'])->name('RealTimeOrderList');
      Route::delete('/realtimeorders/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'destroy'])->name('deleterealorder');
      Route::get('/showRealOrderDetails/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'showRealOrderDetails'])->name('showRealOrderDetails');
-    
+     Route::get('/appointment/print-and-redirects/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'printlast'])->name('printlast');
+     Route::get('/updateRealOrderDetails/{id}', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'updateRealOrderDetails'])->name('updateRealOrderDetails');
+     Route::put('/storeupdate', [App\Http\Controllers\ReaTimeAppoinmentConttroller::class, 'storeupdate'])->name('storeupdate');
+
+     //salon & Theartments pre order
+     Route::get('/SalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'index'])->name('SalonThretment');
+     Route::get('/createSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'create'])->name('createSalonThretment');
+     Route::post('/storeSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'store'])->name('storeSalonThretment');
+     Route::get('/editSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit'])->name('editSalonThretment');
+     Route::put('/updateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update'])->name('updateSalonThretment');
+     Route::delete('/deleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy'])->name('deleteSalonThretment');
+     Route::get('/saloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint'])->name('saloonpreorderprint');
+
+
+     //salon & Theartments Real time order
+     Route::get('/rSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'index1'])->name('RealSalonThretment');
+     Route::get('/rcreateSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'create1'])->name('RealcreateSalonThretment');
+     Route::post('/rstoreSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'store1'])->name('RealstoreSalonThretment');
+     Route::put('/rstoreSalonThretment2', [App\Http\Controllers\SalonThretmentContoller::class, 'store2'])->name('RealstoreSalonThretment2');
+     Route::get('/reditSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit1'])->name('RealeditSalonThretment');
+     Route::put('/rupdateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update1'])->name('RealupdateSalonThretment');
+     Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy1'])->name('RealdeleteSalonThretment');
+     Route::get('/rsaloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
+     Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
+
      // web.php or api.php (depending on your routes file)
      Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);
      Route::get('/get-available-main-dressers', [AppointmentController::class, 'getAvailableMainDressers']);
@@ -262,7 +353,9 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
     
      //revenue
      Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
-     Route::get('/api/monthly-revenue', [RevenueController::class, 'getMonthlyRevenue']);
+     Route::get('/api/monthly-revenue', [YourController::class, 'getMonthlyRevenue']);
+     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
+     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
      Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
      Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
      Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');

@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('packsize');
             $table->decimal('unit_price', 15, 2);
             $table->integer('in_quantity');
+            $table->integer('shots_Count');
+            $table->date('manufacture_date');
+            $table->date('expire_date');
             $table->decimal('total_cost', 15, 2);
             $table->string('payment');
             $table->timestamps();

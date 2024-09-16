@@ -132,12 +132,11 @@ h2 {
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <!-- Email Address -->
                 <div class="form-group col-md-6">
-                    <label for="email">{{ __('Email') }}</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required autofocus>
-                    @if ($errors->has('email'))
-                        <span class="text-danger mt-2">{{ $errors->first('email') }}</span>
+                    <label for="contactno">{{ __('Contact Number') }}</label>
+                    <input type="text" class="form-control" id="contactno" name="contactno" value="{{ old('contactno') }}" required autofocus>
+                    @if ($errors->has('contactno'))
+                        <span class="text-danger mt-2">{{ $errors->first('contactno') }}</span>
                     @endif
                 </div>
 

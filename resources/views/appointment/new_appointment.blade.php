@@ -98,6 +98,8 @@
                       <form action="{{ route('appointment.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
+                        <div class="custom-card" id="card02pre">
+                        <h3>Main Details</h3>
                         <div class="form-group row">
                           <label for="customerSelect" class="col-sm-2 col-form-label" style="color:black;">Customer <i class="text-danger">*</i></label>
                           <div class="col-sm-6 d-flex align-items-center">
@@ -168,88 +170,146 @@
                               </div>
                           </div>
 
+                          <div id="subcategories-container"></div>
+
                             <!-- Date Selection -->
-                                    <div class="form-group row">
-                                        <label for="start_date" class="col-sm-2 col-form-label" style="color:black;">Date <i class="text-danger">*</i></label>
-                                        <div class="col-md-6">
-                                            <input type="date" class="form-control" id="start_date" name="start_date" required>
-                                        </div>
-                                    </div>
+                            <div class="form-group row">
+                                <label for="start_date" class="col-sm-2 col-form-label" style="color:black;">Date <i class="text-danger">*</i></label>
+                                <div class="col-md-6">
+                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                </div>
+                            </div>
 
 
 
-                                    <!-- Time Slot Selection -->
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" style="color:black;">Time Slots <i class="text-danger">*</i></label>
-                                        <div class="col-md-6">
-                                            <div id="timeSlots">
+                            <!-- Time Slot Selection -->
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" style="color:black;">Time Slots <i class="text-danger">*</i></label>
+                                <div class="col-md-6">
+                                    <div id="timeSlots">
                                                 <!-- Time slots will be dynamically populated here -->
-                                            </div>
-                                            <input type="hidden" id="appointment_time" name="appointment_time" required>
-                                        </div>
                                     </div>
+                                    <input type="hidden" id="appointment_time" name="appointment_time" required>
+                                </div>
+                            </div>
 
                                     <!-- Appointment Time Display -->
-                                    <div class="form-group row">
-                                        <label for="appointmentTime" class="col-sm-2 col-form-label" style="color:black;">Appointment Time <i class="text-danger">*</i></label>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control" id="appointmentTime" name="appointment_time" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                    <label for="main_dresser" class="col-sm-2 col-form-label" style="color:black;">Main Dresser <i class="text-danger">*</i></label>
-                                    <div class="col-md-6">
-                                        <select id="main_dresser" name="main_dresser" class="form-control" required>
-                                            <option value="">Select Main Dresser</option>
-                                            <!-- Options will be dynamically populated here -->
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-
-                            <!-- Assistant 1 Name -->
                             <div class="form-group row">
-                                <label for="assistant_1" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger">*</i></label>
+                                <label for="appointmentTime" class="col-sm-2 col-form-label" style="color:black;">Appointment Time <i class="text-danger">*</i></label>
                                 <div class="col-md-6">
-                                    <select class="form-control" id="assistant_1" name="assistant_1_name">
-                                        <option value="">Select Assistant</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="appointmentTime" name="appointment_time" readonly>
                                 </div>
                             </div>
 
-                            <!-- Assistant 2 Name -->
-                            <div class="form-group row">
-                                <label for="assistant_2" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger"></i></label>
-                                <div class="col-md-6">
-                                    <select class="form-control" id="assistant_2" name="assistant_2_name">
-                                        <option value="">Select Assistant</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Assistant 3 Name -->
-                            <div class="form-group row">
-                                <label for="assistant_3" class="col-sm-2 col-form-label" style="color:black;">Assistant <i class="text-danger"></i></label>
-                                <div class="col-md-6">
-                                    <select class="form-control" id="assistant_3" name="assistant_3_name">
-                                        <option value="">Select Assistant</option>
-                                    </select>
-                                </div>
-                            </div>
-
-
-
+                            
                           <!-- Note -->
                           <div class="form-group">
                               <label for="eventNote" class="col-form-label" style="color:black;">Note</label>
                               <textarea class="form-control" id="eventNote" name="note" placeholder="Add some note for your event"></textarea>
                           </div>
 
+                          </div>
 
                           <div class="custom-card" id="card02pre">
+                          <div class="form-group">
+                                <h3>Other Package:</h3>
+                                @foreach($packagesonly as $package)
+                                    <div>
+                                        <input type="checkbox" name="otherpackages[]" class="additional-package-checkbox" data-price="{{ $package->price }}" value="{{ $package->id }}">
+                                        <label>{{ $package->package_name }} - LKR.{{ $package->price }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                          </div>
+
+                          <div class="custom-card" id="card02pre">
+                            <div class="photographer-info">
+                                <h3>Photographer Details</h3>
+                                
+                                <div class="form-group">
+                                    <label for="photographer_name">Photographer Name:</label>
+                                    <input type="text" id="photographer_name" name="photographer_name" class="form-control" placeholder="Enter Photographer Name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="photographer_contact">Contact Number:</label>
+                                    <input type="text" id="photographer_contact" name="photographer_contact" class="form-control" placeholder="Enter Contact Number">
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="custom-card" id="card02pre">
+                                <div class="hotel-dress-option">
+                                    <h3>Going Away to Hotel to Dress</h3>
+                                    
+                                    <div class="form-group">
+                                        <input type="checkbox" id="hotel_dress" name="hotel_dress" value="1">
+                                        <label for="hotel_dress">Select if you are going away to a hotel to dress</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                          <div class="custom-card" id="card02pre">
+
+                            <h3>Payments</h3>
+
+                            <!-- Gift Voucher and Promotional Code in one row each -->
+                            <div class="form-group row" >    
+                                <label for="gift_voucher_Id" class="col-sm-2 col-form-label" style="color:black;">Gift Voucher Number</label>
+                                <div class="col-md-6">
+                                    <select name="gift_voucher_Id" class="form-control" id="gift_voucher_Id" >
+                                        <option value="">Select Gift Voucher </option>
+                                        @foreach($giftvouchers->unique('gift_voucher_Id') as $voucher)
+                                            <option value="{{ $voucher->gift_voucher_Id }}">{{ $voucher->gift_voucher_Id }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>    
+                            </div>
+
+                            <div class="form-group row"> 
+                                <label for="gift_voucher_price" class="col-sm-2 col-form-label" style="color:black;">Gift Voucher Price</label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" id="gift_voucher_price" name="gift_voucher_price" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="promotions_Id" class="col-sm-2 col-form-label" style="color:black;">Promotional Code No</label>
+                                <div class="col-md-6">
+                                    <select name="promotions_Id" class="form-control" id="promotions_Id" >
+                                        <option value="">Select Promotional Code</option>
+                                        @foreach($promotions->unique('promotions_Id') as $promotion)
+                                            <option value="{{ $promotion->promotions_Id }}">{{ $promotion->promotions_Id }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="promotional_price" class="col-sm-2 col-form-label" style="color:black;">Promotional Price</label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" id="promotional_price" name="promotional_price" readonly>
+                                </div>
+                            </div>
+
+                            <!-- Transport -->
+                            <div class="form-group row">
+                                <label for="Transport" class="col-sm-2 col-form-label" style="color:black;">Transport Cost:</label>
+                                    
+                                <div class="col-md-6">
+                                    <input type="number" id="Transport" name="Transport" class="form-control" placeholder="Enter Transpotation cost">
+                                </div>
+                            </div>
+
+                            <!-- Discount -->
+                            <div class="form-group row">
+                                <label for="Discount" class="col-sm-2 col-form-label" style="color:black;">Discount:</label>
+                                    
+                                <div class="col-md-6">
+                                    <input type="number" id="Discount" name="Discount" class="form-control" placeholder="Enter Discount">
+                                </div>
+                            </div>
 
                             <!-- Payment Method -->
                             <div class="form-group row">
@@ -270,6 +330,14 @@
                                 <label for="advancedPayment" class="col-sm-2 col-form-label" style="color:black;">Advanced Payment <i class="text-danger">*</i></label>
                                 <div class="col-md-6">
                                     <input type="number" class="form-control" id="advancedPayment" name="advanced_payment" required>
+                                </div>
+                            </div>
+
+                            <!-- Balance Payment -->
+                            <div class="form-group row">
+                                <label for="BalancePayment" class="col-sm-2 col-form-label" style="color:black;">Balance Payment</label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" id="BalancePayment" name="Balance_Payment" readonly>
                                 </div>
                             </div>
 
@@ -468,6 +536,108 @@ timeSlots.forEach(function(timeSlot) {
 </script>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for gift voucher search
+    $('#gift_voucher_Id').select2({
+        placeholder: "Select Gift Voucher",
+        allowClear: true
+    });
+
+    // On change of the selected gift voucher, fetch its price
+    $('#gift_voucher_Id').on('change', function() {
+        let giftVoucherId = $(this).val();
+
+        // Get the current total price from the input field
+        let totalPrice = parseFloat($('#totalPrice').val());
+        
+        if (giftVoucherId) {
+            // Perform AJAX request to get the gift voucher price
+            $.ajax({
+                url: '/get-gift-voucher-price/' + giftVoucherId,
+                type: 'GET',
+                success: function(data) {
+                    if (data.success) {
+
+                        let giftPrice = parseFloat(data.price);
+                        // Update the price input field with the fetched price
+                        $('#gift_voucher_price').val(giftPrice.toFixed(2));
+                        
+                        updateTotalPrice(giftPrice);
+                    } else {
+                        // Clear the price field if no voucher is found
+                        $('#gift_voucher_price').val('');
+                        updateTotalPrice();
+                    }
+                },
+                error: function(err) {
+                    console.log('Error fetching gift voucher details:', err);
+                }
+            });
+        } else {
+            // Clear the price input if no voucher is selected
+            $('#gift_voucher_price').val('');
+            updateTotalPrice();
+        }
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for searchable dropdown
+    $('#promotions_Id').select2({
+        placeholder: "Select Promotional Code",
+        allowClear: true
+    });
+
+    // Event listener for selecting a promotion ID
+    $('#promotions_Id').on('change', function() {
+        let promotionId = $(this).val();
+
+        // Get the current total price from the input field
+        let totalPrice = parseFloat($('#totalPrice').val());
+
+        if (promotionId) {
+            // AJAX request to fetch the promotional price
+            $.ajax({
+                url: '/get-promotion-price/' + promotionId, // Adjust the URL based on your route
+                type: 'GET',
+                success: function(data) {
+                    if (data.success) {
+                        // Fetch the promotional price (assuming it's a percentage)
+                        let promotionalPrice = parseFloat(data.price);
+
+                        // Calculate the discounted price (total price * promotional percentage) / 100
+                        let discountedPrice = (totalPrice * promotionalPrice) / 100;
+
+                        // Display the promotional price and discounted price
+                        $('#promotional_price').val(discountedPrice.toFixed(2)); // Display the percentage
+                        updateTotalPrice(discountedPrice);
+                        
+                    } else {
+                        alert(data.message);
+                        $('#promotional_price').val('');
+                        updateTotalPrice();
+                    }
+                },
+                error: function(err) {
+                    console.log('Error fetching promotion details:', err);
+                }
+            });
+        } else {
+            // Reset the promotional price if no promotion is selected
+            $('#promotional_price').val('');
+            updateTotalPrice();
+        }
+    });
+});
+</script>
+
+
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -482,11 +652,137 @@ $(document).ready(function() {
                 total += parseFloat(packagePrice);
             }
         });
+        // Add the prices of selected additional packages
+        $('.additional-package-checkbox:checked').each(function() {
+            var packagePrice = $(this).data('price');
+            if (packagePrice) {
+                total += parseFloat(packagePrice);
+            }
+        });
+
+        // Add the transport cost if entered
+        var transportCost = parseFloat($('#Transport').val());
+        if (!isNaN(transportCost)) {
+            total += transportCost;
+        }
+
+        // Subtract the discount if entered
+        var discount = parseFloat($('#Discount').val());
+        if (!isNaN(discount)) {
+            total -= discount;
+        }
+
+        var gift = parseFloat($('#gift_voucher_price').val());
+        if (!isNaN(gift)) {
+            total -= gift;
+        }
+        
+        var promo = parseFloat($('#promotional_price').val());
+        if (!isNaN(promo)) {
+            total -= promo;
+        }
+
+        
+
+        // Ensure the total is not negative
+        if (total < 0) {
+            total = 0;
+        }
+
+        // Update the total price field
         $('#totalPrice').val(total.toFixed(2));
+
+        // Calculate and update the balance payment
+        var advancedPayment = parseFloat($('#advancedPayment').val());
+        if (isNaN(advancedPayment)) {
+            advancedPayment = 0;
+        }
+        var balancePayment = total - advancedPayment;
+
+        if (balancePayment < 0) {
+            balancePayment = 0;
+        }
+
+        $('#BalancePayment').val(balancePayment.toFixed(2));
+    
     }
 
     // Event handler for package dropdown change
-    $('#package-select-1, #package-select-2, #package-select-3').change(updateTotalPrice);
+    $('#package-select-1, #package-select-2, #package-select-3').change(function() {
+        var selectedPackageId = $(this).val();
+        console.log("Selected Package ID: " + selectedPackageId);
+
+        // Fetch subcategories for the selected package
+        if (selectedPackageId) {
+            $.ajax({
+                url: '{{ route("getSubcategoriesByPackage") }}',
+                method: 'GET',
+                data: { package_id: selectedPackageId },
+                success: function(response) {
+                    var container = $('#subcategories-container');
+                    container.empty();
+
+                    response.subcategories.forEach(function(subcategory) {
+                        // Create dropdown for each subcategory
+                        var subcategoryHtml = `
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" style="color:black;">${subcategory.subcategory_name}:</label>
+                                <div class="col-md-6">
+                                    <select class="form-control item-select" data-subcategory-id="${subcategory.id}" name="subcategory_items[${subcategory.id}]">
+                                        <option value="">Select Item</option>
+                                    </select>
+                                </div>
+                            </div>
+                        `;
+                        container.append(subcategoryHtml);
+
+                        // Fetch items for the subcategory
+                        $.ajax({
+                            url: '{{ route("getItemsBySubcategory") }}',
+                            method: 'GET',
+                            data: { subcategory_id: subcategory.id },
+                            success: function(response) {
+                                var itemSelect = container.find(`select[data-subcategory-id="${subcategory.id}"]`);
+                                response.items.forEach(function(item) {
+                                    var option = `<option value="${item.id}">${item.Item_name}</option>`;
+                                    itemSelect.append(option);
+                                });
+                            },
+                            error: function(xhr) {
+                                console.error('Failed to fetch items:', xhr.responseText);
+                            }
+                        });
+                    });
+
+                    updateTotalPrice();
+                },
+                error: function(xhr) {
+                    console.error('Failed to fetch subcategories:', xhr.responseText);
+                }
+            });
+        } else {
+            $('#subcategories-container').empty();
+        }
+    });
+
+    // Event handler for additional package checkbox change
+    $('.additional-package-checkbox').change(function() {
+        updateTotalPrice();
+    });
+
+    // Event handler for transport cost input change
+    $('#Transport').on('input', function() {
+        updateTotalPrice();
+    });
+
+    $('#Discount').on('input', function() {
+        updateTotalPrice();
+    });
+
+
+    $('#advancedPayment').on('input', function() {
+        updateTotalPrice();
+    });
 
     // Existing service-select change event handler
     $('#service-select').change(function() {
@@ -524,10 +820,23 @@ $(document).ready(function() {
 </script>
 
 
+<script>
+    function getSelectedPackageId() {
+    // Get the package select dropdown element
+    var packageSelect = document.getElementById('package-select');
 
+    // Get the selected package ID
+    var selectedPackageId = packageSelect.value;
 
+    // Check if a valid package is selected
+    if (selectedPackageId) {
+        console.log("Selected Package ID:", selectedPackageId);
+    } else {
+        console.log("No package selected.");
+    }
+}
 
-
+</script>
 
 
 
@@ -609,46 +918,7 @@ function selectTimeSlot(timeSlot, date) {
         selectedSlot.style.backgroundColor = '#d0e9ff';
         selectedSlot.style.borderColor = '#4a90e2';
     }
-    fetchAvailableMainDressers(date, timeSlot);
-    fetchAvailableAssistants(date, timeSlot, 'assistant_1');
-    fetchAvailableAssistants(date, timeSlot, 'assistant_2');
-    fetchAvailableAssistants(date, timeSlot, 'assistant_3');
-}
-
-function fetchAvailableMainDressers(date, timeSlot) {
-    fetch(`/get-available-main-dressers?date=${date}&time_slot=${timeSlot}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Available Dressers:', data.available_dressers);
-            var mainDresserSelect = document.getElementById('main_dresser');
-            mainDresserSelect.innerHTML = '<option value="">Select Main Dresser</option>';
-
-            data.available_dressers.forEach(function(dresser) {
-                var option = document.createElement('option');
-                option.value = dresser.id;
-                option.textContent = `${dresser.firstname} ${dresser.lastname}`;
-                mainDresserSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching available dressers:', error));
-}
-
-function fetchAvailableAssistants(date, timeSlot, assistantSelectId) {
-    fetch(`/get-available-assistants?date=${date}&time_slot=${timeSlot}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(`Available Assistants for ${assistantSelectId}:`, data.available_assistants);
-            var assistantSelect = document.getElementById(assistantSelectId);
-            assistantSelect.innerHTML = '<option value="">Select Assistant</option>';
-
-            data.available_assistants.forEach(function(assistant) {
-                var option = document.createElement('option');
-                option.value = assistant.id;
-                option.textContent = `${assistant.firstname} ${assistant.lastname}`;
-                assistantSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error(`Error fetching available assistants for ${assistantSelectId}:`, error));
+    
 }
 
 </script>

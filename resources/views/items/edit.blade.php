@@ -30,6 +30,11 @@
             </div>
 
             <div class="form-group">
+                <label for="shots">Shots</label>
+                <input type="text" name="shots" id="shots" class="form-control" value="{{ old('shots', $item->shots) }}" required>
+            </div>
+
+            <div class="form-group">
                 <label for="supplier_code">Supplier Code</label>
                 <select name="supplier_code" id="supplier_code" class="form-control" required>
                     @foreach($suppliers as $supplier)

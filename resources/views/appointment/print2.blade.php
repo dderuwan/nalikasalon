@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Print Appointment</title>
+    <title>Final Appointment Bill</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             color: black;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            width: 80%;
+            width: 100%;
             margin: auto;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .header {
+        .bill {
+            width: 48%;
+            margin: 10px 1%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            display: inline-block;
+            vertical-align: top;
+            box-sizing: border-box;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .header, .footer {
             text-align: center;
-            margin-bottom: 20px;
         }
-        .header img {
+        .header img, .footer img {
             width: 100%;
             height: auto;
         }
@@ -25,214 +42,153 @@
             margin-bottom: 20px;
         }
         .info-table th, .info-table td {
-            padding: 10px;
+            padding: 8px;
             text-align: left;
-            
+            border-bottom: 1px solid #ddd;
         }
         .info-table th {
             background-color: #f2f2f2;
-            border-bottom: none;
+            font-weight: bold;
         }
-        .info-table .value-cell {
-            text-decoration-thickness: 2px;
+        .final-message {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
         }
-        .footer {
+        .signatures {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 20px;
         }
-
-        .info-table th{
-            font-weight:none;
-        }
-
-        .footer img{
-            width: 100%;
-            height: auto;
-        }
-
-        .footer div {
-            width: 45%;
-        }
-        .footer p {
-            margin: 5px 0;
-        }
-        .footer .signatures {
-            display: flex;
-            justify-content: space-between;
-        }
-        .footer .signatures div {
+        .signatures div {
             text-align: center;
             width: 45%;
-            border-top: 1px solid black;
-            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
         }
-        .notes {
-            color: red;
-            font-size: 12px;
-            margin-top: 10px;
+        .invoice-header {
+            margin-bottom: 15px;
+        }
+        .invoice-header h2 {
+            margin: 0;
+            font-size: 22px;
             text-align: center;
         }
-
-        .tr1 td {
-            border: 1px solid black;
-            padding:0px 0px 0px 10px;
+        .invoice-header p {
+            margin: 3px 0;
+            text-align: center;
+            font-size: 16px;
         }
-
-        .tr2 td{
-            border: 1px solid black;
-        }
-
-        .tr3 td{
-            border: 1px solid black;
-        }
-
-        .value-cell{
-            border: 1px solid black;
-            white-space: nowrap;
-        }
-        .empty-space {
-            height: 1px;
-            line-height: 0; /* Ensures no extra space from line height */
-            border: 0; /* Removes any borders */
-            padding: 0; /* Removes any padding */
-            margin: 0; /* Removes any margin */
-        }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="/assets/images/header.png" alt="Header Image">
-        </div>
-        <table class="info-table">
-            <tr class="tr1">
-                <th>Invoice No</th>
-                <td class="value-cell">{{ $preorder->real_time_app_no }}</td>
-                <th>Date</th>
-                <td class="value-cell">{{ \Carbon\Carbon::parse($preorder->today)->format('Y-m-d') }}</td>
-            </tr>
-            <tr class="empty-space">
-                <td>&nbsp;</td>
-            </tr>
-            <tr class="tr2" >
-                <th>Name</th>
-                <td colspan="3" class="value-cell">{{ $preorder->customer_name }}</td>
-            </tr>
-            <tr class="empty-space">
-                <td>&nbsp;</td>
-            </tr>
-            <tr class="tr3">
-                <th>Contact</th>
-                <td class="value-cell">{{ $preorder->customer_contact_1 }}</td>
-                <th>Wedding Date</th>
-                <td class="value-cell">{{ \Carbon\Carbon::parse($preorder->today)->format('Y-m-d') }}</td>
-            </tr>
-            
-            <tr>
-                <th>Package</th>
-                <td>
-                    <input type="checkbox" {{ $preorder->Package_name_1 ? 'checked' : '' }}> {{ $preorder->Package_name_1 }}<br>
-                </td>
-                <th>Bridal Dressing</th>
-                <td><input type="checkbox" {{ $preorder->bridal_dressing ? 'checked' : '' }}> {{ $preorder->bridal_dressing }}</td>
-            </tr>
-            <tr>
-                <th>Fresh Bouquet</th>
-                <td><input type="checkbox" {{ $preorder->fresh_bouquet ? 'checked' : '' }}> {{ $preorder->fresh_bouquet }}</td>
-                <th>Headdress</th>
-                <td><input type="checkbox" {{ $preorder->headdress ? 'checked' : '' }}> {{ $preorder->headdress }}</td>
-            </tr>
-            <tr>
-                <th>Jewelry</th>
-                <td><input type="checkbox" {{ $preorder->jewelry ? 'checked' : '' }}> {{ $preorder->jewelry }}</td>
-                <th>Bride's Maid</th>
-                <td><input type="checkbox" {{ $preorder->brides_maid ? 'checked' : '' }}> {{ $preorder->brides_maid }}</td>
-            </tr>
-            <tr>
-                <th>Flower Girls</th>
-                <td><input type="checkbox" {{ $preorder->flower_girls ? 'checked' : '' }}> {{ $preorder->flower_girls }}</td>
-                <th>Goingaway Dressing</th>
-                <td><input type="checkbox" {{ $preorder->goingaway_dressing ? 'checked' : '' }}> {{ $preorder->goingaway_dressing }}</td>
-            </tr>
-            <tr>
-                <th>Homecoming Dress</th>
-                <td><input type="checkbox" {{ $preorder->homecoming_dress ? 'checked' : '' }}> {{ $preorder->homecoming_dress }}</td>
-                <th>Bouquet Headdress & Jewelry</th>
-                <td><input type="checkbox" {{ $preorder->bouquet_headdress_jewelry ? 'checked' : '' }}> {{ $preorder->bouquet_headdress_jewelry }}</td>
-            </tr>
-
-            <tr>
-                <th>Photographer & Videographer</th>
-                <td colspan="3" class="value-cell">
-                    Name: {{ $preorder->photographer_name }}<br>
-                    Contact No: {{ $preorder->photographer_contact }}
-                </td>
-            </tr>
-
-            <tr class="empty-space">
-                <td>&nbsp;</td>
-            </tr>
-        
-            <tr>
-                <th>Pre Shoot Makeup</th>
-                <td><input type="checkbox" {{ $preorder->pre_shoot_makeup ? 'checked' : '' }}> {{ $preorder->pre_shoot_makeup }}</td>
-                <th>Transport</th>
-                <td class="value-cell">{{ $preorder->transport }}</td>
-            </tr>
-            <tr>
-                <th>Hair Setting</th>
-                <td><input type="checkbox" {{ $preorder->hair_setting ? 'checked' : '' }}> {{ $preorder->hair_setting }}</td>
-                <th>Total</th>
-                <td class="value-cell">{{ $preorder->Total_price }}</td>
-            </tr>
-            <tr>
-                <th>Manicure & Pedicure for Bride</th>
-                <td><input type="checkbox" {{ $preorder->manicure_pedicure ? 'checked' : '' }}> {{ $preorder->manicure_pedicure }}</td>
-                <th>Advanced</th>
-                <td class="value-cell">{{ $preorder->Advanced_price }}</td>
-            </tr>
-            <tr>
-                <th>Mother Dressing</th>
-                <td><input type="checkbox" {{ $preorder->mother_dressing ? 'checked' : '' }}> {{ $preorder->mother_dressing }}</td>
-                <th>Balance</th>
-                <td class="value-cell">{{ $preorder->balance }}</td>
-            </tr>
-        </table>
-
-        <tr class="empty-space">
-                <td>&nbsp;</td>
-            </tr>
-        <div class="footer">
-            <div>
-                <p></p>
+        <!-- First Bill -->
+        <div class="bill">
+            <div class="header">
+                <img src="/assets/images/header.png" alt="Header Image">
             </div>
+
+            <div class="invoice-header">
+                <h2>Final Appointment Bill</h2>
+                <p>Invoice No: {{ $preorder->Auto_serial_number }}</p>
+                <p>Date: {{ \Carbon\Carbon::parse($preorder->today)->format('Y-m-d') }}</p>
+            </div>
+
+            <table class="info-table">
+                <tr>
+                    <th>Customer Name</th>
+                    <td>{{ $preorder->customer_name }}</td>
+                </tr>
+                <tr>
+                    <th>Contact</th>
+                    <td>{{ $preorder->contact_number_1 }}</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>{{ $preorder->total_price }}</td>
+                </tr>
+                <tr>
+                    <th>Advanced</th>
+                    <td>{{ $preorder->advanced_payment }}</td>
+                </tr>
+                <tr>
+                    <th>Balance</th>
+                    <td>{{ $preorder->Balance_Payment }}</td>
+                </tr>
+            </table>
+
             <div class="signatures">
-                <div>
-                    <p>Authorized Signature</p>
-                </div>
-                <div>
-                    <p>Customer Signature</p>
-                </div>
+                <div>Authorized Signature</div>
+                <div>Customer Signature</div>
+            </div>
+
+            <div class="final-message">
+                Order complete. Please come again!
+            </div>
+
+            <div class="footer">
+                <img src="/assets/images/footer.png" alt="Footer Image">
             </div>
         </div>
-        <div class="notes">
-            <p>You are kindly requested to settle the balance payment before 14 days of the wedding day. If not we will consider as you have canceled the appointment.
-            Advance payment will not be refunded or not applicable to use for any other services of the salon under any circumstance and it has to be minimum Rs. 25000/-
-            This discount or offer is valid exclusively for this package and if you change the package this offer or discount will not be valid for the new package that you select.</p>
-        </div>
-        <div class="footer">
-            <img src="/assets/images/footer.png" alt="Footer Image">
+
+        <!-- Second Bill (same as first) -->
+        <div class="bill">
+            <div class="header">
+                <img src="/assets/images/header.png" alt="Header Image">
+            </div>
+
+            <div class="invoice-header">
+                <h2>Final Appointment Bill</h2>
+                <p>Invoice No: {{ $preorder->Auto_serial_number }}</p>
+                <p>Date: {{ \Carbon\Carbon::parse($preorder->today)->format('Y-m-d') }}</p>
+            </div>
+
+            <table class="info-table">
+                <tr>
+                    <th>Customer Name</th>
+                    <td>{{ $preorder->customer_name }}</td>
+                </tr>
+                <tr>
+                    <th>Contact</th>
+                    <td>{{ $preorder->contact_number_1 }}</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>{{ $preorder->total_price }}</td>
+                </tr>
+                <tr>
+                    <th>Advanced</th>
+                    <td>{{ $preorder->advanced_payment }}</td>
+                </tr>
+                <tr>
+                    <th>Balance</th>
+                    <td>{{ $preorder->Balance_Payment }}</td>
+                </tr>
+            </table>
+
+            <div class="signatures">
+                <div>Authorized Signature</div>
+                <div>Customer Signature</div>
+            </div>
+
+            <div class="final-message">
+                Order complete. Please come again!
+            </div>
+
+            <div class="footer">
+                <img src="/assets/images/footer.png" alt="Footer Image">
+            </div>
         </div>
     </div>
 
     <script>
-        window.print();  // Automatically trigger print dialog
+        window.print(); // Automatically trigger print dialog
 
-        // After printing, redirect to the appointments list
         window.onafterprint = function() {
-            window.location.href = "{{ route('RealTimepage1') }}";
+            window.location.href = "{{ route('appointments') }}";
         };
     </script>
 </body>
