@@ -59,43 +59,15 @@
         </a>
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link me-3" href="{{ route('store') }}">Store</a>
-          </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="{{ route('showApp') }}">Appointments</a>
           </li>
         </ul>
       </div>
 
-      <div class="dropdown me-3">
-        <a id="navbarDropdown" class="text-reset dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-            <div class="icon-circle">
-                @if (Auth::check() && Auth::user()->name)
-                    {{ Auth::user()->name[0] }}
-                @else
-                    <i class="fas fa-user-circle"></i> <!-- Or any default icon -->
-                @endif
-            </div>
-        </a>
-
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ route('logout') }}"
-              onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </div>
-    </div>
-
     </div>
   </nav>
-
-
 
         <main class="mb-5">
             @yield('content')

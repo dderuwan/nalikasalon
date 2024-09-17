@@ -25,22 +25,12 @@ Auth::routes();
 require __DIR__.'/auth.php';
 
 
-Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
+Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Manager|User']],function(){
 
 
     Route::get('/wellcome', [DashboardController::class, 'index'])->name('wellcome');
     Route::view('/home', 'home')->name('home');
     Route::get('/store', [HomeController::class, 'getproducts'])->name('store');
-    
-    
-    
-    //home Appoinments
-    Route::get('/showApp', [HomeAppoinmentController::class, 'showApp'])->name('showApp');
-    Route::get('/get-packages', [HomeAppoinmentController::class, 'getPackagesByService']);
-    Route::get('/get-available-time-slots', [HomeAppoinmentController::class, 'getAvailableTimeSlots']);
-    Route::get('/get-package-price', [HomeAppoinmentController::class, 'getPackagePrice']);
-    Route::post('/storeAppointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
-    Route::get('/appointment/print-and-redirect/{id}', [HomeAppoinmentController::class, 'printAndRedirect'])->name('printAndRedirect');
     
     
                
@@ -62,7 +52,9 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::put('/updateitem/{id}', [App\Http\Controllers\ItemController::class, 'update'])->name('updateitem');
      Route::delete('/deleteitem/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('deleteitem');
      Route::get('/masterstock', [App\Http\Controllers\ItemController::class, 'showMasterStock'])->name('masterstock');
-    
+     
+     
+     
      //Customer
      Route::get('/allcustomer', [App\Http\Controllers\CustomerController::class, 'index'])->name('allcustomer');
      Route::get('/createcustomer', [App\Http\Controllers\CustomerController::class, 'create'])->name('createcustomer');
@@ -81,7 +73,9 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'destroy'])->name('deletepos');
      Route::get('/pos/print-and-redirect/{id}', [App\Http\Controllers\POSController::class, 'printRedirect'])->name('printRedirect');
     
-    
+     Route::group(['middleware' => ['role:Super-Admin|Admin|Main Dresser|Manager']], function () {
+
+
      // OrderRequest module
      Route::get('/allorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'index'])->name('allorderrequests');
      Route::get('/createorderrequests', [App\Http\Controllers\RequestOrderContraller::class, 'create'])->name('orderrequests.create');
@@ -107,7 +101,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
     
      // routes/web.php
      Route::get('/api/get-order-items/{orderRequestCode}', [GinController::class, 'getOrderItems']);
-    
+     
     
      //reports
      Route::get('/orderreport', [App\Http\Controllers\reportController::class, 'orderreport'])->name('orderreport');
@@ -126,7 +120,57 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::delete('/purchaseorderdestroy/{id}', [App\Http\Controllers\reportController::class, 'purchaseorderdestroy'])->name('purchaseorderdestroy');
      Route::get('/PreOrderReport', [App\Http\Controllers\reportController::class, 'PreOrderReport'])->name('PreOrderReport');
      Route::get('/RealOrderReport', [App\Http\Controllers\reportController::class, 'RealOrderReport'])->name('RealOrderReport');
+     Route::get('/SalaryReport', [App\Http\Controllers\reportController::class, 'SalaryReport'])->name('SalaryReport');
+     Route::get('/MoyhlyFinalReport', [App\Http\Controllers\reportController::class, 'MoyhlyFinalReport'])->name('MoyhlyFinalReport');
+     Route::get('/report/generate', [App\Http\Controllers\reportController::class, 'generateReport'])->name('report.generate');
+     Route::post('/report/save-manual-entries', [App\Http\Controllers\reportController::class, 'saveManualEntries'])->name('report.saveManualEntries');
     
+    //roles
+     Route::get('/addRole', [RoleController::class, 'addRole'])->name('addRole');
+     Route::post('/storeRole', [RoleController::class, 'storeRole'])->name('storeRole');
+     Route::get('/showRole', [RoleController::class, 'showRole'])->name('showRole');
+     Route::get('/editRole/{id}', [RoleController::class, 'editRole'])->name('editRole');
+     Route::put('/updateRole/{id}', [RoleController::class, 'updateRole'])->name('updateRole');
+     Route::delete('/deleteRole/{id}', [RoleController::class, 'deleteRole'])->name('deleteRole');
+     Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
+     Route::get('/addPermission', [RoleController::class, 'addPermission'])->name('addPermission');
+     Route::post('/storePermission', [RoleController::class, 'storePermission'])->name('storePermission');
+     Route::get('/showPermission', [RoleController::class, 'showPermission'])->name('showPermission');
+     Route::get('/permissions/{id}/edit', [RoleController::class, 'edit'])->name('editPermission');
+     Route::put('/permissions/{id}', [RoleController::class, 'update'])->name('updatePermission');
+     Route::delete('/permissions/{id}', [RoleController::class, 'deletePermission'])->name('deletePermission');
+     Route::post('/assignRole', [RoleController::class, 'assignRole'])->name('assignRole');
+     Route::get('/roles/{id}/add-permission', [RoleController::class, 'addPermitionToRole'])->name('addPermitionToRole');
+     Route::put('/roles/{id}/permissions', [RoleController::class, 'givePermissionToRole'])->name('givePermissionToRole');
+
+    //salary Managment module
+     Route::get('/salary', [App\Http\Controllers\SallaryContoller::class, 'index'])->name('salary');
+     Route::get('/createsalary', [App\Http\Controllers\SallaryContoller::class, 'create'])->name('createsalary');
+     Route::get('/editsalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'edit'])->name('editsalary');
+     Route::put('/updatesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'updatess'])->name('updatesalary');
+     Route::post('/storesalary', [App\Http\Controllers\SallaryContoller::class, 'store'])->name('storesalary');
+     Route::delete('/deletesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'destroy'])->name('deletesalary');
+     Route::get('/get-employee-attendance-count', [App\Http\Controllers\SallaryContoller::class, 'getAttendanceCount'])->name('getEmployeeAttendanceCount');
+     Route::get('/get-employee-total-allowance', [App\Http\Controllers\SallaryContoller::class, 'getTotalAllowance'])->name('getEmployeeTotalAllowance');
+
+          //revenue
+     Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
+     Route::get('/api/monthly-revenue', [YourController::class, 'getMonthlyRevenue']);
+     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
+     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
+     Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
+     Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
+     Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
+    
+     //commitions
+     Route::get('/commissions-list', [AttendanceController::class, 'commissionsList'])->name('commissions-list');
+     Route::delete('/destroycommission/{id}', [AttendanceController::class, 'destroycommission'])->name('destroycommission');
+     Route::get('/editcommission/{id}', [App\Http\Controllers\AttendanceController::class, 'editcommission'])->name('editcommission');
+     Route::put('/updatecommission/{id}', [App\Http\Controllers\AttendanceController::class, 'updatecommission'])->name('updatecommission');
+
+    });
+
+
      //services
      Route::get('/services', [App\Http\Controllers\ServiceController::class, 'index'])->name('services');
      Route::get('/addservice', [App\Http\Controllers\ServiceController::class, 'create'])->name('addservice');
@@ -158,7 +202,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/getSubcategoriesByPackage', [AppointmentController::class, 'getSubcategoriesByPackage'])->name('getSubcategoriesByPackage');
      Route::get('/getItemsBySubcategory', [AppointmentController::class, 'getItemsBySubcategory'])->name('getItemsBySubcategory');
      Route::get('/show-packages', [AppointmentController::class, 'showPackages'])->name('showPackages');
-
+    
 
 
 
@@ -189,23 +233,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/editUser/{id}', [UserController::class, 'edit'])->name('user.edit');
      Route::put('/updateUser/{id}', [UserController::class, 'update'])->name('updateUser');
     
-     //roles
-     Route::get('/addRole', [RoleController::class, 'addRole'])->name('addRole');
-     Route::post('/storeRole', [RoleController::class, 'storeRole'])->name('storeRole');
-     Route::get('/showRole', [RoleController::class, 'showRole'])->name('showRole');
-     Route::get('/editRole/{id}', [RoleController::class, 'editRole'])->name('editRole');
-     Route::put('/updateRole/{id}', [RoleController::class, 'updateRole'])->name('updateRole');
-     Route::delete('/deleteRole/{id}', [RoleController::class, 'deleteRole'])->name('deleteRole');
-     Route::get('/assign_user_role', [RoleController::class, 'showUsers'])->name('assign_user_role');
-     Route::get('/addPermission', [RoleController::class, 'addPermission'])->name('addPermission');
-     Route::post('/storePermission', [RoleController::class, 'storePermission'])->name('storePermission');
-     Route::get('/showPermission', [RoleController::class, 'showPermission'])->name('showPermission');
-     Route::get('/permissions/{id}/edit', [RoleController::class, 'edit'])->name('editPermission');
-     Route::put('/permissions/{id}', [RoleController::class, 'update'])->name('updatePermission');
-     Route::delete('/permissions/{id}', [RoleController::class, 'deletePermission'])->name('deletePermission');
-     Route::post('/assignRole', [RoleController::class, 'assignRole'])->name('assignRole');
-     Route::get('/roles/{id}/add-permission', [RoleController::class, 'addPermitionToRole'])->name('addPermitionToRole');
-     Route::put('/roles/{id}/permissions', [RoleController::class, 'givePermissionToRole'])->name('givePermissionToRole');
+
      
      //HRmodule
      //attendance
@@ -219,10 +247,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::post('/attendance/{id}/update', [AttendanceController::class, 'update'])->name('attendance.update');
      Route::view('/hrm/update_attendance', 'humanResources.attendance.update_attendance')->name('update_attendance');
      Route::get('/hrm/attendance_reports', [AttendanceController::class, 'attendanceReport'])->name('attendance_reports');
-     Route::get('/commissions-list', [AttendanceController::class, 'commissionsList'])->name('commissions-list');
-     Route::delete('/destroycommission/{id}', [AttendanceController::class, 'destroycommission'])->name('destroycommission');
-     Route::get('/editcommission/{id}', [App\Http\Controllers\AttendanceController::class, 'editcommission'])->name('editcommission');
-     Route::put('/updatecommission/{id}', [App\Http\Controllers\AttendanceController::class, 'updatecommission'])->name('updatecommission');
+
 
 
      //Leave
@@ -259,15 +284,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::post('/storeemployee', [App\Http\Controllers\EmployeeController::class, 'store'])->name('storeemployee');
      Route::delete('/deleteemployee/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('deleteemployee');
 
-     //salary Managment module
-     Route::get('/salary', [App\Http\Controllers\SallaryContoller::class, 'index'])->name('salary');
-     Route::get('/createsalary', [App\Http\Controllers\SallaryContoller::class, 'create'])->name('createsalary');
-     Route::get('/editsalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'edit'])->name('editsalary');
-     Route::put('/updatesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'updatess'])->name('updatesalary');
-     Route::post('/storesalary', [App\Http\Controllers\SallaryContoller::class, 'store'])->name('storesalary');
-     Route::delete('/deletesalary/{id}', [App\Http\Controllers\SallaryContoller::class, 'destroy'])->name('deletesalary');
-     Route::get('/get-employee-attendance-count', [App\Http\Controllers\SallaryContoller::class, 'getAttendanceCount'])->name('getEmployeeAttendanceCount');
-     Route::get('/get-employee-total-allowance', [App\Http\Controllers\SallaryContoller::class, 'getTotalAllowance'])->name('getEmployeeTotalAllowance');
+
 
 
      //gift vouchers
@@ -331,6 +348,8 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::put('/updateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update'])->name('updateSalonThretment');
      Route::delete('/deleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy'])->name('deleteSalonThretment');
      Route::get('/saloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint'])->name('saloonpreorderprint');
+     Route::get('/salon/preorders', [App\Http\Controllers\SalonThretmentContoller::class, 'getPreorders'])->name('salon.preorders');
+     Route::get('/calender', [App\Http\Controllers\SalonThretmentContoller::class, 'calender'])->name('calender');
 
 
      //salon & Theartments Real time order
@@ -343,6 +362,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy1'])->name('RealdeleteSalonThretment');
      Route::get('/rsaloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
      Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
+     Route::get('/send-message', [App\Http\Controllers\SalonThretmentContoller::class, 'sendMessage'])->name('send.message');
 
      // web.php or api.php (depending on your routes file)
      Route::get('/get-available-time-slots', [AppointmentController::class, 'getAvailableTimeSlots']);
@@ -351,14 +371,7 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::get('/get-available-time', [ReaTimeAppoinmentConttroller::class, 'getAvailableTime']);
     
     
-     //revenue
-     Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
-     Route::get('/api/monthly-revenue', [YourController::class, 'getMonthlyRevenue']);
-     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
-     Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
-     Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
-     Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
-     Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
+
     
     
      Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
@@ -370,14 +383,24 @@ Route::group(['middleware'=>['role:Super Admin|Admin']],function(){
      Route::delete('/cart/delete/{title}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     
     
-     Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
     
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+// Profile routes, accessible to anyone
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+//home Appoinments
+Route::get('/showApp', [HomeAppoinmentController::class, 'showApp'])->name('showApp');
+Route::get('/get-packages', [HomeAppoinmentController::class, 'getPackagesByService']);
+Route::get('/get-available-time-slots', [HomeAppoinmentController::class, 'getAvailableTimeSlots']);
+Route::get('/get-package-price', [HomeAppoinmentController::class, 'getPackagePrice']);
+Route::post('/storeAppointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
+Route::get('/appointment/print-and-redirect/{id}', [HomeAppoinmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 

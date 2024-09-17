@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="row mb-2">
                         <div class="col-md-6">
-                            <h2>Salon & Thretment Appoinments Report</h2>
+                            <h2>Salon & Thretment Reports</h2>
                         </div>
                     </div>
                     <p class="card-text"></p>
@@ -47,31 +47,34 @@
                                     <table id="mydata" class="table">
                                         <thead>
                                             <tr>
-                                                <th style="color: black;">Date</th>
                                                 <th style="color: black;">Order ID</th>
                                                 <th style="color: black;">Customer Code</th>
                                                 <th style="color: black;">Service</th>
                                                 <th style="color: black;">Package</th>
+                                                <th style="color: black;">Appointment Date</th>
+                                                <th style="color: black;">Discount</th>
                                                 <th style="color: black;">Total Price</th>
+                                                <th style="color: black;">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($realtime as $gin)
+                                            @foreach ($preorders as $gin)
                                             <tr>
-                                                <td>{{ $gin->today }}</td>
                                                 <td>{{ $gin->Booking_number }}</td>
-                                                <td>{{ $gin->customer_id}}</td>
+                                                <td>{{ $gin->customer_name }}</td>
                                                 <td>{{ $gin->service_id }}</td>
                                                 <td>{{ $gin->package_id }}</td>
+                                                <td>{{ $gin->today }}</td>
+                                                <td>{{ $gin->Discount }}</td>
                                                 <td>{{ $gin->total_price }}</td>
-                                                
+                                                <td>{{ "Completed" }}</td>
                                             </tr>
-                                        @endforeach
+                                            @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="7" style="text-align:right">Total:</th>
-                                                <th colspan="2" id="totalCost"></th>
+                                                <th id="totalCost"></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -84,7 +87,6 @@
         </div>
     </div>
 </main>
-
 
 <script>
 $(document).ready(function() {
@@ -120,12 +122,12 @@ $(document).ready(function() {
             var api = this.api();
 
             // Calculate total price (column index 6 for total_price)
-            var total = api.column(5, { page: 'current' }).data().reduce(function (a, b) {
+            var total = api.column(6, { page: 'current' }).data().reduce(function (a, b) {
                 return parseFloat(a) + parseFloat(b);
             }, 0);
 
             // Update the total cost in the footer
-            $(api.column(5).footer()).html('LKR ' + total.toFixed(2));
+            $(api.column(6).footer()).html('LKR ' + total.toFixed(2));
         }
 
     });
@@ -135,7 +137,7 @@ $(document).ready(function() {
         var endDate = $('#end-date').val();
  
         // Filter the table data based on date range
-        var filteredData = @json($realtime).filter(function(order) {
+        var filteredData = @json($preorders).filter(function(order) {
             var orderDate = order.today;
             return orderDate >= startDate && orderDate <= endDate;
         });
@@ -144,13 +146,12 @@ $(document).ready(function() {
         table.clear();
         filteredData.forEach(function(order) {
             table.row.add([
-                order.Auto_serial_number,
+                order.Booking_number,
                 order.customer_name,
+                order.service_id,
                 order.package_id,
-                order.Package_name_1,
-                order.Appoinment_date,
-                order.Appointment_time,
-                order.advanced_payment,
+                order.today,
+                order.Discount,
                 order.total_price,
                 order.status
             ]);

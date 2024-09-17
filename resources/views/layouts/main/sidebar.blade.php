@@ -149,6 +149,18 @@
                     <span class="ml-3 item-text">Salon & Thretment Report</span><span class="sr-only">(current)</span>
                   </a>
                 </li>
+
+                <li class="nav-item mb-2">
+                  <a href="{{route('SalaryReport')}}" class="sidebar_text text-decoration-none"  >
+                    <span class="ml-3 item-text">Salary Report</span><span class="sr-only">(current)</span>
+                  </a>
+                </li>
+
+                <li class="nav-item mb-2">
+                  <a href="{{route('MoyhlyFinalReport')}}" class="sidebar_text text-decoration-none"  >
+                    <span class="ml-3 item-text">Monthly Final Report</span><span class="sr-only">(current)</span>
+                  </a>
+                </li>
                 
               </ul>
             </li>
@@ -294,9 +306,15 @@
                       <span class="ml-3 item-text">Saloon Appointments</span><span class="sr-only">(current)</span>
                   </a>
                   <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="appoinment">
+
+                      <li class="nav-item mb-2">
+                          <a href="{{ route('calender') }}" class="sidebar_text">
+                              <span class="ml-3 item-text">Saloon Pre Orders</span><span class="sr-only">(current)</span>
+                          </a>
+                      </li>
                       <li class="nav-item mb-2">
                           <a href="{{ route('SalonThretment') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Saloon Pre Order</span><span class="sr-only">(current)</span>
+                              <span class="ml-3 item-text">Saloon Pre Order List</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
                       <li class="nav-item mb-2">

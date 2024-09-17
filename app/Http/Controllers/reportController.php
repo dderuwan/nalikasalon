@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\Supplier;
 use App\Models\Customer;
 use App\Models\Gin;
+use App\Models\Salary;
 use App\Models\OrderRequest;
 use App\Models\OrderRequestItem;
 use App\Models\Preorder;
@@ -163,9 +164,136 @@ class reportController extends Controller
     
     public function RealOrderReport()
     {
-        $realtime = SalonThretment::all();
-        return view('reports.realtimeorder', compact('realtime'));
+        $preorders = SalonThretment::all();
+        return view('reports.realtimeorder', compact('preorders'));
 
     }
+
+    public function SalaryReport()
+    {
+        $salaries = Salary::with('employee')->get();
+        return view('reports.salary', compact('salaries'));
+
+    }
+
+    public function MoyhlyFinalReport()
+    {
+        return view('reports.FinalReport');
+
+    }
+
+    public function generateReport(Request $request)
+    {
+        // Validate the date inputs
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+    
+        // Get the start and end dates
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+    
+        // Fetch the required data from your models based on the date range
+        $itemSales = Order::whereBetween('date', [$startDate, $endDate])->sum('total_cost_payment');
+        $cogs = Gin::whereBetween('date', [$startDate, $endDate])->sum('total_cost_payment');
+        $salonIncome = SalonThretment::whereBetween('today', [$startDate, $endDate])->sum('total_price');
+        
+        $totalAdvancePriceToday = BridelPreorder::whereBetween('today', [$startDate, $endDate])
+        ->where('status', 'NotCompleted')
+        ->sum('advanced_payment');
+        $totalbalancedPriceToday = BridelPreorder::whereBetween('today', [$startDate, $endDate])
+        ->where('status', 'completed')
+        ->sum('total_price');
+    
+        $totalSalaries = Salary::whereBetween('created_at', [$startDate, $endDate])->sum('gross_salary');
+    
+        // Default values for manual entries
+        $operationalCost = 0;
+        $otherExpenses = 0; 
+        $otherIncomes = 0;
+    
+        // Calculate totals
+        $totalExpenses = $cogs + $totalSalaries + $operationalCost + $otherExpenses;
+        $totalIncome = $itemSales + $totalAdvancePriceToday + $totalbalancedPriceToday + $salonIncome + $otherIncomes;
+        $netProfitOrLoss = $totalIncome - $totalExpenses;
+    
+        // Store dates in the session
+        $request->session()->put('start_date', $startDate);
+        $request->session()->put('end_date', $endDate);
+    
+        // Pass data to the view
+        return view('reports.FinalReport', [
+            'reportData' => [
+                'itemSales' => $itemSales,
+                'cogs' => $cogs,
+                'totalAdvancePriceToday' => $totalAdvancePriceToday,
+                'totalbalancedPriceToday' => $totalbalancedPriceToday,
+                'salonIncome' => $salonIncome,
+                'totalSalaries' => $totalSalaries,
+                'operationalCost' => $operationalCost,
+                'otherExpenses' => $otherExpenses,
+                'totalExpenses' => $totalExpenses,
+                'otherIncomes' => $otherIncomes,
+                'totalIncome' => $totalIncome,
+                'netProfitOrLoss' => $netProfitOrLoss,
+            ]
+        ]);
+    }
+    
+    public function saveManualEntries(Request $request)
+    {
+        // Validate manual entries
+        $request->validate([
+            'other_incomes' => 'nullable|numeric',
+            'operational_cost' => 'nullable|numeric',
+            'other_expenses' => 'nullable|numeric',
+        ]);
+    
+        // Calculate the values from the request
+        $otherIncomes = $request->input('other_incomes', 0);
+        $operationalCost = $request->input('operational_cost', 0);
+        $otherExpenses = $request->input('other_expenses', 0);
+    
+        // Fetch the previous report data
+        $startDate = $request->session()->get('start_date');
+        $endDate = $request->session()->get('end_date');
+    
+        $itemSales = Order::whereBetween('date', [$startDate, $endDate])->sum('total_cost_payment');
+        $cogs = Gin::whereBetween('date', [$startDate, $endDate])->sum('total_cost_payment');
+        $salonIncome = SalonThretment::whereBetween('today', [$startDate, $endDate])->sum('total_price');
+        
+        $totalAdvancePriceToday = BridelPreorder::whereBetween('today', [$startDate, $endDate])
+        ->where('status', 'NotCompleted')
+        ->sum('advanced_payment');
+        $totalbalancedPriceToday = BridelPreorder::whereBetween('today', [$startDate, $endDate])
+        ->where('status', 'completed')
+        ->sum('total_price');
+    
+        $totalSalaries = Salary::whereBetween('created_at', [$startDate, $endDate])->sum('gross_salary');
+    
+        // Recalculate totals with manual entries
+        $totalExpenses = $cogs + $totalSalaries + $operationalCost + $otherExpenses;
+        $totalIncome = $itemSales + $totalAdvancePriceToday + $totalbalancedPriceToday + $salonIncome + $otherIncomes;
+        $netProfitOrLoss = $totalIncome - $totalExpenses;
+    
+        // Pass data to the view with manual entries
+        return view('reports.FinalReport', [
+            'reportData' => [
+                'itemSales' => $itemSales,
+                'cogs' => $cogs,
+                'totalAdvancePriceToday' => $totalAdvancePriceToday,
+                'totalbalancedPriceToday' => $totalbalancedPriceToday,
+                'salonIncome' => $salonIncome,
+                'totalSalaries' => $totalSalaries,
+                'operationalCost' => $operationalCost,
+                'otherExpenses' => $otherExpenses,
+                'totalExpenses' => $totalExpenses,
+                'otherIncomes' => $otherIncomes,
+                'totalIncome' => $totalIncome,
+                'netProfitOrLoss' => $netProfitOrLoss,
+            ]
+        ]);
+    }    
 
 }

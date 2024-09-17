@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="row mb-2">
                 <div class="col-md-6">
-                    <h2>Salon & Thretments</h2>
+                    <h2>Salon & Thretments List</h2>
                 </div>
                 <div class="col-md-6">
                     @if ($message = Session::get('success'))
@@ -16,9 +16,7 @@
                     </div>
                     @endif
                 </div>
-                <div class="col-md-6">
-                    <a href="{{ route('createSalonThretment') }}" class="btn btn-primary mb-3">Add Booking</a>
-                </div>
+                
             </div>
             <p class="card-text"></p>
             <div class="row my-4">

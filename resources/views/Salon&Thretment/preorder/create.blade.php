@@ -471,9 +471,6 @@ $(document).ready(function() {
         }
 
         
-
-        
-
         // Ensure the total is not negative
         if (total < 0) {
             total = 0;

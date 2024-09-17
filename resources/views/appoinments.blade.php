@@ -281,7 +281,7 @@
                                       <option value="">Select Service</option>
                                       @foreach($services as $service)
                                           <option value="{{ $service->service_code }}" data-name="{{ $service->service_name }}">
-                                              {{ $service->service_code }} - {{ $service->service_name }}
+                                                {{ $service->service_name }}
                                           </option>
                                       @endforeach
                                   </select>
@@ -347,15 +347,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
             <!-- Section 3: Customer Details -->
             <div id="section3" class="section">
                 <div class="form-container13">
@@ -383,50 +374,17 @@
 
                     <div>
                         <button class="btn btn-secondary" onclick="previousSection(2)">Back</button>
-                        <button class="btn btn-primary" onclick="nextSection(4)">Next</button>
+                        <button class="btn btn-primary" onclick="validateAndNextSection(4)">Next</button>
                     </div>
                     
                 </div>
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- Section 4: Payment and Order Confirmation -->
             <div id="section4" class="section">
                 <div class="form-container13">
                     <h3>Payment and Order Confirmation</h3>
-                    <div class="form-group row">
-                        <label for="paymentMethod" class="col-sm-2 col-form-label" style="color:black;">Payment Method <i class="text-danger">*</i></label>
-                        <div class="col-md-6">
-                            <select class="form-control" id="paymentMethod" name="payment_method" required>
-                                <option value="">Select Payment Method</option>
-                                <option value="credit_card">Credit Card</option>
-                                <option value="debit_card">Debit Card</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Advanced Payment -->
-                    <div class="form-group row">
-                        <label for="advancedPayment" class="col-sm-2 col-form-label" style="color:black;">Advanced Payment <i class="text-danger">*</i></label>
-                            <div class="col-md-6">
-                                <input type="number" class="form-control" id="advance_price" name="advance_price" min="0" required>
-                            </div>
-                    </div>
 
                     <!-- Total Price -->
                     <div class="form-group row">
@@ -435,12 +393,13 @@
                             <input type="text" class="form-control" id="total_price" name="total_price" readonly>
                         </div>
                     </div>
+                    
                     <!-- Hidden input to store package price -->
                     <input type="hidden" id="package_price" name="package_price">
 
                     <div>
                         <button class="btn btn-secondary" onclick="previousSection(3)">Back</button>
-                        <button class="btn btn-success">Confirm Appointment</button>
+                        <button type="submit" class="btn btn-success">Confirm Appointment</button>
                     </div>
                     
                 </div>
@@ -453,60 +412,65 @@
 </div>
 
 <script>
-    // Object to store selected service details
-    let selectedService = {};
-    let packagePrice = 0;
+  document.getElementById('service-select').addEventListener('change', function() {
+    // Get the selected service code
+    var serviceCode = this.value;
 
-    // Function to handle service selection and fetch packages
-    document.getElementById('service-select').addEventListener('change', function() {
-        const selectedServiceCode = this.value; // Get the selected service_code
-        selectedService.service_code = selectedServiceCode; // Store the selected service code
+    if (serviceCode) {
+        // Make an AJAX call to fetch packages for the selected service
+        fetch(`/get-packages?service_code=${serviceCode}`)
+            .then(response => response.json())
+            .then(data => {
+                var packageSelect = document.getElementById('package');
+                
+                // Clear the package dropdown
+                packageSelect.innerHTML = '<option value="">Select Package</option>';
+                
+                // Populate the package dropdown with the fetched packages
+                data.packages.forEach(function(packageItem) {
+                    var option = document.createElement('option');
+                    option.value = packageItem.id; // Assuming the package id is needed
+                    option.textContent = packageItem.package_name; // Assuming package_name exists
+                    packageSelect.appendChild(option);
+                });
 
-        // Send AJAX request to fetch packages based on selected service
-        fetchPackages(selectedService.service_code);
-    });
-
-    function fetchPackages(serviceCode) {
-    const packageSelect = document.getElementById('package');
-    axios.get(`/get-packages`, {
-        params: {
-            service_code: serviceCode
-        }
-    })
-    .then(response => {
-        const packages = response.data.packages;
-        packageSelect.innerHTML = '<option value="">Select Package</option>';
-        packages.forEach(package => {
-            packageSelect.innerHTML += `<option value="${package.id}" data-price="${package.price}">${package.package_name}</option>`;
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching packages:', error);
-        alert('There was an error fetching the packages.');
-    });
+                // Reset the total price field
+                document.getElementById('total_price').value = '';
+            })
+            .catch(error => {
+                console.error('Error fetching packages:', error);
+            });
+    } else {
+        // Clear the package dropdown and reset the total price field if no service is selected
+        document.getElementById('package').innerHTML = '<option value="">Select Package</option>';
+        document.getElementById('total_price').value = '';
     }
+});
 
-    // Function to handle package selection and display the price
-    document.getElementById('package').addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            packagePrice = parseFloat(selectedOption.getAttribute('data-price')); // Get the price from the data attribute
-            document.getElementById('total_price').value = packagePrice.toFixed(2); // Display the price in the total price field
-            document.getElementById('package_price').value = packagePrice.toFixed(2);
-            updateTotalPrice(); // Update the total price field based on the advanced payment
-        });
+// Event listener for package selection to fetch and display package price
+document.getElementById('package').addEventListener('change', function() {
+    var packageId = this.value;
 
-        // Function to handle advanced payment and update total price
-        document.getElementById('advance_price').addEventListener('input', function() {
-            updateTotalPrice();
-        });
+    if (packageId) {
+        // Make an AJAX call to fetch the price of the selected package
+        fetch(`/get-package-price?package_id=${packageId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the Total Price field with the fetched package price
+                document.getElementById('total_price').value = data.price;
+            })
+            .catch(error => {
+                console.error('Error fetching package price:', error);
+            });
+    } else {
+        // Clear the total price if no package is selected
+        document.getElementById('total_price').value = '';
+    }
+});
 
-        function updateTotalPrice() {
-            const advancePrice = parseFloat(document.getElementById('advance_price').value) || 0;
-            const totalPrice = packagePrice - advancePrice;
-            document.getElementById('total_price').value = totalPrice.toFixed(2); // Update the total price field
-        }
 
 </script>
+
 
 <script>
     function nextSection(sectionNumber) {
@@ -523,108 +487,77 @@
 
 
 
-<script>    
-document.getElementById('start_date').addEventListener('change', function() {
-    var date = this.value;
-    if (date) {
-        console.log('Fetching available time slots for date:', date);
-        fetchAvailableTimeSlots(date);
-    }
-});
+<script>
+    // Event listener for date and service change
+document.getElementById('start_date').addEventListener('change', handleDateOrServiceChange);
+document.getElementById('service-select').addEventListener('change', handleDateOrServiceChange);
 
-document.getElementById('start_date').addEventListener('change', function() {
-    var date = this.value;
-    var serviceSelect = document.getElementById('service-select');
-    var serviceId = serviceSelect.value;
+function handleDateOrServiceChange() {
+    var date = document.getElementById('start_date').value;
+    var serviceId = document.getElementById('service-select').value;
+
     if (date && serviceId) {
         console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
         fetchAvailableTimeSlots(date, serviceId);
+    } else {
+        console.log('Please select both date and service to fetch available time slots.');
     }
-});
+}
 
+// Fetch available time slots from the server
 function fetchAvailableTimeSlots(date, serviceId) {
-    console.log(`Fetching available time slots for date: ${date} and service: ${serviceId}`);
     fetch(`/get-available-time-slots?date=${date}&service_id=${serviceId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                throw new Error('Network response was not ok: ' + response.statusText);
             }
             return response.json();
         })
         .then(data => {
             console.log('Available time slots data:', data);
             var timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = '';
+            timeSlotsContainer.innerHTML = ''; // Clear previous time slots
 
-            data.available_time_slots.forEach(function(timeSlot) {
-                var timeSlotDiv = document.createElement('div');
-                timeSlotDiv.className = 'time-slot';
-                timeSlotDiv.textContent = timeSlot;
-                timeSlotDiv.addEventListener('click', function() {
-                    selectTimeSlot(timeSlot, date);
+            if (data.available_time_slots.length > 0) {
+                // Populate available time slots
+                data.available_time_slots.forEach(function(timeSlot) {
+                    var timeSlotDiv = document.createElement('div');
+                    timeSlotDiv.className = 'time-slot';
+                    timeSlotDiv.textContent = timeSlot;
+                    
+                    // Add click event to select time slot
+                    timeSlotDiv.addEventListener('click', function() {
+                        selectTimeSlot(timeSlot);
+                    });
+
+                    timeSlotsContainer.appendChild(timeSlotDiv);
                 });
-                timeSlotsContainer.appendChild(timeSlotDiv);
-            });
-
-            if (data.available_time_slots.length === 0) {
-                console.log('No available time slots found.');
+            } else {
+                timeSlotsContainer.innerHTML = '<p>No available time slots for the selected date and service.</p>';
             }
         })
         .catch(error => console.error('Error fetching time slots:', error));
 }
 
-document.getElementById('service').addEventListener('change', function() {
-    var serviceId = this.value;
-    var date = document.getElementById('start_date').value;
-    if (date && serviceId) {
-        console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
-        fetchAvailableTimeSlots(date, serviceId);
-    }
-});
-
-
-
-function selectTimeSlot(timeSlot, date) {
-    console.log(`Selected time slot: ${timeSlot} on date: ${date}`);
+// Handle time slot selection
+function selectTimeSlot(timeSlot) {
     document.getElementById('appointment_time').value = timeSlot;
     document.getElementById('appointmentTime').value = timeSlot;
+
+    // Reset the styles for all time slots
     var timeSlots = document.querySelectorAll('.time-slot');
     timeSlots.forEach(slot => {
         slot.style.backgroundColor = '#fff';
         slot.style.borderColor = '#ccc';
     });
+
+    // Highlight the selected time slot
     var selectedSlot = [...timeSlots].find(slot => slot.textContent === timeSlot);
     if (selectedSlot) {
         selectedSlot.style.backgroundColor = '#d0e9ff';
         selectedSlot.style.borderColor = '#4a90e2';
     }
 }
-
-$(document).ready(function() {
-    let totalPrice = 0;
-
-    function updateTotalPrice() {
-        var total = 0;
-        $('#package').each(function() {
-            var packagePrice = $(this).find('option:selected').data('price');
-            if (packagePrice) {
-                total += parseFloat(packagePrice);
-            }
-        });
-        $('#totalPrice').val(total.toFixed(2));
-    }
-
-    // When advance price is entered, decrease the total price
-    $('#advance-price').on('input', function() {
-        updateTotalPrice();
-    });
-
-    function updateTotalPrice() {
-        let advancePrice = parseFloat($('#advance-price').val()) || 0;
-        let finalPrice = totalPrice - advancePrice;
-        $('#total-price').val(finalPrice.toFixed(2)); // Display final price
-    }
-});
 
 </script>
 
@@ -647,23 +580,29 @@ $(document).ready(function() {
             }
         });
 
-        // On entering advance price, update the total price
-        $('#advance_price').on('input', function() {
-            var totalPrice = parseFloat($('#total_price').val());
-            var advancePrice = parseFloat($(this).val());
-
-            if (!isNaN(totalPrice) && !isNaN(advancePrice)) {
-                var remainingAmount = totalPrice - advancePrice;
-                $('#total_price').val(remainingAmount.toFixed(2)); // Update total price after advance payment
-            }
-        });
+        
     });
 
 </script>
 
+<script>
+    function validateAndNextSection(sectionNumber) {
+    // Get the form container or parent of the fields that need to be validated
+    var section = document.querySelector('#section3 .form-container13');
+
+    // Check if all required fields in the section are valid
+    if (section.checkValidity()) {
+        // If valid, proceed to the next section
+        nextSection(sectionNumber);
+    } else {
+        // If invalid, trigger form validation and show feedback
+        section.reportValidity();
+    }
+}
+
+</script>
+
+@endsection
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
-@endsection

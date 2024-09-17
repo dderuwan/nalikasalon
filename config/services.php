@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'sms' => [
+        'base_url' => env('SMS_API_BASE_URL'),
+        'api_token' => env('SMS_API_TOKEN'),
+        'ca_cert_path' => env('CA_CERT_PATH'), // Path to CA bundle
+    ],
+
 ];

@@ -13,6 +13,9 @@ use App\Models\Item;
 use App\Models\TimeSlotBridel;
 use Carbon\Carbon;
 use App\Models\Commission;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class SalonThretmentContoller extends Controller
 {
@@ -32,7 +35,7 @@ class SalonThretmentContoller extends Controller
 
     public function store(Request $request){
 
-        //dd($request);
+        dd($request);
         $request->validate([
             'contact_number_1' => 'required|string',
             'service_id' => 'required|string',
@@ -101,6 +104,28 @@ class SalonThretmentContoller extends Controller
         }
     }
 
+    public function calender(){
+        return view('Salon&Thretment.preorder.calender');
+    }
+
+    public function getPreorders()
+    {
+        // Fetch all bookings with 'preOrder' status
+        $bookings = SalonThretment::where('status', 'preOrder')
+                    ->get(['Appoinment_date as start', 'customer_name as title', 'Appointment_time']);
+
+        // Map the bookings into events array
+        $events = $bookings->map(function ($booking) {
+            return [
+                'title' => $booking->title,  // Customer name as the event title
+                'start' => $booking->start,  // Appointment date as the event start
+                'appointment_time' => $booking->Appointment_time,  // Appointment time as additional attribute
+            ];
+        });
+
+        // Return the events as a JSON response
+        return response()->json($events);
+    }
 
     //real time section
 
@@ -154,8 +179,11 @@ class SalonThretmentContoller extends Controller
                     'total_price'=> $request->total_price,
                     'status'=> "RealTimeOrder",
                 ]);
-    
 
+                if ($preorder) {
+                    $message = 'Your appointment is confirmed for ' . $preorder->today . ' at ' . $preorder->Appointment_time . '. Thank you for choosing our service.';
+                    $this->sendMessage($preorder->contact_number_1, $message);
+                }
 
             } catch (\Exception $e) {
                 \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
@@ -169,6 +197,46 @@ class SalonThretmentContoller extends Controller
             return redirect()->route('RealSalonThretment')->withErrors('Failed to create appointment.');
         }
     }
+
+    protected function sendMessage($contact, $msg)
+    {
+        $apiToken = env('RICHMO_API_TOKEN');
+        $senderName = 'Bridalhouse';
+        $message = $msg;
+        $cacert = env('CA_CERT_PATH'); // Use the CA bundle path from the .env file
+    
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => "Bearer $apiToken"
+            ])->withOptions([
+                'verify' => $cacert // Use the CA bundle
+            ])->get('https://portal.richmo.lk/api/sms/send/', [
+                'dst' => $contact,
+                'from' => $senderName,
+                'msg' => $message
+            ]);
+    
+            if ($response->successful()) {
+                $responseData = $response->json();
+                // Log::info('SMS sent successfully:', $responseData);
+    
+                if ($responseData['message'] === 'success') {
+                    // SMS was sent successfully
+                } else {
+                    // Log::warning('Unexpected response:', $responseData);
+                }
+            } else {
+                $error = $response->json();
+                // Log::error('SMS sending failed:', $error);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error sending SMS:', ['error' => $e->getMessage()]);
+        }
+    }
+    
+
+
+
 
     private function generateBookingId1()
     {
