@@ -52,9 +52,6 @@
                                         
                                         <td>
 
-                                            <!-- Edit Button -->
-                                            <a href="{{ route('editpackage', $service->id) }}" class="btn btn-primary"><i class="fe fe-edit fe-16"></i></a>
-
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger" onclick="confirmDelete({{ $service->id }})"><i class="fe fe-trash fe-16"></i></button>
                                             <form id="delete-form-{{ $service->id }}" action="{{ route('deleteSalonThretment', $service->id) }}" method="POST" style="display:none;">

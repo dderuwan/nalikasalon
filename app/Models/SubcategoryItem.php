@@ -25,7 +25,7 @@ class SubcategoryItem extends Model
 
     public function subcategory()
     {
-        return $this->belongsTo(BridelSubCtegory::class); // Ensure you have a Subcategory model
+        return $this->belongsTo(BridelSubCategory::class); // Ensure you have a Subcategory model
     }
 
     public function item()

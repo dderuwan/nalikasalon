@@ -52,22 +52,22 @@
                                     <div class="custom-card-body-right">
                                         <!-- Custom Section for Customer Search and Add -->
                                         <div class="customer-section mb-3">
-    <div class="input-group-yt">
-        <select name="customer_contact_number" class="form-control" id="user_id" required>
-            <option value="">Select Customer</option>
-            @foreach($customers->unique('id') as $customer)
-                <option value="{{ $customer->contact_number_1 }}" data-name="{{ $customer->name }}" data-code="{{ $customer->id }}">
-                    {{ $customer->contact_number_1 }}
-                </option>
-            @endforeach
-        </select>
-        <button class="btn btn-outline-secondary" type="button" id="add-customer-btn">
-            <i class="fe fe-10 fe-plus"></i>
-        </button>
-    </div>
-    <div id="customer-name-display" class="mb-3 mt-3 ml-2" style="font-weight: bold;"></div>
-    <input type="hidden" name="customer_code" id="customer_code">
-</div>
+                                            <div class="input-group-yt">
+                                                <select name="customer_contact_number" class="form-control" id="user_id" required>
+                                                    <option value="">Select Customer</option>
+                                                    @foreach($customers->unique('id') as $customer)
+                                                        <option value="{{ $customer->contact_number_1 }}" data-name="{{ $customer->name }}" data-code="{{ $customer->id }}">
+                                                            {{ $customer->contact_number_1 }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <button class="btn btn-outline-secondary" type="button" id="add-customer-btn">
+                                                    <i class="fe fe-10 fe-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div id="customer-name-display" class="mb-3 mt-3 ml-2" style="font-weight: bold;"></div>
+                                            <input type="hidden" name="customer_code" id="customer_code">
+                                        </div>
 
 
 
@@ -595,6 +595,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
 </script>
+
+<style>
+    
+</style>
 
 
 @endsection

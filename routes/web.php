@@ -160,7 +160,6 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
      Route::get('/api/daily-revenue-column-chart', [RevenueController::class, 'getDailyRevenueForColumnChart']);
      Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
-     Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
     
      //commitions
      Route::get('/commissions-list', [AttendanceController::class, 'commissionsList'])->name('commissions-list');
@@ -314,12 +313,11 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
      Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
      Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
-     Route::get('/appointment/print-and-redirect/{id}', [AppointmentController::class, 'printAndRedirect'])->name('printAndRedirect');
      Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
      Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
      Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
      Route::delete('/preorders/{id}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('deletepreorder');
-     
+     Route::get('/preorders/print-and-redirects/{id}', [App\Http\Controllers\AppointmentController::class, 'printAndRedirect'])->name('printAndRedirectBridel');
 
      Route::get('/get-appointments', [BridalAppointmentController::class, 'getAppointments'])->name('getAppointments');
      Route::get('/get-appointment-details', [BridalAppointmentController::class, 'getAppointmentDetails'])->name('getAppointmentDetails');

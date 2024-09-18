@@ -21,6 +21,8 @@ use App\Models\AdditionalPackage;
 use App\Models\SubcategoryItem;
 use App\Models\bridelpreorder;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 class AppointmentController extends Controller
 {
@@ -200,9 +202,10 @@ class AppointmentController extends Controller
 
     public function showPreOrderDetails($id)
     {
-        $preorder = bridelpreorder::findOrFail($id);
+        $preorder = bridelpreorder::with(['additionalPackages', 'subcategoryItems'])->findOrFail($id);
         return view('appointment.showPreOrderDetails', compact('preorder'));
     }
+
 
 
 
@@ -299,6 +302,19 @@ class AppointmentController extends Controller
                     }
                 }
 
+                // Send SMS after order confirmation
+                $formattedContact = $this->formatContactNumber($preorder->contact_number_1);
+
+                $msg = "Hello {$preorder->customer_name},\n\nYour order is confirmed!\n"
+                    . "Booking Number: {$preorder->Auto_serial_number}\n"
+                    . "Appointment Date: {$preorder->Appoinment_date}\n\n"
+                    . "Thank you for choosing our salon! We look forward to seeing you soon.";
+
+                // Call sendMessage function to send the SMS
+                $this->sendMessage($formattedContact, $msg);
+
+                
+
                 \Log::info('Additional packages and subcategory items saved successfully.');
 
 
@@ -309,9 +325,50 @@ class AppointmentController extends Controller
         });
     
         if ($preorder) {
-            return redirect()->route('printAndRedirect', ['id' => $preorder->id]);
+            return redirect()->route('printAndRedirectBridel', ['id' => $preorder->id]);
         } else {
             return redirect()->route('Appoinments')->withErrors('Failed to create appointment.');
+        }
+    }
+
+    // Function to format contact number
+    protected function formatContactNumber($contact)
+    {
+        $contact = preg_replace('/\D/', '', $contact); // Remove any non-digit characters
+
+        if (strpos($contact, '0') === 0) {
+            $contact = substr($contact, 1); // Remove leading zero
+        }
+
+        return '94' . $contact; // Add country code (94 for Sri Lanka)
+    }
+
+    // Function to send the SMS
+    protected function sendMessage($contact, $msg)
+    {
+        $apiToken = env('RICHMO_API_TOKEN');
+        $senderName = 'Bridalhouse';
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $apiToken"
+        ])->withoutVerifying()->get('https://portal.richmo.lk/api/sms/send/', [
+            'dst' => $contact,
+            'from' => $senderName,
+            'msg' => $msg
+        ]);
+
+        if ($response->successful()) {
+            $responseData = $response->json();
+            \Log::info('SMS sent successfully:', $responseData);
+
+            if ($responseData['message'] === 'success') {
+                // SMS sent successfully
+            } else {
+                \Log::warning('Unexpected response:', $responseData);
+            }
+        } else {
+            $error = $response->json();
+            \Log::error('SMS sending failed:', $error);
         }
     }
     
@@ -394,7 +451,7 @@ class AppointmentController extends Controller
     public function destroy($id)
     {
         // Find the preorder by ID and delete it
-        $preorder = Preorder::findOrFail($id);
+        $preorder = bridelpreorder::findOrFail($id);
         $preorder->delete();
 
         // Redirect back with a success message

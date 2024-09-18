@@ -180,10 +180,12 @@ class SalonThretmentContoller extends Controller
                     'status'=> "RealTimeOrder",
                 ]);
 
-                if ($preorder) {
-                    $message = 'Your appointment is confirmed for ' . $preorder->today . ' at ' . $preorder->Appointment_time . '. Thank you for choosing our service.';
-                    $this->sendMessage($preorder->contact_number_1, $message);
-                }
+
+                $formattedContact = $this->formatContactNumber($request->contact_number_1);
+                $msg = "Your appointment is confirmed.\nBooking Number: {$preorder->Booking_number}\nDate: {$request->Carbon::today()}\nThank you for choosing our salon!";
+                $this->sendMessage($formattedContact, $msg);
+
+                
 
             } catch (\Exception $e) {
                 \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
@@ -198,45 +200,48 @@ class SalonThretmentContoller extends Controller
         }
     }
 
-    protected function sendMessage($contact, $msg)
+    private function formatContactNumber($contact)
+    {
+        // Remove any non-digit characters
+        $contact = preg_replace('/\D/', '', $contact);
+
+        // Check if the number starts with '0' and remove it
+        if (strpos($contact, '0') === 0) {
+            $contact = substr($contact, 1);
+        }
+
+        // Add the country code (94 for Sri Lanka)
+        return '94' . $contact;
+    }
+
+    private function sendMessage($contact, $msg)
     {
         $apiToken = env('RICHMO_API_TOKEN');
-        $senderName = 'Bridalhouse';
+        $senderName = 'Bridalhouse'; 
         $message = $msg;
-        $cacert = env('CA_CERT_PATH'); // Use the CA bundle path from the .env file
-    
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => "Bearer $apiToken"
-            ])->withOptions([
-                'verify' => $cacert // Use the CA bundle
-            ])->get('https://portal.richmo.lk/api/sms/send/', [
-                'dst' => $contact,
-                'from' => $senderName,
-                'msg' => $message
-            ]);
-    
-            if ($response->successful()) {
-                $responseData = $response->json();
-                // Log::info('SMS sent successfully:', $responseData);
-    
-                if ($responseData['message'] === 'success') {
-                    // SMS was sent successfully
-                } else {
-                    // Log::warning('Unexpected response:', $responseData);
-                }
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $apiToken"
+        ])->withoutVerifying()->get('https://portal.richmo.lk/api/sms/send/', [
+            'dst' => $contact,
+            'from' => $senderName,
+            'msg' => $message
+        ]);
+
+        if ($response->successful()) {
+            $responseData = $response->json();
+            if ($responseData['message'] === 'success') {
+                \Log::info('SMS sent successfully:', ['response' => $responseData]);
             } else {
-                $error = $response->json();
-                // Log::error('SMS sending failed:', $error);
+                \Log::warning('Unexpected response from SMS API:', ['response' => $responseData]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error sending SMS:', ['error' => $e->getMessage()]);
+        } else {
+            $error = $response->json();
+            \Log::error('SMS sending failed:', ['error' => $error]);
         }
     }
+
     
-
-
-
 
     private function generateBookingId1()
     {

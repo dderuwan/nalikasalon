@@ -137,10 +137,10 @@ $(document).ready(function() {
         table.clear();
         filteredData.forEach(function(salary) {
             table.row.add([
-                
-                salary.employee.name,
+                salary.employee_id,
+                salary.fullname,
                 salary.year,
-                salary.month_name,
+                salary.month,
                 salary.days_of_work,
                 salary.no_pay_days,
                 salary.no_pay_amount,
