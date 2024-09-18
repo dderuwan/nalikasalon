@@ -72,7 +72,8 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/showpos/{id}', [App\Http\Controllers\POSController::class, 'show'])->name('showopos');
      Route::delete('/deletepos/{id}', [App\Http\Controllers\POSController::class, 'destroy'])->name('deletepos');
      Route::get('/pos/print-and-redirect/{id}', [App\Http\Controllers\POSController::class, 'printRedirect'])->name('printRedirect');
-    
+
+
      Route::group(['middleware' => ['role:Super-Admin|Admin|Main Dresser|Manager']], function () {
 
 
@@ -153,7 +154,7 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/get-employee-attendance-count', [App\Http\Controllers\SallaryContoller::class, 'getAttendanceCount'])->name('getEmployeeAttendanceCount');
      Route::get('/get-employee-total-allowance', [App\Http\Controllers\SallaryContoller::class, 'getTotalAllowance'])->name('getEmployeeTotalAllowance');
 
-          //revenue
+    //revenue
      Route::get('/monthly-revenue', [RevenueController::class, 'index'])->name('monthly-revenue');
      Route::get('/api/monthly-revenue', [YourController::class, 'getMonthlyRevenue']);
      Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue'])->name('monthly.revenue');
@@ -357,7 +358,7 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::put('/rstoreSalonThretment2', [App\Http\Controllers\SalonThretmentContoller::class, 'store2'])->name('RealstoreSalonThretment2');
      Route::get('/reditSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit1'])->name('RealeditSalonThretment');
      Route::put('/rupdateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update1'])->name('RealupdateSalonThretment');
-     Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy1'])->name('RealdeleteSalonThretment');
+     Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy12'])->name('RealdeleteSalonThretment');
      Route::get('/rsaloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
      Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
      Route::get('/send-message', [App\Http\Controllers\SalonThretmentContoller::class, 'sendMessage'])->name('send.message');

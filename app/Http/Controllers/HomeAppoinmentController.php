@@ -16,6 +16,7 @@ use App\Models\TimeSlotBridel;
 use App\Models\Schedule;
 use App\Models\SalonThretment;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class HomeAppoinmentController extends Controller
 {
@@ -166,6 +167,18 @@ class HomeAppoinmentController extends Controller
                 'status' => "preOrder",
             ]);
 
+
+            $formattedContact = $this->formatContactNumber($preorder->contact_number_1);
+
+                $msg = "Hello {$preorder->customer_name},\n\nYour order is confirmed!\n"
+                    . "Booking Number: {$preorder->Booking_number}\n"
+                    . "Appointment Date: {$preorder->Appoinment_date}\n"
+                    . "Appointment Time: {$preorder->Appointment_time}\n\n"
+                    . "Thank you for choosing our salon! We look forward to seeing you soon.";
+
+                // Call sendMessage function to send the SMS
+            $this->sendMessage($formattedContact, $msg);
+
         } catch (\Exception $e) {
             \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
             throw $e;
@@ -174,11 +187,56 @@ class HomeAppoinmentController extends Controller
 
     // Redirect based on the outcome of preorder creation
     if ($preorder) {
-        return redirect()->route('showApp',);
+        
+        notify()->success('Package Created successfully.You Will Recive A Msg Quickly. ⚡️', 'Success');
+        return redirect()->route('showApp')->with('success', 'Appoinment created successfully. You Will Recive a Message Quickly.');
     } else {
+        notify()->success('There is an Error. ⚡️', 'Error');
         return redirect()->route('showApp')->withErrors('Failed to create appointment.');
     }
 }
+
+
+    // Function to format contact number
+    protected function formatContactNumber($contact)
+    {
+        $contact = preg_replace('/\D/', '', $contact); // Remove any non-digit characters
+
+        if (strpos($contact, '0') === 0) {
+            $contact = substr($contact, 1); // Remove leading zero
+        }
+
+        return '94' . $contact; // Add country code (94 for Sri Lanka)
+    }
+
+    // Function to send the SMS
+    protected function sendMessage($contact, $msg)
+    {
+        $apiToken = env('RICHMO_API_TOKEN');
+        $senderName = 'Bridalhouse';
+
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $apiToken"
+        ])->withoutVerifying()->get('https://portal.richmo.lk/api/sms/send/', [
+            'dst' => $contact,
+            'from' => $senderName,
+            'msg' => $msg
+        ]);
+
+        if ($response->successful()) {
+            $responseData = $response->json();
+            \Log::info('SMS sent successfully:', $responseData);
+
+            if ($responseData['message'] === 'success') {
+                // SMS sent successfully
+            } else {
+                \Log::warning('Unexpected response:', $responseData);
+            }
+        } else {
+            $error = $response->json();
+            \Log::error('SMS sending failed:', $error);
+        }
+    }
 
     // Helper method to generate customer code (if needed)
     private function generateCustomerCode()

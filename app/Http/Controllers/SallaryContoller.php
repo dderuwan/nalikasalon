@@ -114,7 +114,7 @@ class SallaryContoller extends Controller
         }
     
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Salary data has been saved successfully.');
+        return redirect()->route('salary')->with('success', 'Order deleted successfully');
     }
     
     

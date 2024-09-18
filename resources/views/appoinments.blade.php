@@ -234,6 +234,12 @@
 @section('content')
 <div class="container-fluid p-0">
     <div class="row justify-content-center m-0">
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
         <div class="col-12 p-0">
             <div class="hero1" style="background-image: url('{{ asset('images/homeimg.jpg') }}');">
                 <div class="hero-container">
@@ -293,6 +299,15 @@
                             <!-- Packages will be populated based on selected service -->
                         </select>
                     </div>
+
+                    <!-- Total Price -->
+                    <div class="form-group12">
+                        <label for="totalPrice" class="col-sm-2 col-form-label" style="color:black;">Package Price <i class="text-danger">*</i></label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="total_price" name="total_price" readonly>
+                        </div>
+                    </div>
+
                     <button class="btn btn-primary" onclick="nextSection(2)">Next</button>
                 </div>
             </div>
@@ -386,13 +401,7 @@
                 <div class="form-container13">
                     <h3>Payment and Order Confirmation</h3>
 
-                    <!-- Total Price -->
-                    <div class="form-group row">
-                        <label for="totalPrice" class="col-sm-2 col-form-label" style="color:black;">Total Price <i class="text-danger">*</i></label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="total_price" name="total_price" readonly>
-                        </div>
-                    </div>
+                    
                     
                     <!-- Hidden input to store package price -->
                     <input type="hidden" id="package_price" name="package_price">
@@ -504,40 +513,6 @@ function handleDateOrServiceChange() {
     }
 }
 
-// Fetch available time slots from the server
-function fetchAvailableTimeSlots(date, serviceId) {
-    fetch(`/get-available-time-slots?date=${date}&service_id=${serviceId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Available time slots data:', data);
-            var timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = ''; // Clear previous time slots
-
-            if (data.available_time_slots.length > 0) {
-                // Populate available time slots
-                data.available_time_slots.forEach(function(timeSlot) {
-                    var timeSlotDiv = document.createElement('div');
-                    timeSlotDiv.className = 'time-slot';
-                    timeSlotDiv.textContent = timeSlot;
-                    
-                    // Add click event to select time slot
-                    timeSlotDiv.addEventListener('click', function() {
-                        selectTimeSlot(timeSlot);
-                    });
-
-                    timeSlotsContainer.appendChild(timeSlotDiv);
-                });
-            } else {
-                timeSlotsContainer.innerHTML = '<p>No available time slots for the selected date and service.</p>';
-            }
-        })
-        .catch(error => console.error('Error fetching time slots:', error));
-}
 
 // Handle time slot selection
 function selectTimeSlot(timeSlot) {
@@ -601,6 +576,62 @@ function selectTimeSlot(timeSlot) {
 }
 
 </script>
+
+
+<script>
+// Function to generate time slots from 8:00 AM to 6:00 PM in 45-minute intervals
+function generateTimeSlots() {
+    const timeSlotsDiv = document.getElementById('timeSlots');
+    const appointmentTimeInput = document.getElementById('appointment_time');
+    const appointmentTimeDisplay = document.getElementById('appointmentTime');
+
+    // Starting time: 8:00 AM
+    let startTime = 8 * 60; // 8 hours in minutes
+    let endTime = 18 * 60;  // 6:00 PM in minutes
+    let slotDuration = 45;  // Each slot is 45 minutes
+
+    while (startTime + slotDuration <= endTime) {
+        // Convert start time to hours and minutes (e.g., 8:00, 9:00, etc.)
+        let startHour = Math.floor(startTime / 60);
+        let startMinutes = startTime % 60;
+
+        let endHour = Math.floor((startTime + slotDuration) / 60);
+        let endMinutes = (startTime + slotDuration) % 60;
+
+        // Format time (e.g., 8:00 AM - 8:45 AM)
+        let startTimeFormatted = formatTime(startHour, startMinutes);
+        let endTimeFormatted = formatTime(endHour, endMinutes);
+
+        // Create button for the time slot
+        const timeSlotButton = document.createElement('button');
+        timeSlotButton.type = 'button';
+        timeSlotButton.textContent = `${startTimeFormatted} - ${endTimeFormatted}`;
+        timeSlotButton.onclick = function() {
+            // Update hidden input and display selected time
+            appointmentTimeInput.value = `${startTimeFormatted} - ${endTimeFormatted}`;
+            appointmentTimeDisplay.value = `${startTimeFormatted} - ${endTimeFormatted}`;
+        };
+
+        // Append the time slot button to the timeSlots div
+        timeSlotsDiv.appendChild(timeSlotButton);
+
+        // Increment time by the slot duration (45 minutes)
+        startTime += slotDuration;
+    }
+}
+
+// Helper function to format time as HH:MM AM/PM
+function formatTime(hours, minutes) {
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;  // Convert to 12-hour format
+    minutes = minutes < 10 ? '0' + minutes : minutes;  // Pad minutes with leading zero
+    return `${hours}:${minutes} ${ampm}`;
+}
+
+// Generate time slots when the page loads
+window.onload = generateTimeSlots;
+</script>
+
 
 @endsection
 <!-- Include jQuery -->

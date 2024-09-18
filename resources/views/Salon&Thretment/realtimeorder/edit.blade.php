@@ -103,7 +103,7 @@
 
                                 <!-- Commission Type Dropdown -->
                                 <td>
-                                    <select name="commission_type[]" class="form-control commission-type" data-row="{{ $i }}" required>
+                                    <select name="commission_type[]" class="form-control commission-type" data-row="{{ $i }}" >
                                         <option value="">Select Commission Type</option>
                                         <option value="percentage" {{ isset($preorder->commission_type[$i]) && $preorder->commission_type[$i] == 'percentage' ? 'selected' : '' }}>Percentage</option>
                                         <option value="fixed" {{ isset($preorder->commission_type[$i]) && $preorder->commission_type[$i] == 'fixed' ? 'selected' : '' }}>Fixed</option>
@@ -112,7 +112,7 @@
 
                                 <!-- Price Input -->
                                 <td>
-                                    <input type="number" name="price[]" class="form-control price-input" data-row="{{ $i }}" placeholder="Enter Price" value="{{ isset($preorder->price[$i]) ? $preorder->price[$i] : '' }}" required>
+                                    <input type="number" name="price[]" class="form-control price-input" data-row="{{ $i }}" placeholder="Enter Price" value="{{ isset($preorder->price[$i]) ? $preorder->price[$i] : '' }}" >
                                 </td>
 
                                 <!-- Commission Amount (calculated) -->
@@ -139,14 +139,14 @@
                     <tbody>
                         <tr>
                             <td>
-                                <select name="items[0][item_name]" class="form-control" required>
+                                <select name="items[0][item_name]" class="form-control" >
                                     <option value="">Select Item</option>
                                     @foreach($items as $item)
                                         <option value="{{ $item->id }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                             </td>
-                            <td><input type="text" name="items[0][vastage_slots]" class="form-control" required></td>
+                            <td><input type="text" name="items[0][vastage_slots]" class="form-control" ></td>
                             <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>
                         </tr>
                     </tbody>
@@ -217,11 +217,11 @@
         newRow.innerHTML = `
             <tr>
                 <td>
-                    <select name="items[${rowIndex}][item_name]" class="form-control" required>
+                    <select name="items[${rowIndex}][item_name]" class="form-control" >
                         ${itemOptions}
                     </select>
                 </td>
-                <td><input type="text" name="items[${rowIndex}][vastage_slots]" class="form-control" required></td>
+                <td><input type="text" name="items[${rowIndex}][vastage_slots]" class="form-control" ></td>
                 <td><button type="button" class="btn btn-danger remove-row">Delete</button></td>
             </tr>
         `;

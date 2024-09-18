@@ -397,13 +397,14 @@ class AppointmentController extends Controller
 
     public function getPreorders()
     {
-        $preorders = bridelpreorder::all(['Appoinment_date as start', 'customer_name as title', 'hotel_dress']);
+        $preorders = bridelpreorder::all(['Appoinment_date as start', 'customer_name as title', 'hotel_dress','Appointment_time as time']);
 
         $events = $preorders->map(function ($preorder) {
             return [
                 'title' => $preorder->title,  // Customer name as the event title
                 'start' => $preorder->start,  // Appointment date as the event start
                 'hotel_dress' => $preorder->hotel_dress,  // Include hotel_dress as an attribute
+                'time'=>$preorder->time,
             ];
         });
 

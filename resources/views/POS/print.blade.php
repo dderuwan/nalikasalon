@@ -35,7 +35,6 @@
 
         table th {
             border-bottom: 1px solid #000;
-
         }
 
         .text-right {
@@ -87,14 +86,13 @@
             text-align: right;
             flex: 1;
         }
-        .ppid{
-            padding-top:10px;
+        .ppid {
+            padding-top: 10px;
             border-top: 1px dashed #000;
         }
-        .ppd{
-            padding-bottom:5px;
+        .ppd {
+            padding-bottom: 5px;
         }
-
     </style>
 </head>
 <body>
@@ -122,21 +120,20 @@
             @foreach ($order->items as $item)
                 <tr>
                     <td>{{ $item->item_name }} x {{ $item->quantity }}</td>
-                    <td class="text-right"> {{ number_format($item->total_cost, 2) }}</td>
+                    <td class="text-right">{{ number_format($item->total_cost, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="total-section">
-    <p><strong>Sub - Total Amount</strong> <span class="text-right"> {{ number_format($order->total_cost_payment, 2) }}</span></p>
-    <p>Vat(%) <span class="text-right"> {{ number_format($order->vat, 2) }}</span></p>
-    <p class="ppd">Discount <span class="text-right"> {{ number_format($order->discount, 2) }}</span></p>
-    <p class="ppid">Paid Amount <span class="text-right"> {{ number_format($order->paid_amount, 2) }}</span></p>
-    <p>Change Due <span class="text-right"> {{ number_format($order->change, 2) }}</span></p>
-    <p><strong>Total Payment</strong> <span class="text-right"> {{ number_format($order->total_cost_payment, 2) }}</span></p>
+        <p><strong>Sub - Total Amount</strong> <span class="text-right">{{ number_format($order->total_cost_payment, 2) }}</span></p>
+        <p>Vat(%) <span class="text-right">{{ number_format($order->vat, 2) }}</span></p>
+        <p class="ppd">Discount <span class="text-right">{{ number_format($order->discount, 2) }}</span></p>
+        <p class="ppid">Paid Amount <span class="text-right">{{ number_format($order->paid_amount, 2) }}</span></p>
+        <p>Change Due <span class="text-right">{{ number_format($order->change, 2) }}</span></p>
+        <p><strong>Total Payment</strong> <span class="text-right">{{ number_format($order->total_cost_payment, 2) }}</span></p>
     </div>
-
 
     <div class="footer">
         <p>Billing To: {{ $order->payment_type }}</p>
@@ -144,12 +141,23 @@
         <p><strong>Thank you very much</strong></p>
     </div>
 
-    <script>
-        window.print();  // Automatically trigger print dialog
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="printButton" onclick="printBill()">Print</button>
+        <button id="cancelButton" onclick="cancelBill()">Cancel</button>
+    </div>
 
-        // After printing, redirect to the appointments list
+    <script>
+        function printBill() {
+            window.print(); // Trigger the print dialog
+        }
+
+        function cancelBill() {
+            window.location.href = "{{ route('pospage') }}"; // Redirect to the POS page
+        }
+
+        // Optionally, handle actions after printing is done
         window.onafterprint = function() {
-            window.location.href = "{{ route('pospage') }}";
+            window.location.href = "{{ route('pospage') }}"; // Redirect after print
         };
     </script>
 

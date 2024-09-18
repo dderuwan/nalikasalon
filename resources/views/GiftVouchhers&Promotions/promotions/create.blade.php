@@ -15,11 +15,7 @@
                 <label for="description">Description</label>
                 <textarea name="description" id="description" class="form-control"></textarea>
             </div>
-            <div class="form-group">
-                <label for="price">Promotion Price </label>
-                <input type="text" name="price" class="form-control" >
-            </div>
-            <label for="or">or</label>
+            
 
             <div class="form-group">
                 <label for="price">Promotion Percentage *</label>

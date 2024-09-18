@@ -55,7 +55,7 @@
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' />
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
     
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -63,21 +63,28 @@
         events: '/appointments/getPreorders', // Fetch the events
 
         eventContent: function(arg) {
-            // Create a container for the event title
+            // Create a container for the event content
             let customEventContent = document.createElement('div');
-            
+
             // Add the customer name (title)
             let titleElement = document.createElement('div');
-            titleElement.innerHTML = arg.event.title;
+            titleElement.innerHTML = `<strong>${arg.event.title}</strong>`;
             customEventContent.appendChild(titleElement);
-            
+
+            // Add the time if it exists
+            if (arg.event.extendedProps.time) {
+                let timeElement = document.createElement('div');
+                timeElement.innerHTML = `<em>${arg.event.extendedProps.time}</em>`;
+                customEventContent.appendChild(timeElement);
+            }
+
             // Check if hotel_dress is 1, and if so, append a red bulb icon
             if (arg.event.extendedProps.hotel_dress == 1) {
                 let redBulbIcon = document.createElement('span');
                 redBulbIcon.innerHTML = ' &#128308;'; // Unicode for red circle (can represent a bulb)
                 customEventContent.appendChild(redBulbIcon);
             }
-            
+
             return { domNodes: [customEventContent] };
         },
 
@@ -86,8 +93,8 @@
 
     calendar.render();
 });
-
 </script>
+
 
 
 <style>

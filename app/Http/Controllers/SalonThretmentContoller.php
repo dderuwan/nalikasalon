@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\Commission;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 
 class SalonThretmentContoller extends Controller
@@ -276,21 +277,23 @@ class SalonThretmentContoller extends Controller
     }
 
 
-    public function store2(Request $request)
-    {
-        //dd($request);
-        // Getting current date
-        $currentDate = Carbon::now()->toDateString();
-        
-        // Retrieve the assistants, commission type, and price from the request
-        $assistants = $request->input('assistants');
-        $bookingNumber = $request->input('Booking_number'); // order_id
-        $commissionPrices = $request->input('price');
-        $mainDresser = $request->input('main_dresser');
 
-        // Loop through assistants and insert commission details into the table
-        foreach ($assistants as $index => $assistantId) {
-            // Create a new commission record for each assistant
+
+public function store2(Request $request)
+{
+    // Getting current date
+    $currentDate = Carbon::now()->toDateString();
+    
+    // Retrieve the assistants, commission type, and price from the request
+    $assistants = array_filter($request->input('assistants')); // Filter out null values
+    $bookingNumber = $request->input('Booking_number'); // order_id
+    $commissionPrices = $request->input('price');
+    $mainDresser = $request->input('main_dresser');
+
+    // Check if there are valid assistants and prices before proceeding
+    foreach ($assistants as $index => $assistantId) {
+        if (!empty($assistantId) && isset($commissionPrices[$index])) {
+            // Ensure assistantId and price are valid
             Commission::create([
                 'employee_id' => $assistantId,           // The assistant's ID
                 'order_id' => $bookingNumber,            // Use the booking number as the order ID
@@ -298,48 +301,52 @@ class SalonThretmentContoller extends Controller
                 'commission_amount' => $commissionPrices[$index], // Get the corresponding price from the "price" array
             ]);
         }
-
-        $salonThretment = SalonThretment::where('Booking_number', $bookingNumber)->firstOrFail();
-
-        $salonThretment->update([
-            'Main_Dresser' => $mainDresser,                   // Update Main Dresser
-            'Assistent_Dresser_1' => $assistants[0] ?? null,  // Update Assistant Dresser 1
-            'Assistent_Dresser_2' => $assistants[1] ?? null,  // Update Assistant Dresser 2
-            'Assistent_Dresser_3' => $assistants[2] ?? null,  // Update Assistant Dresser 3
-        ]);
-
-        $items = $request->input('items');
-
-        foreach ($items as $itemData) {
-            $itemId = $itemData['item_name']; // Assuming item_name is the item ID
-            $vastageSlots = $itemData['vastage_slots'];
-
-            // Find the item in the database
-            $item = Item::find($itemId);
-
-            if ($item) {
-                // Decrease the item quantity by the vastage slots
-                $item->shots -= $vastageSlots;
-
-                // Save the updated item quantity
-                $item->save();
-            }
-        }
-
-        return redirect('Salon&Thretment.realtimeorder.index')->with('success', 'Commition Create successfully');
     }
 
-    public function destroy1($id)
+    // Update the salon treatment with the main dresser and assistants
+    $salonThretment = SalonThretment::where('Booking_number', $bookingNumber)->firstOrFail();
+
+    $salonThretment->update([
+        'Main_Dresser' => $mainDresser,                   // Update Main Dresser
+        'Assistent_Dresser_1' => $assistants[0] ?? null,  // Update Assistant Dresser 1
+        'Assistent_Dresser_2' => $assistants[1] ?? null,  // Update Assistant Dresser 2
+        'Assistent_Dresser_3' => $assistants[2] ?? null,  // Update Assistant Dresser 3
+    ]);
+
+    // Handle items and update their vastage slots
+    $items = $request->input('items');
+    foreach ($items as $itemData) {
+        $itemId = $itemData['item_name']; // Assuming item_name is the item ID
+        $vastageSlots = $itemData['vastage_slots'];
+
+        // Find the item in the database
+        $item = Item::find($itemId);
+
+        if ($item) {
+            // Decrease the item quantity by the vastage slots
+            $item->shots -= $vastageSlots;
+
+            // Save the updated item quantity
+            $item->save();
+        }
+    }
+
+    return redirect()->route('RealSalonThretment')->with('success', 'Commission created successfully');
+}
+
+
+    public function destroy12($id)
     {
         $voucher = SalonThretment::find($id);
         if ($voucher) {
             $voucher->delete();
 
-            return redirect('RealSalonThretment')->with('success', 'Order deleted successfully');
+            return redirect()->route('RealSalonThretment')->with('success', 'Order deleted successfully'); // Ensure route name is correct
         } else {
             return redirect()->route('RealSalonThretment')->with('error', 'Order not found.');
         }
     }
+
 
     public function customerstore(Request $request)
     {

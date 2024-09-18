@@ -838,90 +838,43 @@ $(document).ready(function() {
 
 </script>
 
-
-
-
-<!-- JavaScript to Handle Dynamic Time Slot Population -->
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Define time slots
+        const timeSlots = ['First Slot', 'Second Slot', 'Third Slot'];
 
-    
-document.getElementById('start_date').addEventListener('change', function() {
-    var date = this.value;
-    if (date) {
-        console.log('Fetching available time slots for date:', date);
-        fetchAvailableTimeSlots(date);
-    }
-});
+        // Get the timeSlots div, the hidden input, and the appointment time display input
+        const timeSlotsContainer = document.getElementById('timeSlots');
+        const appointmentTimeInput = document.getElementById('appointment_time');
+        const appointmentTimeDisplay = document.getElementById('appointmentTime');
 
-document.getElementById('start_date').addEventListener('change', function() {
-    var date = this.value;
-    var serviceSelect = document.getElementById('service-select');
-    var serviceId = serviceSelect.value;
-    if (date && serviceId) {
-        console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
-        fetchAvailableTimeSlots(date, serviceId);
-    }
-});
+        // Function to render time slots
+        timeSlots.forEach((slot) => {
+            // Create a clickable div for each time slot
+            const slotElement = document.createElement('div');
+            slotElement.textContent = slot;
+            slotElement.classList.add('time-slot');
 
-function fetchAvailableTimeSlots(date, serviceId) {
-    console.log(`Fetching available time slots for date: ${date} and service: ${serviceId}`);
-    fetch(`/get-available-time-slots?date=${date}&service_id=${serviceId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Available time slots data:', data);
-            var timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = '';
+            // Event listener for clicking a slot
+            slotElement.addEventListener('click', function () {
+                // Highlight the selected time slot
+                document.querySelectorAll('.time-slot').forEach(el => el.style.backgroundColor = '#fff'); // Reset background of all slots
+                slotElement.style.backgroundColor = '#d1e7dd'; // Highlight selected slot
 
-            data.available_time_slots.forEach(function(timeSlot) {
-                var timeSlotDiv = document.createElement('div');
-                timeSlotDiv.className = 'time-slot';
-                timeSlotDiv.textContent = timeSlot;
-                timeSlotDiv.addEventListener('click', function() {
-                    selectTimeSlot(timeSlot, date);
-                });
-                timeSlotsContainer.appendChild(timeSlotDiv);
+                // Set the value of the hidden input to the selected time slot
+                appointmentTimeInput.value = slot;
+
+                // Set the value of the display input to show the selected time slot
+                appointmentTimeDisplay.value = slot;
             });
 
-            if (data.available_time_slots.length === 0) {
-                console.log('No available time slots found.');
-            }
-        })
-        .catch(error => console.error('Error fetching time slots:', error));
-}
-
-document.getElementById('service-select').addEventListener('change', function() {
-    var serviceId = this.value;
-    var date = document.getElementById('start_date').value;
-    if (date && serviceId) {
-        console.log('Fetching available time slots for date:', date, 'and service:', serviceId);
-        fetchAvailableTimeSlots(date, serviceId);
-    }
-});
-
-
-function selectTimeSlot(timeSlot, date) {
-    console.log(`Selected time slot: ${timeSlot} on date: ${date}`);
-    document.getElementById('appointment_time').value = timeSlot;
-    document.getElementById('appointmentTime').value = timeSlot;
-    var timeSlots = document.querySelectorAll('.time-slot');
-    timeSlots.forEach(slot => {
-        slot.style.backgroundColor = '#fff';
-        slot.style.borderColor = '#ccc';
+            // Append the slot element to the container
+            timeSlotsContainer.appendChild(slotElement);
+        });
     });
-    var selectedSlot = [...timeSlots].find(slot => slot.textContent === timeSlot);
-    if (selectedSlot) {
-        selectedSlot.style.backgroundColor = '#d0e9ff';
-        selectedSlot.style.borderColor = '#4a90e2';
-    }
-    
-}
-
 </script>
+
+
 
 
 
