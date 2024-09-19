@@ -210,11 +210,7 @@
                                 <span class="ml-3 item-text">Attendance List</span><span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item active">
-                            <a href="{{route('attendance_reports')}}" class="sidebar_text">
-                                <span class="ml-3 item-text">Attendance Reports</span><span class="sr-only">(current)</span>
-                            </a>
-                        </li>
+                        
                     </ul>
                     </li>
                 </ul>
