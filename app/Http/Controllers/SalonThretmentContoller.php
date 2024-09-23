@@ -183,7 +183,7 @@ class SalonThretmentContoller extends Controller
 
 
                 $formattedContact = $this->formatContactNumber($request->contact_number_1);
-                $msg = "Your appointment is confirmed.\nBooking Number: {$preorder->Booking_number}\nDate: {$request->Carbon::today()}\nThank you for choosing our salon!";
+                $msg = "Your appointment is confirmed.\nBooking Number: {$preorder->Booking_number}\nDate: " . Carbon::today()->toFormattedDateString() . "\nThank you for choosing our salon!";
                 $this->sendMessage($formattedContact, $msg);
 
                 

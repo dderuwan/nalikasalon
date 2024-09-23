@@ -147,14 +147,13 @@ $(document).ready(function() {
         filteredData.forEach(function(order) {
             table.row.add([
                 order.Auto_serial_number,
-                order.customer_name,
-                order.package_id,
-                order.Package_name_1,
-                order.Appoinment_date,
-                order.Appointment_time,
-                order.advanced_payment,
-                order.total_price,
-                order.status
+        order.customer_name,
+        order.package_id,  // Assuming this is the correct property for the package
+        order.Appoinment_date,
+        order.Appointment_time,
+        order.advanced_payment,
+        order.total_price,
+        order.status
             ]);
         });
         table.draw();

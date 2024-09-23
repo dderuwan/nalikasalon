@@ -186,7 +186,7 @@
 
 
 
-                          <div class="custom-card" id="card02pre">
+                        <div class="custom-card" id="card02pre">
 
                             <h3>Payments</h3>
                             <!-- Discount -->

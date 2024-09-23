@@ -226,7 +226,7 @@ class AppointmentController extends Controller
         return response()->json([], 404);
     }
 
-    public function storeAppointments(Request $request)
+    public function storeAppointment(Request $request)
     {
         //dd($request);
         $request->validate([

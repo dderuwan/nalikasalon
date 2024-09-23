@@ -64,13 +64,14 @@
                           <a href="{{ route('leave_type.edit', $leave_type->id) }}" class="action-icon edit-icon" title="Edit">
                             <i class="fe fe-edit text-primary"></i>
                           </a>
-                        <button class="action-icon delete-icon" onclick="confirmDelete('{{ $leave_type->id }}')" title="Delete">
-                            <i class="fe fe-trash-2 text-danger"></i>
-                        </button>
-                            <form id="delete-form-{{ $leave_type->id }}" action="{{ route('leave_type.destroy',  $leave_type->id) }}" method="POST" style="display: none;">
-                            @csrf
-                            @method('DELETE')
-                            </form>
+                        
+                          <form id="delete-form-{{ $leave_type->id }}" action="{{ route('deleteleavetype', $leave_type->id) }}" method="POST" style="display: inline;">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="action-icon delete-icon" title="Delete" onclick="return confirm('Are you sure you want to delete this leave type?');">
+                                  <i class="fe fe-trash-2 text-danger"></i>
+                              </button>
+                          </form>
                       </div>
                   </td>    
                 </tr>

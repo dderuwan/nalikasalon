@@ -138,7 +138,7 @@ $(document).ready(function() {
         filteredData.forEach(function(salary) {
             table.row.add([
                 salary.employee_id,
-                salary.fullname,
+                salary.employee.fullname, // Correcting the employee name field
                 salary.year,
                 salary.month,
                 salary.days_of_work,
@@ -154,6 +154,7 @@ $(document).ready(function() {
         table.draw();
     });
 });
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

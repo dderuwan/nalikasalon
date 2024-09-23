@@ -294,6 +294,26 @@ public function updateLeaveApp(Request $request, $id)
 
     return redirect()->route('manage_leave_application')->with('success', 'Leave application updated successfully');
 }
+
+// In LeaveController.php
+
+public function destroyapplication($id)
+{
+    try {
+        // Find the leave application by its ID
+        $leaveApplication = Leave_Apply::findOrFail($id);
+
+        // Delete the leave application
+        $leaveApplication->delete();
+
+        // Redirect or return success message after deletion
+        return redirect()->route('manage_leave_application')->with('success', 'Leave application deleted successfully.');
+    } catch (\Exception $e) {
+        // Handle the exception if something goes wrong
+        return redirect()->route('manage_leave_application')->with('error', 'Failed to delete leave application.');
+    }
+}
+
 }
 
 

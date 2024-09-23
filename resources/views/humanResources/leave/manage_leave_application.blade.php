@@ -72,18 +72,21 @@
                                                         <a href="{{ route('leave_app_edit', $leave_app->id) }}" class="action-icon edit-icon" title="Edit">
                                                             <i class="fe fe-edit text-primary"></i>
                                                         </a>
-                                                        <button class="action-icon delete-icon" onclick="confirmDelete('{{ $leave_app->id }}')" title="Delete">
-                                                            <i class="fe fe-trash-2 text-danger"></i>
-                                                        </button>
-                                                            <form id="delete-form-{{  $leave_app->id }}" action="{{ route('leave_application.destroy',  $leave_app->id) }}" method="POST" style="display: none;">
+                                                        
+                                                        <!-- Delete form (hidden) -->
+                                                        <form id="delete-form-{{ $leave_app->id }}" action="{{ route('destroyapplication', $leave_app->id) }}" method="POST" style="display: inline;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            </form>
+                                                            <button type="submit" class="action-icon delete-icon" title="Delete" onclick="return confirm('Are you sure you want to delete this Leave Application?');">
+                                                                <i class="fe fe-trash-2 text-danger"></i>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </td>                                                                 
                                             </tr>
                                         @endforeach
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -93,40 +96,50 @@
         </div>
     </div>
     <!-- Delete Confirmation Modal -->
+    <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this Leave Application?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Yes, Delete</button>
-                    </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this Leave Application?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Yes, Delete</button>
                 </div>
             </div>
         </div>
+    </div>
+
 </main>
 
+
+
 <script>
-    function confirmDelete(leave_appId) {
-        const deleteForm = document.getElementById('delete-form-' + leave_appId);
-        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let leaveAppId;
 
-        $('#deleteModal').modal('show');
+    // When the delete button is clicked, store the ID of the leave application
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        leaveAppId = button.data('id'); // Extract info from data-* attributes
 
-        confirmDeleteButton.onclick = function() {
-            deleteForm.submit();
+        var modal = $(this);
+        modal.find('.modal-body').text('Are you sure you want to delete this leave application?');
+    });
+
+    // When the confirmation button is clicked, submit the associated form
+    $('#confirmDeleteButton').on('click', function () {
+        if (leaveAppId) {
+            $('#delete-form-' + leaveAppId).submit();
         }
-    }
+    });
 </script>
-
 
 
 

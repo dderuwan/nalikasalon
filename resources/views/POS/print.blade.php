@@ -5,7 +5,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            width: 300px; /* Adjusted for POS bill size */
+            width: 300px;
+            height: 100%;
             margin: 0 auto;
             padding: 10px;
         }
@@ -127,13 +128,14 @@
     </table>
 
     <div class="total-section">
-        <p><strong>Sub - Total Amount</strong> <span class="text-right">{{ number_format($order->total_cost_payment, 2) }}</span></p>
-        <p>Vat(%) <span class="text-right">{{ number_format($order->vat, 2) }}</span></p>
-        <p class="ppd">Discount <span class="text-right">{{ number_format($order->discount, 2) }}</span></p>
-        <p class="ppid">Paid Amount <span class="text-right">{{ number_format($order->paid_amount, 2) }}</span></p>
-        <p>Change Due <span class="text-right">{{ number_format($order->change, 2) }}</span></p>
-        <p><strong>Total Payment</strong> <span class="text-right">{{ number_format($order->total_cost_payment, 2) }}</span></p>
+        <p><strong>Sub - Total Amount</strong> <span class="text-right">{{ number_format($order->total_cost_payment ?? 0, 2) }}</span></p>
+        <p>Vat(%) <span class="text-right">{{ number_format($order->vat ?? 0, 2) }}</span></p>
+        <p class="ppd">Discount <span class="text-right">{{ number_format($order->discount ?? 0, 2) }}</span></p>
+        <p class="ppid">Paid Amount <span class="text-right">{{ number_format($order->paid_amount ?? 0, 2) }}</span></p>
+        <p>Change Due <span class="text-right">{{ number_format($order->change ?? 0, 2) }}</span></p>
+        <p><strong>Total Payment</strong> <span class="text-right">{{ number_format($order->total_cost_payment ?? 0, 2) }}</span></p>
     </div>
+
 
     <div class="footer">
         <p>Billing To: {{ $order->payment_type }}</p>

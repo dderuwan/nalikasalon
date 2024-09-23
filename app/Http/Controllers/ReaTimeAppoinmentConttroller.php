@@ -320,7 +320,7 @@ class ReaTimeAppoinmentConttroller extends Controller
             }
         }
 
-        return redirect('appointment.realtimeOrderList')->with('success', 'Update Details successfully');
+        return redirect('RealTimeOrderList')->with('success', 'Update Details successfully');
     }
 
 

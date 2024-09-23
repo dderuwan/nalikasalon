@@ -261,13 +261,17 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::view('/hrm/weekly_holidays_update', 'humanResources.leave.weekly_holiday_update')->name('weekly_holiday_update');
      Route::get('/holiday/{id}/edit', [LeaveController::class, 'edit'])->name('holiday.edit');
      Route::post('/holiday/{id}/update', [LeaveController::class, 'updateHoliday'])->name('update_holiday');
-    
+     
+
+     
      Route::get('/hrm/add_leave_type', [LeaveController::class, 'showLeavetypes'])->name('add_leave_type');
      Route::post('/hrm/add_leave_type/store', [LeaveController::class, 'storeLeavetypes'])->name('Leave_type.store');
      Route::delete('/hrm/add_leave_type/{leave_type}', [LeaveController::class, 'destroyLeave_type'])->name('leave_type.destroy');
      Route::post('/hrm/add_leave_type/{id}/update', [LeaveController::class, 'updateLeavetype'])->name('update_leave_type');
      Route::get('/hrm/add_leave_type/{id}/edit', [LeaveController::class, 'editLeavetype'])->name('leave_type.edit');
-    
+     Route::delete('/delete-leave_type/{id}', [App\Http\Controllers\LeaveController::class, 'destroyLeave_type'])->name('deleteleavetype');
+
+
      Route::post('/hrm/leave_application/store', [LeaveController::class, 'storeleavApp'])->name('leave.store');
      Route::get('/hrm/leave_application/apply', [LeaveController::class, 'createLeaveApp'])->name('apply_leave');
      Route::get('/hrm/leave_application', [LeaveController::class, 'showLeaveApp'])->name('leave_application');
@@ -275,7 +279,9 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::delete('/hrm/leave_application/{leave_application}', [LeaveController::class, 'destroyLeaveapp'])->name('leave_application.destroy');
      Route::get('/hrm/leave-applications/edit/{id}', [LeaveController::class, 'editLeaveApp'])->name('leave_app_edit');
      Route::put('/hrm/leave-applications/update/{id}', [LeaveController::class, 'updateLeaveApp'])->name('leave_app_update');
-    
+     Route::delete('/delete-leave-applications/{id}', [App\Http\Controllers\LeaveController::class, 'destroyapplication'])->name('destroyapplication');
+
+
      //employee module
      Route::get('/employee', [App\Http\Controllers\EmployeeController::class, 'index'])->name('employee');
      Route::get('/createemployee', [App\Http\Controllers\EmployeeController::class, 'create'])->name('createemployee');
@@ -312,7 +318,7 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/showPreOrders', [AppointmentController::class, 'showPreOrders'])->name('showPreOrders');
      Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
      Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
-     Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointments'])->name('appointment.store');
+     Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointment'])->name('storeAppointment');
      Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
      Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
      Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
@@ -359,7 +365,7 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/reditSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit1'])->name('RealeditSalonThretment');
      Route::put('/rupdateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update1'])->name('RealupdateSalonThretment');
      Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy12'])->name('RealdeleteSalonThretment');
-     Route::get('/rsaloonpreorderprint/print-and-redirects/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
+     Route::get('/rsaloonpreorderprint/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
      Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
      Route::get('/send-message', [App\Http\Controllers\SalonThretmentContoller::class, 'sendMessage'])->name('send.message');
 

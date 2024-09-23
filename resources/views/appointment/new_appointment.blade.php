@@ -95,7 +95,7 @@
                 <div class="col-12">
                   <div class="card shadow mb-4 p-2 pl-3">
                     <div class="card-body">
-                      <form action="{{ route('appointment.store') }}" method="POST" enctype="multipart/form-data">
+                      <form action="{{ route('storeAppointment') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="custom-card" id="card02pre">

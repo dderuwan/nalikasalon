@@ -220,16 +220,6 @@
                         <span class="ml-3 item-text">Leave</span><span class="sr-only">(current)</span>
                     </a>
                     <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="Leave">
-                        <li class="nav-item mb-2">
-                            <a href="{{route('weekly_holiday')}}" class="sidebar_text">
-                                <span class="ml-3 item-text">Weekly Holiday</span><span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item active mb-2">
-                            <a href="{{route('holiday')}}" class="sidebar_text">
-                                <span class="ml-3 item-text">Holiday</span><span class="sr-only">(current)</span>
-                            </a>
-                        </li>
                         <li class="nav-item active mb-2">
                             <a href="{{route('add_leave_type')}}" class="sidebar_text">
                                 <span class="ml-3 item-text">Add Leave Type</span><span class="sr-only">(current)</span>

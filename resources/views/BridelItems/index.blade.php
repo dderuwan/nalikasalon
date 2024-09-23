@@ -32,9 +32,9 @@
                                         <th style="color: black;">Id</th>
                                         <th style="color: black;">Bridel Sub Category</th>
                                         <th style="color: black;">Item Name</th>
-                                        <th style="color: black;">Price</th>
                                         <th style="color: black;">Description</th>
                                         <th style="color: black;">Price</th>
+                                        <th style="color: black;">Quentity</th>
                                         <th style="color: black;" width="200px">Action</th>
                                     </tr>
                                 </thead>
