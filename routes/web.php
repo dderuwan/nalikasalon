@@ -360,12 +360,13 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      //salon & Theartments Real time order
      Route::get('/rSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'index1'])->name('RealSalonThretment');
      Route::get('/rcreateSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'create1'])->name('RealcreateSalonThretment');
-     Route::post('/rstoreSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'store1'])->name('RealstoreSalonThretment');
+     //Route::post('/rstoreSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'store1'])->name('RealstoreSalonThretment');
+     Route::post('/storeRealTimeSalonThretment', [App\Http\Controllers\SalonThretmentContoller::class, 'storeRealTime'])->name('storeRealTime');
      Route::put('/rstoreSalonThretment2', [App\Http\Controllers\SalonThretmentContoller::class, 'store2'])->name('RealstoreSalonThretment2');
      Route::get('/reditSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit1'])->name('RealeditSalonThretment');
      Route::put('/rupdateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update1'])->name('RealupdateSalonThretment');
      Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy12'])->name('RealdeleteSalonThretment');
-     Route::get('/rsaloonpreorderprint/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
+     Route::get('/realsaloonpreorderprint/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
      Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
      Route::get('/send-message', [App\Http\Controllers\SalonThretmentContoller::class, 'sendMessage'])->name('send.message');
 

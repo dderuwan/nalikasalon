@@ -144,6 +144,63 @@ class SalonThretmentContoller extends Controller
         return view('Salon&Thretment.realtimeorder.create', compact('customers','services','packages','timeSlots','timeSlotsBridels'));
     }
 
+    
+    public function storeRealTime(Request $request){
+        //dd($request);
+        $request->validate([
+            'contact_number_1' => 'required|string',
+            'service_id' => 'required|string',
+            'package_id_1' => 'required|string',
+            'payment_method' => 'required|string',
+            'total_price'=>'required|numeric',
+        ]);
+        //dd($request);
+        $preorder = null; // Initialize preorder variable
+    
+        \DB::transaction(function () use ($request, &$preorder) {
+            try {
+                // Create the preorder
+                $preorder = SalonThretment::create([
+                    'Booking_number' => $this->generateBookingId1(),
+                    'customer_id' => $request->customer_id,
+                    'customer_name' => $request->customer_name,
+                    'contact_number_1' => $request->contact_number_1,
+                    'service_id' => $request->service_name,
+                    'package_id' => $request->package_name_1,
+                    'Appoinment_date' => $request->start_date,
+                    'today'=> Carbon::today(),
+                    'Appointment_time' => $request->appointment_time,
+                    'note' => $request->note,
+                    'Main_Dresser'=> $request->Main_Dresser,
+                    'Assistent_Dresser_1'=> $request->Assistent_Dresser_1,
+                    'Assistent_Dresser_2'=> $request->Assistent_Dresser_2,
+                    'Assistent_Dresser_3'=> $request->Assistent_Dresser_3,
+                    'Discount'=> $request->Discount,
+                    'payment_method'=> $request->payment_method,
+                    'total_price'=> $request->total_price,
+                    'status'=> "RealTimeOrder",
+                ]);
+
+
+                $formattedContact = $this->formatContactNumber($request->contact_number_1);
+                $msg = "Your appointment is confirmed.\nBooking Number: {$preorder->Booking_number}\nDate: " . Carbon::today()->toFormattedDateString() . "\nThank you for choosing our salon!";
+                $this->sendMessage($formattedContact, $msg);
+
+                
+
+            } catch (\Exception $e) {
+                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
+                throw $e;
+            }
+        });
+    
+        if ($preorder) {
+            return redirect()->route('saloonpreorderprint1', ['id' => $preorder->id]);
+        } else {
+            return redirect()->route('RealSalonThretment')->withErrors('Failed to create appointment.');
+        }
+    }
+
     public function store1(Request $request){
 
         //dd($request);

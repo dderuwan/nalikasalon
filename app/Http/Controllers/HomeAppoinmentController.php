@@ -112,87 +112,89 @@ class HomeAppoinmentController extends Controller
 
 
     public function storeAppointments(Request $request)
-{
-    // Validate the request
-    $request->validate([
-        'service_id' => 'required|string',
-        'name' => 'required|string',
-        'contact_number_1' => 'required|string',
-        'start_date' => 'required|date',
-        'appointment_time' => 'required|string',
-        'total_price' => 'required|numeric',
-    ]);
+    {
+        // Validate the request
+        $request->validate([
+            'service_id' => 'required|string',
+            'name' => 'required|string',
+            'contact_number_1' => 'required|string',
+            'start_date' => 'required|date',
+            'appointment_time' => 'required|string',
+            'total_price' => 'required|numeric',
+        ]);
 
-    $preorder = null; // Initialize preorder variable
-    
-    // Use a transaction for database operations
-    \DB::transaction(function () use ($request, &$preorder) {
-        try {
-            // Check if customer exists with the provided contact number
-            $customer = Customer::where('contact_number_1', $request->contact_number_1)->first();
-            
-            if (!$customer) {
-                // If customer does not exist, create a new one
-                $customer = Customer::create([
-                    'name' => $request->name, // Use the correct name field
+        //dd($request);
+
+        $preorder = null; // Initialize preorder variable
+        
+        // Use a transaction for database operations
+        \DB::transaction(function () use ($request, &$preorder) {
+            try {
+                // Check if customer exists with the provided contact number
+                $customer = Customer::where('contact_number_1', $request->contact_number_1)->first();
+                
+                if (!$customer) {
+                    // If customer does not exist, create a new one
+                    $customer = Customer::create([
+                        'name' => $request->name, // Use the correct name field
+                        'contact_number_1' => $request->contact_number_1,
+                        'contact_number_2' => $request->contact_number_2 ?? null, // Optional field
+                        'address' => $request->address ?? null, // Optional field
+                        'date_of_birth' => $request->date_of_birth ?? null, // Optional field
+                        'customer_code' => $this->generateCustomerCode(), // Generate customer code
+                    ]);
+                }
+                
+                // Create the preorder (SalonThretment) with the retrieved or newly created customer ID
+                $preorder = SalonThretment::create([
+                    'Booking_number' => $this->generateBookingId(),
+                    'customer_id' => $customer->id, // Use the customer ID, not customer_code
+                    'customer_name' => $request->name,
                     'contact_number_1' => $request->contact_number_1,
-                    'contact_number_2' => $request->contact_number_2 ?? null, // Optional field
-                    'address' => $request->address ?? null, // Optional field
-                    'date_of_birth' => $request->date_of_birth ?? null, // Optional field
-                    'customer_code' => $this->generateCustomerCode(), // Generate customer code
+                    'service_id' => $request->service_id,
+                    'package_id' => $request->package ?? null, // Ensure package is optional
+                    'Appoinment_date' => $request->start_date,
+                    'today' => Carbon::today(),
+                    'Appointment_time' => $request->appointment_time,
+                    'note' => $request->note ?? null, // Optional field
+                    'Main_Dresser' => $request->Main_Dresser ?? null, // Optional field
+                    'Assistent_Dresser_1' => $request->Assistent_Dresser_1 ?? null, // Optional field
+                    'Assistent_Dresser_2' => $request->Assistent_Dresser_2 ?? null, // Optional field
+                    'Assistent_Dresser_3' => $request->Assistent_Dresser_3 ?? null, // Optional field
+                    'Discount' => $request->Discount ?? null, // Optional field
+                    'payment_method' => $request->payment_method ?? "cash", // Default to cash if not provided
+                    'total_price' => $request->total_price,
+                    'status' => "preOrder",
                 ]);
+
+                // Format contact number for SMS
+                $formattedContact = $this->formatContactNumber($preorder->contact_number_1);
+
+                // Prepare SMS message
+                $msg = "Hello {$preorder->customer_name},\n\nYour order is confirmed!\n"
+                . "Booking Number: {$preorder->Booking_number}\n"
+                . "Appointment Date: {$preorder->Appoinment_date}\n"
+                . "Appointment Time: {$preorder->Appointment_time}\n\n"
+                . "Thank you for choosing our salon! We look forward to seeing you soon.";
+
+                // Send the SMS
+                $this->sendMessage($formattedContact, $msg);
+
+            } catch (\Exception $e) {
+                \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
+                throw $e; // Rethrow exception to trigger transaction rollback
             }
-            
-            // Create the preorder (SalonThretment) with the retrieved or newly created customer ID
-            $preorder = SalonThretment::create([
-                'Booking_number' => $this->generateBookingId(),
-                'customer_id' => $customer->id, // Use the customer ID, not customer_code
-                'customer_name' => $request->name,
-                'contact_number_1' => $request->contact_number_1,
-                'service_id' => $request->service_id,
-                'package_id' => $request->package ?? null, // Ensure package is optional
-                'Appoinment_date' => $request->start_date,
-                'today' => Carbon::today(),
-                'Appointment_time' => $request->appointment_time,
-                'note' => $request->note ?? null, // Optional field
-                'Main_Dresser' => $request->Main_Dresser ?? null, // Optional field
-                'Assistent_Dresser_1' => $request->Assistent_Dresser_1 ?? null, // Optional field
-                'Assistent_Dresser_2' => $request->Assistent_Dresser_2 ?? null, // Optional field
-                'Assistent_Dresser_3' => $request->Assistent_Dresser_3 ?? null, // Optional field
-                'Discount' => $request->Discount ?? null, // Optional field
-                'payment_method' => $request->payment_method ?? "cash", // Default to cash if not provided
-                'total_price' => $request->total_price,
-                'status' => "preOrder",
-            ]);
+        });
 
-            // Format contact number for SMS
-            $formattedContact = $this->formatContactNumber($preorder->contact_number_1);
-
-            // Prepare SMS message
-            $msg = "Hello {$preorder->customer_name},\n\nYour order is confirmed!\n"
-               . "Booking Number: {$preorder->Booking_number}\n"
-               . "Appointment Date: {$preorder->Appoinment_date}\n"
-               . "Appointment Time: {$preorder->Appointment_time}\n\n"
-               . "Thank you for choosing our salon! We look forward to seeing you soon.";
-
-            // Send the SMS
-            $this->sendMessage($formattedContact, $msg);
-
-        } catch (\Exception $e) {
-            \Log::error('Error creating preorder or updating schedules:', ['error' => $e->getMessage()]);
-            throw $e; // Rethrow exception to trigger transaction rollback
+        // Redirect based on the outcome of preorder creation
+        if ($preorder) {
+            notify()->success('Package created successfully. You will receive a message shortly. ⚡️', 'Success');
+            return redirect()->route('showApp')->with('success', 'Appointment created successfully. You will receive a message shortly.');
+        } else {
+            notify()->error('There was an error. ⚡️', 'Error');
+            return redirect()->route('showApp')->withErrors('Failed to create appointment.');
         }
-    });
-
-    // Redirect based on the outcome of preorder creation
-    if ($preorder) {
-        notify()->success('Package created successfully. You will receive a message shortly. ⚡️', 'Success');
-        return redirect()->route('showApp')->with('success', 'Appointment created successfully. You will receive a message shortly.');
-    } else {
-        notify()->error('There was an error. ⚡️', 'Error');
-        return redirect()->route('showApp')->withErrors('Failed to create appointment.');
     }
-}
 
 
 
