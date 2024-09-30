@@ -314,13 +314,13 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::delete('/deleteGiftVoucher/{id}', [App\Http\Controllers\PromotionContoller::class, 'destroy'])->name('deletePromotion');
     
      //appointment module(PreOrders)
-     Route::get('/appointments', [AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
-     Route::get('/showPreOrders', [AppointmentController::class, 'showPreOrders'])->name('showPreOrders');
-     Route::get('/Appointments/New-appointment', [AppointmentController::class, 'showCustomers'])->name('new_appointment');
-     Route::get('/Appointments/New-appointment/customers/{customer_code}', [AppointmentController::class, 'getCustomerDetails']);
-     Route::post('/Appointments/New-appointment/store', [AppointmentController::class, 'storeAppointment'])->name('storeAppointment');
-     Route::get('/get-packages-by-service', [AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
-     Route::get('/appointments/getPreorders', [AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
+     Route::get('/appointments', [App\Http\Controllers\AppointmentController::class, 'showAppoinmentsss'])->name('appointments');
+     Route::get('/showPreOrders', [App\Http\Controllers\AppointmentController::class, 'showPreOrders'])->name('showPreOrders');
+     Route::get('/Appointments/New-appointment', [App\Http\Controllers\AppointmentController::class, 'showCustomers'])->name('new_appointment');
+     Route::get('/Appointments/New-appointment/customers/{customer_code}', [App\Http\Controllers\AppointmentController::class, 'getCustomerDetails']);
+     Route::post('/Appointments/New-appointment/store', [App\Http\Controllers\AppointmentController::class, 'storeAppointment'])->name('storeAppointment');
+     Route::get('/get-packages-by-service', [App\Http\Controllers\AppointmentController::class, 'getPackagesByService'])->name('getPackagesByService');
+     Route::get('/appointments/getPreorders', [App\Http\Controllers\AppointmentController::class, 'getPreorders'])->name('appointments.getPreorders');
      Route::post('/POS.customerstore', [App\Http\Controllers\AppointmentController::class, 'customerstore'])->name('POS.customerstore');
      Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
      Route::delete('/preorders/{id}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('deletepreorder');
@@ -387,6 +387,9 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
      Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
      Route::delete('/cart/delete/{title}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+
+
     
     
     
@@ -407,6 +410,12 @@ Route::get('/showApp', [HomeAppoinmentController::class, 'showApp'])->name('show
 Route::get('/get-packages', [HomeAppoinmentController::class, 'getPackagesByService']);
 Route::get('/get-available-time-slots', [HomeAppoinmentController::class, 'getAvailableTimeSlots']);
 Route::get('/get-package-price', [HomeAppoinmentController::class, 'getPackagePrice']);
-Route::post('/storeAppointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
+Route::post('/storeappointments', [HomeAppoinmentController::class,'storeAppointments'])->name('storeAppointments');
 Route::get('/appointment/print-and-redirect/{id}', [HomeAppoinmentController::class, 'printAndRedirect'])->name('printAndRedirect');
 
+
+Route::post('/preorderstore', [App\Http\Controllers\Stoercontroller::class,'preorderstore'])->name('preorderstore');
+Route::post('/homeorderstore', [App\Http\Controllers\Stoercontroller::class,'homeorderstore'])->name('homeorderstore');
+Route::post('/saloonorderstore', [App\Http\Controllers\Stoercontroller::class,'saloonorderstore'])->name('saloonorderstore');
+
+Route::get('/preordercreate', [App\Http\Controllers\Stoercontroller::class,'preordercreate'])->name('preordercreate');

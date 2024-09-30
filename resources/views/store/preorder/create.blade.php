@@ -146,7 +146,7 @@
                               <label for="service-select" class="col-sm-2 col-form-label" style="color:black;">Service <i class="text-danger">*</i></label>
                               <div class="col-md-6">
                                   <select class="form-control" id="service-select" name="service_id" required>
-                                      <option value="">Select Service</option>
+                                      
                                       @foreach($services as $service)
                                           <option value="{{ $service->service_code }}" data-name="{{ $service->service_name }}">
                                               {{ $service->service_code }} - {{ $service->service_name }}
@@ -161,14 +161,20 @@
 
 
                           <!-- Package Dropdowns -->
-                          <div class="form-group row">
-                              <label for="package-select-1" class="col-sm-2 col-form-label" style="color:black;">Package 01 : <i class="text-danger">*</i></label>
-                              <div class="col-md-6">
-                                  <select class="form-control" id="package-select-1" name="package_id_1" required>
-                                      <option value="">Select Package</option>
-                                  </select>
-                              </div>
-                          </div>
+                        <div class="form-group row">
+                            <label for="package-select-1" class="col-sm-2 col-form-label" style="color:black;">Package 01 : <i class="text-danger">*</i></label>
+                            <div class="col-md-6">
+                                <select class="form-control" id="package-select-1" name="package_id_1" required>
+                                    <option value="">Select Package</option>
+                                    @foreach($packages as $package)
+                                        <option value="{{ $package->id }}" data-price="{{ $package->price }}">
+                                            {{ $package->package_name }} - LKR.{{ $package->price }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
 
                           <div id="subcategories-container"></div>
 
@@ -176,9 +182,10 @@
                             <div class="form-group row">
                                 <label for="start_date" class="col-sm-2 col-form-label" style="color:black;">Date <i class="text-danger">*</i></label>
                                 <div class="col-md-6">
-                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" min="{{ date('Y-m-d') }}" required>
                                 </div>
                             </div>
+
 
 
 
@@ -213,7 +220,7 @@
                           <div class="custom-card" id="card02pre">
                           <div class="form-group">
                                 <h3>Other Package:</h3>
-                                @foreach($packagesonly as $package)
+                                @foreach($otherpackages as $package)
                                     <div>
                                         <input type="checkbox" name="otherpackages[]" class="additional-package-checkbox" data-price="{{ $package->price }}" value="{{ $package->id }}">
                                         <label>{{ $package->package_name }} - LKR.{{ $package->price }}</label>
@@ -424,458 +431,316 @@
   </div>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endsection
 
-<script>
-$(document).ready(function() {
-    // Initialize Select2 on the select element
-    $('#customer_code').select2({
-        placeholder: 'Select or type customer contact number',
-        allowClear: true
-    });
-
-    // Update customer details display when selection changes
-    $('#customer_code').on('change', function() {
-    var selectedOption = $(this).find('option:selected');
-    var name = selectedOption.data('name') || 'N/A';
-    var contact = selectedOption.data('contact') || 'N/A';
-    var address = selectedOption.data('address') || 'N/A';
-    var dob = selectedOption.data('dob') || 'N/A';
-    var code = selectedOption.data('code') || 'N/A';
-
-    if (name && contact && address && dob) {
-        $('#customerDetails').show();
-        $('#customerName').html('<strong>Name:</strong> ' + name);
-        $('#customerContact').html('<strong>Contact:</strong> ' + contact);
-        $('#customerAddress').html('<strong>Address:</strong> ' + address);
-        $('#customerDOB').html('<strong>Date of Birth:</strong> ' + dob);
-        
-        // Set the hidden input fields
-        $('#hiddenCustomerName').val(name);
-        $('#hiddenCustomerContact').val(contact);
-        $('#hiddenCustomerAddress').val(address);
-        $('#hiddenCustomerDOB').val(dob);
-        $('#hiddenCustomerId').val(code);
-
-    } else {
-        $('#customerDetails').hide();
-        
-        // Clear the hidden input fields
-        $('#hiddenCustomerName').val('');
-        $('#hiddenCustomerContact').val('');
-        $('#hiddenCustomerAddress').val('');
-        $('#hiddenCustomerDOB').val('');
-        $('#hiddenCustomerId').val('');
-    }
-});
-
-    // Show modal to add customer
-    $('#add-customer-btn').on('click', function() {
-        new bootstrap.Modal(document.getElementById('addCustomerModal')).show();
-    });
-
-    // Redirect to the same page on cancel
-    $('#cancel-btn').on('click', function() {
-        window.location.reload();
-    });
-
-    $('#service-select').on('change', function() {
-    var selectedOption = $(this).find('option:selected');
-    var serviceName = selectedOption.data('name') || '';
-
-    // Set the hidden input field with the service name
-    $('#hiddenServiceName').val(serviceName);
-});
-
-});
-</script>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  
-
-    timeSlots.forEach(function(timeSlot) {
-        timeSlot.addEventListener('click', function() {
-            appointmentTimeInput.value = timeSlot.textContent.trim();
-        });
-    });
-
-    // Tab switching functionality
-    const tabs = document.querySelectorAll('.custom-nav-link');
-    const tabPanes = document.querySelectorAll('.custom-tab-pane');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function(event) {
-            event.preventDefault();
-            const targetPaneId = this.getAttribute('href').substring(1);
-
-            tabs.forEach(t => t.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('active'));
-
-            this.classList.add('active');
-            document.getElementById(targetPaneId).classList.add('active');
-        });
-    });
-
-    // Ensure the first tab is active on page load
-    tabs[0].classList.add('active');
-    tabPanes[0].classList.add('active');
-});
-
-var timeSlots = document.querySelectorAll('.time-slot');
-    var appointmentTimeInput = document.getElementById('appointmentTime');
-
-timeSlots.forEach(function(timeSlot) {
-        timeSlot.addEventListener('click', function() {
-            appointmentTimeInput.value = timeSlot.textContent.trim();
-        });
-    });
-</script>
-
-
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    // Initialize Select2 for gift voucher search
-    $('#gift_voucher_Id').select2({
-        placeholder: "Select Gift Voucher",
-        allowClear: true
-    });
+  // Initialize Select2 for customer and service selection
+  $('#customer_code').select2({ placeholder: 'Select or type customer contact number', allowClear: true });
+  $('#service-select').select2({ placeholder: 'Select Service', allowClear: true });
 
-    // On change of the selected gift voucher, fetch its price
-    $('#gift_voucher_Id').on('change', function() {
-        let giftVoucherId = $(this).val();
-
-        // Get the current total price from the input field
-        let totalPrice = parseFloat($('#totalPrice').val());
-        
-        if (giftVoucherId) {
-            // Perform AJAX request to get the gift voucher price
-            $.ajax({
-                url: '/get-gift-voucher-price/' + giftVoucherId,
-                type: 'GET',
-                success: function(data) {
-                    if (data.success) {
-
-                        let giftPrice = parseFloat(data.price);
-                        // Update the price input field with the fetched price
-                        $('#gift_voucher_price').val(giftPrice.toFixed(2));
-                        
-                        updateTotalPrice(giftPrice);
-                    } else {
-                        // Clear the price field if no voucher is found
-                        $('#gift_voucher_price').val('');
-                        updateTotalPrice();
-                    }
-                },
-                error: function(err) {
-                    console.log('Error fetching gift voucher details:', err);
-                }
-            });
-        } else {
-            // Clear the price input if no voucher is selected
-            $('#gift_voucher_price').val('');
-            updateTotalPrice();
-        }
-    });
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    // Initialize Select2 for searchable dropdown
-    $('#promotions_Id').select2({
-        placeholder: "Select Promotional Code",
-        allowClear: true
-    });
-
-    // Event listener for selecting a promotion ID
-    $('#promotions_Id').on('change', function() {
-        let promotionId = $(this).val();
-
-        // Get the current total price from the input field
-        let totalPrice = parseFloat($('#totalPrice').val());
-
-        if (promotionId) {
-            // AJAX request to fetch the promotional price
-            $.ajax({
-                url: '/get-promotion-price/' + promotionId, // Adjust the URL based on your route
-                type: 'GET',
-                success: function(data) {
-                    if (data.success) {
-                        // Fetch the promotional price (assuming it's a percentage)
-                        let promotionalPrice = parseFloat(data.price);
-
-                        // Calculate the discounted price (total price * promotional percentage) / 100
-                        let discountedPrice = (totalPrice * promotionalPrice) / 100;
-
-                        // Display the promotional price and discounted price
-                        $('#promotional_price').val(discountedPrice.toFixed(2)); // Display the percentage
-                        updateTotalPrice(discountedPrice);
-                        
-                    } else {
-                        alert(data.message);
-                        $('#promotional_price').val('');
-                        updateTotalPrice();
-                    }
-                },
-                error: function(err) {
-                    console.log('Error fetching promotion details:', err);
-                }
-            });
-        } else {
-            // Reset the promotional price if no promotion is selected
-            $('#promotional_price').val('');
-            updateTotalPrice();
-        }
-    });
-});
-</script>
-
-
-<!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    // Function to update total price
-    function updateTotalPrice() {
-        var total = 0;
-        $('#package-select-1, #package-select-2, #package-select-3').each(function() {
-            var packagePrice = $(this).find('option:selected').data('price');
-            if (packagePrice) {
-                total += parseFloat(packagePrice);
-            }
-        });
-        // Add the prices of selected additional packages
-        $('.additional-package-checkbox:checked').each(function() {
-            var packagePrice = $(this).data('price');
-            if (packagePrice) {
-                total += parseFloat(packagePrice);
-            }
-        });
-
-        // Add the transport cost if entered
-        var transportCost = parseFloat($('#Transport').val());
-        if (!isNaN(transportCost)) {
-            total += transportCost;
-        }
-
-        // Subtract the discount if entered
-        var discount = parseFloat($('#Discount').val());
-        if (!isNaN(discount)) {
-            total -= discount;
-        }
-
-        var gift = parseFloat($('#gift_voucher_price').val());
-        if (!isNaN(gift)) {
-            total -= gift;
-        }
-        
-        var promo = parseFloat($('#promotional_price').val());
-        if (!isNaN(promo)) {
-            total -= promo;
-        }
-
-        
-
-        // Ensure the total is not negative
-        if (total < 0) {
-            total = 0;
-        }
-
-        // Update the total price field
-        $('#totalPrice').val(total.toFixed(2));
-
-        // Calculate and update the balance payment
-        var advancedPayment = parseFloat($('#advancedPayment').val());
-        if (isNaN(advancedPayment)) {
-            advancedPayment = 0;
-        }
-        var balancePayment = total - advancedPayment;
-
-        if (balancePayment < 0) {
-            balancePayment = 0;
-        }
-
-        $('#BalancePayment').val(balancePayment.toFixed(2));
+  // Show customer details when a customer is selected
+  $('#customer_code').on('change', function() {
+    var selectedOption = $(this).find('option:selected');
+    $('#customerDetails').show();
+    $('#customerName').html('<strong>Name:</strong> ' + selectedOption.data('name'));
+    $('#customerContact').html('<strong>Contact:</strong> ' + selectedOption.data('contact'));
+    $('#customerAddress').html('<strong>Address:</strong> ' + selectedOption.data('address'));
+    $('#customerDOB').html('<strong>Date of Birth:</strong> ' + selectedOption.data('dob'));
     
-    }
+    // Set hidden input values
+    $('#hiddenCustomerName').val(selectedOption.data('name'));
+    $('#hiddenCustomerContact').val(selectedOption.data('contact'));
+    $('#hiddenCustomerAddress').val(selectedOption.data('address'));
+    $('#hiddenCustomerDOB').val(selectedOption.data('dob'));
+    $('#hiddenCustomerId').val(selectedOption.data('code'));
+  });
 
-    // Event handler for package dropdown change
-    $('#package-select-1, #package-select-2, #package-select-3').change(function() {
-        var selectedPackageId = $(this).val();
-        console.log("Selected Package ID: " + selectedPackageId);
+  // Handle adding a new customer (show modal)
+  $('#add-customer-btn').on('click', function() {
+    $('#addCustomerModal').modal('show');
+  });
 
-        // Fetch subcategories for the selected package
+  // Time slot selection logic
+  const timeSlots = ['Fierst_Slot', 'Second_slot', 'Third_slot']; // Example time slots
+  const timeSlotsContainer = $('#timeSlots');
+  const appointmentTimeInput = $('#appointment_time');
+  const appointmentTimeDisplay = $('#appointmentTime');
+
+  timeSlots.forEach(slot => {
+    const slotElement = $('<div class="time-slot"></div>').text(slot);
+    timeSlotsContainer.append(slotElement);
+    slotElement.on('click', function() {
+      $('.time-slot').css('background-color', '#fff'); // Reset background of all slots
+      $(this).css('background-color', '#d1e7dd'); // Highlight selected slot
+      appointmentTimeInput.val(slot);
+      appointmentTimeDisplay.val(slot);
+    });
+  });
+});
+</script>
+
+
+<script>
+    $(document).ready(function() {
+    // Event handler for package selection
+    $('#package-select-1').on('change', function() {
+        var selectedPackageId = $(this).val(); // Get the selected package ID
+
         if (selectedPackageId) {
+            // Make AJAX request to fetch subcategories
             $.ajax({
-                url: '{{ route("getSubcategoriesByPackage") }}',
+                url: '{{ route("getSubcategoriesByPackage") }}', // The route for fetching subcategories
                 method: 'GET',
                 data: { package_id: selectedPackageId },
                 success: function(response) {
                     var container = $('#subcategories-container');
-                    container.empty();
+                    container.empty();  // Clear existing subcategories if any
 
-                    response.subcategories.forEach(function(subcategory) {
-                        // Create dropdown for each subcategory
-                        var subcategoryHtml = `
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label" style="color:black;">${subcategory.subcategory_name}:</label>
-                                <div class="col-md-6">
-                                    <select class="form-control item-select" data-subcategory-id="${subcategory.id}" name="subcategory_items[${subcategory.id}]">
-                                        <option value="">Select Item</option>
-                                    </select>
+                    if (response.subcategories.length > 0) {
+                        response.subcategories.forEach(function(subcategory) {
+                            // Create dropdown for each subcategory
+                            var subcategoryHtml = `
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" style="color:black;">${subcategory.subcategory_name}:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control item-select" data-subcategory-id="${subcategory.id}" name="subcategory_items[${subcategory.id}]">
+                                            <option value="">Select Item</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
-                        container.append(subcategoryHtml);
+                            `;
+                            container.append(subcategoryHtml);
 
-                        // Fetch items for the subcategory
-                        $.ajax({
-                            url: '{{ route("getItemsBySubcategory") }}',
-                            method: 'GET',
-                            data: { subcategory_id: subcategory.id },
-                            success: function(response) {
-                                var itemSelect = container.find(`select[data-subcategory-id="${subcategory.id}"]`);
-                                response.items.forEach(function(item) {
-                                    var option = `<option value="${item.id}">${item.Item_name}</option>`;
-                                    itemSelect.append(option);
-                                });
-                            },
-                            error: function(xhr) {
-                                console.error('Failed to fetch items:', xhr.responseText);
-                            }
+                            // Fetch items for the subcategory
+                            fetchItemsBySubcategory(subcategory.id);
                         });
-                    });
-
-                    updateTotalPrice();
+                    } else {
+                        container.append('<p>No subcategories available for this package.</p>');
+                    }
                 },
                 error: function(xhr) {
                     console.error('Failed to fetch subcategories:', xhr.responseText);
                 }
             });
         } else {
+            // Clear subcategories container if no package is selected
             $('#subcategories-container').empty();
         }
     });
 
-    // Event handler for additional package checkbox change
-    $('.additional-package-checkbox').change(function() {
+    // Function to fetch items by subcategory
+    // Function to fetch items by subcategory
+    function fetchItemsBySubcategory(subcategoryId) {
+        $.ajax({
+            url: '{{ route("getItemsBySubcategory") }}',  // The route for fetching items
+            method: 'GET',
+            data: { subcategory_id: subcategoryId },
+            success: function(response) {
+                var itemSelect = $(`select[data-subcategory-id="${subcategoryId}"]`);
+                itemSelect.empty(); // Clear any previous items
+
+                // Add "Select Item" as the first placeholder option
+                itemSelect.append('<option value="">Select Item</option>');
+
+                if (response.items.length > 0) {
+                    response.items.forEach(function(item) {
+                        var option = `<option value="${item.id}">${item.Item_name}</option>`;
+                        itemSelect.append(option);
+                    });
+                } else {
+                    itemSelect.append('<option value="">No items available</option>');
+                }
+            },
+            error: function(xhr) {
+                console.error('Failed to fetch items:', xhr.responseText);
+            }
+        });
+    }
+
+});
+
+</script>
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get the current date in 'YYYY-MM-DD' format
+    var today = new Date().toISOString().split('T')[0];
+
+    // Set the min attribute of the date input to today's date
+    document.getElementById("start_date").setAttribute('min', today);
+    });
+
+</script>
+
+
+
+<script>$(document).ready(function() {
+    var basePackagePrice = 0; // Initialize the base package price
+
+    // Event listener for main package selection
+    $('#package-select-1').on('change', function() {
+        basePackagePrice = parseFloat($(this).find('option:selected').data('price')) || 0; // Get the selected package's price
+
+        // Update the total price initially with only the base package price
         updateTotalPrice();
     });
 
-    // Event handler for transport cost input change
+    // Event listener for additional package selection
+    $('.additional-package-checkbox').on('change', function() {
+        // Update the total price whenever an additional package is selected/deselected
+        updateTotalPrice();
+    });
+
+    // Event listener for transport cost input
     $('#Transport').on('input', function() {
         updateTotalPrice();
     });
 
+    // Event listener for discount input
     $('#Discount').on('input', function() {
         updateTotalPrice();
     });
 
-
+    // Event listener for advanced payment input
     $('#advancedPayment').on('input', function() {
         updateTotalPrice();
     });
 
-    // Existing service-select change event handler
-    $('#service-select').change(function() {
-        var serviceCode = $(this).val();
+    // Event listener for promotional code selection
+    $('#promotions_Id').on('change', function() {
+        let promotionId = $(this).val(); // Get the selected promotional code ID
 
-        $('#package-select-1').empty().append('<option value="">Select Package</option>');
-        $('#package-select-2').empty().append('<option value="">Select Package</option>');
-        $('#package-select-3').empty().append('<option value="">Select Package</option>');
-
-        if (serviceCode) {
+        if (promotionId) {
+            // Perform AJAX request to get the promotional price (percentage)
             $.ajax({
-                url: '{{ route("getPackagesByService") }}',
-                method: 'GET',
-                data: { service_code: serviceCode },
-                success: function(response) {
-                    response.packages.forEach(function(package) {
-                        var option = `<option value="${package.id}" data-price="${package.price}">${package.package_name}</option>`;
-                        $('#package-select-1').append(option);
-                        $('#package-select-2').append(option);
-                        $('#package-select-3').append(option);
-                    });
-                    updateTotalPrice();
+                url: '/get-promotion-price/' + promotionId, // Adjust this URL to your route
+                type: 'GET',
+                success: function(data) {
+                    if (data.success) {
+                        // Calculate and display the promotional discount value in the promotional price field
+                        var promotionalPercentage = parseFloat(data.price);
+                        var discountValue = (basePackagePrice * promotionalPercentage) / 100; // Calculate the discount
+                        $('#promotional_price').val(discountValue.toFixed(2)); // Display discount value
+                        
+                        updateTotalPrice(); // Recalculate the total price after applying the promotional discount
+                    } else {
+                        alert(data.message);
+                        $('#promotional_price').val(''); // Clear the promotional price if not found
+                        updateTotalPrice(); // Recalculate total without promotion
+                    }
+                },
+                error: function(err) {
+                    console.log('Error fetching promotion details:', err);
+                    $('#promotional_price').val(''); // Clear the promotional price on error
+                    updateTotalPrice(); // Recalculate total without promotion
                 }
             });
+        } else {
+            // Clear the promotional price field if no promotion is selected
+            $('#promotional_price').val('');
+            updateTotalPrice(); // Recalculate total without promotion
         }
     });
-});
-</script>
 
-<script>
-    // Show modal to add customer
-    $('#add-customer-btn').on('click', function() {
-        new bootstrap.Modal(document.getElementById('addCustomerModal')).show();
-    });
-</script>
+    // Event listener for gift voucher selection
+    $('#gift_voucher_Id').on('change', function() {
+        let giftVoucherId = $(this).val(); // Get the selected gift voucher ID
 
-
-<script>
-    function getSelectedPackageId() {
-    // Get the package select dropdown element
-    var packageSelect = document.getElementById('package-select');
-
-    // Get the selected package ID
-    var selectedPackageId = packageSelect.value;
-
-    // Check if a valid package is selected
-    if (selectedPackageId) {
-        console.log("Selected Package ID:", selectedPackageId);
-    } else {
-        console.log("No package selected.");
-    }
-}
-
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Define time slots
-        const timeSlots = ['First Slot', 'Second Slot', 'Third Slot'];
-
-        // Get the timeSlots div, the hidden input, and the appointment time display input
-        const timeSlotsContainer = document.getElementById('timeSlots');
-        const appointmentTimeInput = document.getElementById('appointment_time');
-        const appointmentTimeDisplay = document.getElementById('appointmentTime');
-
-        // Function to render time slots
-        timeSlots.forEach((slot) => {
-            // Create a clickable div for each time slot
-            const slotElement = document.createElement('div');
-            slotElement.textContent = slot;
-            slotElement.classList.add('time-slot');
-
-            // Event listener for clicking a slot
-            slotElement.addEventListener('click', function () {
-                // Highlight the selected time slot
-                document.querySelectorAll('.time-slot').forEach(el => el.style.backgroundColor = '#fff'); // Reset background of all slots
-                slotElement.style.backgroundColor = '#d1e7dd'; // Highlight selected slot
-
-                // Set the value of the hidden input to the selected time slot
-                appointmentTimeInput.value = slot;
-
-                // Set the value of the display input to show the selected time slot
-                appointmentTimeDisplay.value = slot;
+        if (giftVoucherId) {
+            // Perform AJAX request to get the gift voucher price
+            $.ajax({
+                url: '/get-gift-voucher-price/' + giftVoucherId, // Adjust this URL to your route
+                type: 'GET',
+                success: function(data) {
+                    if (data.success) {
+                        // Display the gift voucher price
+                        $('#gift_voucher_price').val(data.price);
+                        updateTotalPrice(); // Recalculate the total price with the gift voucher discount
+                    } else {
+                        alert(data.message);
+                        $('#gift_voucher_price').val(''); // Clear the price if not found
+                        updateTotalPrice(); // Recalculate total without voucher
+                    }
+                },
+                error: function(err) {
+                    console.log('Error fetching gift voucher details:', err);
+                    $('#gift_voucher_price').val(''); // Clear the price on error
+                    updateTotalPrice(); // Recalculate total without voucher
+                }
             });
-
-            // Append the slot element to the container
-            timeSlotsContainer.appendChild(slotElement);
-        });
+        } else {
+            // Clear the gift voucher price field if no voucher is selected
+            $('#gift_voucher_price').val('');
+            updateTotalPrice(); // Recalculate total without voucher
+        }
     });
+
+    // Function to update the total price and balance payment
+    function updateTotalPrice() {
+        var totalPrice = basePackagePrice; // Start with the base price (main package)
+
+        // Add additional package prices
+        $('.additional-package-checkbox:checked').each(function() {
+            var additionalPackagePrice = parseFloat($(this).data('price'));
+            totalPrice += additionalPackagePrice;
+        });
+
+        // Add transport cost if entered
+        var transportCost = parseFloat($('#Transport').val());
+        if (!isNaN(transportCost)) {
+            totalPrice += transportCost;
+        }
+
+        // Subtract discount if entered
+        var discount = parseFloat($('#Discount').val());
+        if (!isNaN(discount)) {
+            totalPrice -= discount;
+        }
+
+        // Subtract promotional discount if entered
+        var promotionalPrice = parseFloat($('#promotional_price').val());
+        if (!isNaN(promotionalPrice)) {
+            totalPrice -= promotionalPrice;
+        }
+
+        // Subtract gift voucher discount if entered
+        var giftVoucherPrice = parseFloat($('#gift_voucher_price').val());
+        if (!isNaN(giftVoucherPrice)) {
+            totalPrice -= giftVoucherPrice;
+        }
+
+        // Ensure the total price is not negative
+        if (totalPrice < 0) {
+            totalPrice = 0;
+        }
+
+        // Update the total price field
+        $('#totalPrice').val(totalPrice.toFixed(2)); // Display total with two decimal places
+
+        // Calculate balance payment by subtracting advanced payment
+        var advancedPayment = parseFloat($('#advancedPayment').val());
+        if (isNaN(advancedPayment)) {
+            advancedPayment = 0;
+        }
+        var balancePayment = totalPrice - advancedPayment;
+
+        // Ensure balance payment is not negative
+        if (balancePayment < 0) {
+            balancePayment = 0;
+        }
+
+        // Update the balance payment field
+        $('#BalancePayment').val(balancePayment.toFixed(2)); // Display balance with two decimal places
+    }
+});
+
+
+
 </script>
-
-
-
-
-
-@endsection

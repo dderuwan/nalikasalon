@@ -17,7 +17,7 @@
                     @endif
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ route('new_appointment') }}" class="btn btn-primary mb-3">Add Pre Order</a>
+                    <a href="{{ route('preordercreate') }}" class="btn btn-primary mb-3">Add Pre Order</a>
                 </div>
             </div>
             <p class="card-text"></p>

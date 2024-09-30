@@ -249,7 +249,7 @@
             </div>
         </div>
 
-        <form action="{{ route('storeAppointments') }}" method="POST" id="appointmentForm">
+        <form action="{{ route('homeorderstore') }}" method="POST" id="appointmentForm">
             @csrf
             <div class="col-md-12">
                 <!-- Progress Bar -->

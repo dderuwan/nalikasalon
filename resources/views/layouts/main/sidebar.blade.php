@@ -262,16 +262,13 @@
                       <span class="ml-3 item-text">Bridel Appointments</span><span class="sr-only">(current)</span>
                   </a>
                   <ul class="collapse list-unstyled pl-1 w-100 ml-4" id="Bridelappoinment">
+                      
                       <li class="nav-item mb-2">
-                          <a href="{{ route('appointments') }}" class="sidebar_text">
+                          <a href="{{ route('preordercreate') }}" class="sidebar_text">
                               <span class="ml-3 item-text">Bridel Pre Order</span><span class="sr-only">(current)</span>
                           </a>
                       </li>
-                      <li class="nav-item mb-2">
-                          <a href="{{ route('showPreOrders') }}" class="sidebar_text">
-                              <span class="ml-3 item-text">Bridel Pre Order List</span><span class="sr-only">(current)</span>
-                          </a>
-                      </li>
+                    
                       <li class="nav-item active mb-2">
                           <a href="{{ route('RealTimepage1') }}" class="sidebar_text">
                               <span class="ml-3 item-text">Order Closing Form</span><span class="sr-only">(current)</span>

@@ -421,7 +421,7 @@ class AppointmentController extends Controller
             'name' => 'required|string|max:255',
             'contact_number_1' => 'required|string|max:20',
             'contact_number_2' => 'nullable|string|max:20',
-            'address' => 'required|string|max:255',
+            'address' => 'required|strinshowPreOrders|max:255',
             'date_of_birth' => 'required|date',
         ]);
         
