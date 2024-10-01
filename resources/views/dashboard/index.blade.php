@@ -96,7 +96,7 @@
                                 <i class="material-icons">date_range</i>
                             </div>
                             <div class="card-content">
-                                <p class="card-category">Total Bookings</p>
+                                <p class="card-category">Today Bookings</p>
                                 <h3 class="card-title mb-3">{{ $totalBookings }}</h3> 
                             </div>
                         </div>
