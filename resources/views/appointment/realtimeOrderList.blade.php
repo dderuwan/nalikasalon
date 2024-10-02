@@ -46,6 +46,10 @@
                                         <td>{{ $appointment->package_id}}</td>
                                         <td>{{ $appointment->Appoinment_date }}</td>
                                         <td>
+                                            
+                                            <a href="{{ route('printAndRedirectmain', ['id' => $appointment->id]) }}" class="btn btn-primary" target="_blank">Print</a>
+                
+                                            <button class="btn btn-secondary" onclick="copyLink('{{ route('printAndRedirectmain', ['id' => $appointment->id]) }}')">Share</button>
                                             <!-- Show Button -->
                                             <a href="{{ route('showRealOrderDetails', $appointment->id) }}" class="btn btn-secondary"><i class="fe fe-eye fe-16"></i></a>
 

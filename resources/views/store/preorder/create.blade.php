@@ -577,6 +577,11 @@ $(document).ready(function() {
     document.getElementById("start_date").setAttribute('min', today);
     });
 
+    // Show modal to add customer
+    $('#add-customer-btn').on('click', function() {
+        new bootstrap.Modal(document.getElementById('addCustomerModal')).show();
+    });
+
 </script>
 
 
@@ -741,6 +746,6 @@ $(document).ready(function() {
     }
 });
 
-
+    
 
 </script>

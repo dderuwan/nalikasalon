@@ -439,5 +439,14 @@ private function sendConfirmationSMS($preorder)
         return view('Salon&Thretment.realtimeorder.print', compact('preorder'));
     }
 
+    public function saloonpreorderprintmain($id)
+    {
+        // Retrieve the SalonThretment record by ID
+        $preorder = SalonThretment::findOrFail($id);
+
+        // Pass the retrieved record to the view
+        return view('Salon&Thretment.realtimeorder.print1', compact('preorder'));
+    }
+
     
 }

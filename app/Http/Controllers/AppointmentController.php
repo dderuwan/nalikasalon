@@ -195,7 +195,7 @@ class AppointmentController extends Controller
 
     public function showPreOrders()
     {
-        $appointments = bridelpreorder::with('package')->get(); 
+        $appointments = bridelpreorder::with('Package')->get(); 
         return view('appointment.preorderList', compact('appointments'));
     }
     
@@ -393,6 +393,13 @@ class AppointmentController extends Controller
         // Eager load related additional packages and subcategory items
         $preorder = bridelpreorder::with(['additionalPackages', 'subcategoryItems'])->findOrFail($id);
         return view('appointment.print', compact('preorder'));
+    }
+
+    public function printAndRedirectmain($id)
+    {
+        // Eager load related additional packages and subcategory items
+        $preorder = bridelpreorder::with(['additionalPackages', 'subcategoryItems'])->findOrFail($id);
+        return view('appointment.printmain', compact('preorder'));
     }
 
     public function getPreorders()

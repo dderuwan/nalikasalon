@@ -28,6 +28,7 @@
         margin-bottom: 6px; 
     }
 
+
     .card-stats {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
@@ -97,7 +98,7 @@
                             </div>
                             <div class="card-content">
                                 <p class="card-category">Today Bookings</p>
-                                <h3 class="card-title mb-3">{{ $totalBookings }}</h3> 
+                                <h3 class="card-title mb-3">{{ $totalBookings }}</h3>
                             </div>
                         </div>
                     </div>

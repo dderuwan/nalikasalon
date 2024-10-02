@@ -164,13 +164,6 @@ h2 {
                     </div>
                 </div>
 
-                <!-- Forgot Password Link -->
-                <div class="form-group col-md-6 mt-4">
-                    <a class="text-sm text-muted" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                </div>
-
                 <!-- Submit Button -->
                 <div class="form-group col-md-6 mt-4">
                     <button type="submit" class="btn btn-primary">

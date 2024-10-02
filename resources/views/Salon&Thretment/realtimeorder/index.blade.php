@@ -54,6 +54,10 @@
                                         
                                         <td>
 
+                                            <a href="{{ route('saloonpreorderprint1', ['id' => $service->id]) }}" class="btn btn-primary" target="_blank">Print</a>
+                
+                                            <button class="btn btn-secondary" onclick="copyLink('{{ route('saloonpreorderprint1', ['id' => $service->id]) }}')">Share</button>
+
                                             <!-- Edit Button -->
                                             @if ($service->Main_Dresser || $service->Assistent_Dresser_1 || $service->Assistent_Dresser_2 || $service->Assistent_Dresser_3)
                                                     <!-- Hide Edit Button if any dresser fields have values -->
@@ -129,4 +133,15 @@
         });
     }
 </script>
+
+<script>
+    function copyLink(link) {
+        navigator.clipboard.writeText(link).then(function() {
+            alert('Link copied to clipboard: ' + link);
+        }, function(err) {
+            alert('Failed to copy link: ', err);
+        });
+    }
+</script>
+
 @endsection

@@ -325,6 +325,7 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/showPreOrderDetails/{id}', [App\Http\Controllers\AppointmentController::class, 'showPreOrderDetails'])->name('showPreOrderDetails');
      Route::delete('/preorders/{id}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('deletepreorder');
      Route::get('/preorders/print-and-redirects/{id}', [App\Http\Controllers\AppointmentController::class, 'printAndRedirect'])->name('printAndRedirectBridel');
+     
 
      Route::get('/get-appointments', [BridalAppointmentController::class, 'getAppointments'])->name('getAppointments');
      Route::get('/get-appointment-details', [BridalAppointmentController::class, 'getAppointmentDetails'])->name('getAppointmentDetails');
@@ -366,7 +367,6 @@ Route::group(['middleware'=>['role:Super-Admin|Admin|Assistant|Main Dresser|Mana
      Route::get('/reditSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'edit1'])->name('RealeditSalonThretment');
      Route::put('/rupdateSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'update1'])->name('RealupdateSalonThretment');
      Route::delete('/rdeleteSalonThretment/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'destroy12'])->name('RealdeleteSalonThretment');
-     Route::get('/realsaloonpreorderprint/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
      Route::post('/r.customerstore', [App\Http\Controllers\SalonThretmentContoller::class, 'customerstore'])->name('r.customerstore');
      Route::get('/send-message', [App\Http\Controllers\SalonThretmentContoller::class, 'sendMessage'])->name('send.message');
 
@@ -419,3 +419,7 @@ Route::post('/homeorderstore', [App\Http\Controllers\Stoercontroller::class,'hom
 Route::post('/saloonorderstore', [App\Http\Controllers\Stoercontroller::class,'saloonorderstore'])->name('saloonorderstore');
 
 Route::get('/preordercreate', [App\Http\Controllers\Stoercontroller::class,'preordercreate'])->name('preordercreate');
+
+Route::get('/realsaloonpreorderprint/{id}', [App\Http\Controllers\SalonThretmentContoller::class, 'saloonpreorderprint1'])->name('saloonpreorderprint1');
+Route::get('/realsaloonmainpreorderprint/{id}', [App\Http\Controllers\Stoercontroller::class, 'saloonpreorderprintmain'])->name('saloonpreorderprint1');
+Route::get('/preorders/print-and-redirectmain/{id}', [App\Http\Controllers\AppointmentController::class, 'printAndRedirectmain'])->name('printAndRedirectmain');
